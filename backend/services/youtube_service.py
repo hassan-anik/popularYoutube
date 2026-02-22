@@ -13,9 +13,19 @@ YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3"
 
 class YouTubeService:
     def __init__(self):
-        self.api_key = os.environ.get('YOUTUBE_API_KEY')
+        self._api_key = None
         self._cache = {}
         self._cache_ttl = 300  # 5 minutes cache
+    
+    @property
+    def api_key(self):
+        # Load API key fresh each time to handle env updates
+        if self._api_key is None:
+            from dotenv import load_dotenv
+            from pathlib import Path
+            load_dotenv(Path(__file__).parent.parent / '.env')
+            self._api_key = os.environ.get('YOUTUBE_API_KEY')
+        return self._api_key
     
     def _get_cache_key(self, prefix: str, identifier: str) -> str:
         return f"{prefix}:{identifier}"
