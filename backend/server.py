@@ -1243,6 +1243,7 @@ async def get_sitemap():
     for path, priority, freq in static_pages:
         xml_parts.append(f'''  <url>
     <loc>{base_url}{path}</loc>
+    <lastmod>{today}</lastmod>
     <changefreq>{freq}</changefreq>
     <priority>{priority}</priority>
   </url>''')
@@ -1252,22 +1253,28 @@ async def get_sitemap():
     for country in countries:
         xml_parts.append(f'''  <url>
     <loc>{base_url}/country/{country["code"]}</loc>
-    <changefreq>hourly</changefreq>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>''')
     
-    # Channel pages
+    # Channel pages - only include active channels with valid IDs
     channels = await db.channels.find(
-        {"is_active": True}, 
+        {"is_active": True, "channel_id": {"$exists": True, "$ne": ""}}, 
         {"channel_id": 1, "updated_at": 1}
     ).to_list(1000)
     
     for channel in channels:
-        lastmod = channel.get("updated_at", datetime.now(timezone.utc).isoformat())
-        if isinstance(lastmod, str):
+        channel_id = channel.get("channel_id", "")
+        if not channel_id or len(channel_id) < 10:  # Skip invalid channel IDs
+            continue
+        lastmod = channel.get("updated_at", today)
+        if isinstance(lastmod, str) and len(lastmod) >= 10:
             lastmod = lastmod[:10]  # Get just the date part
+        else:
+            lastmod = today
         xml_parts.append(f'''  <url>
-    <loc>{base_url}/channel/{channel["channel_id"]}</loc>
+    <loc>{base_url}/channel/{channel_id}</loc>
     <lastmod>{lastmod}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -1277,7 +1284,11 @@ async def get_sitemap():
     
     return Response(
         content='\n'.join(xml_parts),
-        media_type='application/xml'
+        media_type='application/xml',
+        headers={
+            'Content-Type': 'application/xml; charset=utf-8',
+            'Cache-Control': 'public, max-age=3600'
+        }
     )
 
 
