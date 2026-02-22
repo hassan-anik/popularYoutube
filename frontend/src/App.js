@@ -1358,6 +1358,7 @@ const Footer = () => (
             <li><Link to="/leaderboard" className="text-gray-400 hover:text-white">Global Leaderboard</Link></li>
             <li><Link to="/trending" className="text-gray-400 hover:text-white">Fastest Growing</Link></li>
             <li><Link to="/countries" className="text-gray-400 hover:text-white">By Country</Link></li>
+            <li><Link to="/compare" className="text-gray-400 hover:text-white">Compare Channels</Link></li>
           </ul>
         </div>
         <div>
@@ -1370,8 +1371,10 @@ const Footer = () => (
           </ul>
         </div>
         <div>
-          <h4 className="font-semibold text-white mb-4">About</h4>
+          <h4 className="font-semibold text-white mb-4">Resources</h4>
           <ul className="space-y-2 text-sm">
+            <li><Link to="/blog" className="text-gray-400 hover:text-white">Blog & Insights</Link></li>
+            <li><Link to="/favorites" className="text-gray-400 hover:text-white">My Favorites</Link></li>
             <li><Link to="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
             <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
             <li><Link to="/privacy" className="text-gray-400 hover:text-white">Privacy Policy</Link></li>
