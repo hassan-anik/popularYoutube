@@ -2157,10 +2157,18 @@ const ChannelPage = () => {
               <div className="flex flex-wrap items-center gap-3 mb-2">
                 <h1 className="text-2xl md:text-3xl font-bold text-white">{channel.title}</h1>
                 <ViralBadge label={channel.viral_label} />
+                <FavoriteButton 
+                  channel={channel}
+                  isFavorite={isFavorite(channel.channel_id)}
+                  onToggle={toggleFavorite}
+                  size="lg"
+                />
+                <LiveIndicator />
               </div>
               <p className="text-gray-500 mb-3">
                 <Link to={`/country/${channel.country_code}`} className="hover:text-white">{channel.country_name}</Link>
                 {channel.current_rank && ` • Rank #${channel.current_rank}`}
+                <LastUpdatedIndicator timestamp={channel.updated_at} className="ml-3 inline-flex" />
               </p>
               <p className="text-gray-400 text-sm line-clamp-2">{channel.description}</p>
               <a 
