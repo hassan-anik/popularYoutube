@@ -921,6 +921,47 @@ resend.api_key = os.environ.get('RESEND_API_KEY', '')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@toptubeworldpro.com')
 
+
+# ==================== NEWSLETTER ====================
+
+class NewsletterSubscribe(BaseModel):
+    email: str
+
+@api_router.post("/newsletter/subscribe")
+async def subscribe_newsletter(data: NewsletterSubscribe):
+    """Subscribe to newsletter"""
+    email = data.email.lower().strip()
+    
+    # Validate email format
+    if not email or '@' not in email:
+        raise HTTPException(status_code=400, detail="Invalid email address")
+    
+    # Check if already subscribed
+    existing = await db.newsletter_subscribers.find_one({"email": email})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already subscribed")
+    
+    # Save subscriber
+    subscriber_doc = {
+        "email": email,
+        "subscribed_at": datetime.now(timezone.utc).isoformat(),
+        "status": "active"
+    }
+    await db.newsletter_subscribers.insert_one(subscriber_doc)
+    
+    logger.info(f"New newsletter subscriber: {email}")
+    return {"status": "success", "message": "Successfully subscribed!"}
+
+@api_router.get("/newsletter/subscribers")
+async def get_newsletter_subscribers():
+    """Get all newsletter subscribers (admin)"""
+    subscribers = await db.newsletter_subscribers.find(
+        {"status": "active"},
+        {"_id": 0, "email": 1, "subscribed_at": 1}
+    ).to_list(10000)
+    return {"subscribers": subscribers, "total": len(subscribers)}
+
+
 @api_router.post("/contact")
 async def submit_contact_form(form: ContactFormRequest):
     """Handle contact form submissions"""
