@@ -129,6 +129,232 @@ const HorizontalAd = () => (
   </div>
 );
 
+// Sidebar Ad Component
+const SidebarAd = () => (
+  <div className="bg-[#0d0d0d] border border-[#222] rounded-lg p-2 sticky top-20">
+    <div className="text-center text-xs text-gray-500 mb-1">Sponsored</div>
+    <AdBanner format="rectangle" style={{ minHeight: '250px', width: '300px' }} />
+  </div>
+);
+
+// In-Feed Ad (for between rows)
+const InFeedAd = ({ index }) => {
+  if (index > 0 && index % 10 === 0) {
+    return (
+      <tr className="bg-[#0a0a0a]">
+        <td colSpan="6" className="px-4 py-3">
+          <div className="text-center text-xs text-gray-500 mb-1">Sponsored</div>
+          <AdBanner format="fluid" style={{ minHeight: '60px' }} />
+        </td>
+      </tr>
+    );
+  }
+  return null;
+};
+
+// Sticky Mobile Ad Banner
+const StickyMobileAd = () => (
+  <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#0a0a0a] border-t border-[#222] p-1 z-40" data-testid="sticky-mobile-ad">
+    <div className="text-center text-xs text-gray-500">Ad</div>
+    <AdBanner format="horizontal" style={{ height: '50px' }} />
+  </div>
+);
+
+// ==================== FAVORITES SYSTEM ====================
+
+const FAVORITES_KEY = 'toptube_favorites';
+
+const getFavorites = () => {
+  try {
+    const stored = localStorage.getItem(FAVORITES_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveFavorites = (favorites) => {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+};
+
+const useFavorites = () => {
+  const [favorites, setFavorites] = useState(getFavorites);
+
+  const toggleFavorite = (channel) => {
+    setFavorites(prev => {
+      const exists = prev.find(f => f.channel_id === channel.channel_id);
+      let updated;
+      if (exists) {
+        updated = prev.filter(f => f.channel_id !== channel.channel_id);
+      } else {
+        updated = [...prev, {
+          channel_id: channel.channel_id,
+          title: channel.title,
+          thumbnail_url: channel.thumbnail_url,
+          subscriber_count: channel.subscriber_count,
+          added_at: new Date().toISOString()
+        }];
+      }
+      saveFavorites(updated);
+      return updated;
+    });
+  };
+
+  const isFavorite = (channelId) => favorites.some(f => f.channel_id === channelId);
+
+  return { favorites, toggleFavorite, isFavorite };
+};
+
+// Favorite Button Component
+const FavoriteButton = ({ channel, isFavorite, onToggle, size = 'md' }) => {
+  const sizeClasses = {
+    sm: 'w-4 h-4',
+    md: 'w-5 h-5',
+    lg: 'w-6 h-6'
+  };
+  
+  return (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onToggle(channel);
+      }}
+      className={`p-2 rounded-lg transition-colors ${isFavorite ? 'bg-red-500/20 text-red-500' : 'bg-[#222] text-gray-400 hover:text-red-500'}`}
+      title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+      data-testid={`favorite-btn-${channel.channel_id}`}
+    >
+      <Heart className={`${sizeClasses[size]} ${isFavorite ? 'fill-current' : ''}`} />
+    </button>
+  );
+};
+
+// ==================== REAL-TIME INDICATORS ====================
+
+// Animated Counter Component
+const AnimatedCounter = ({ value, format = true }) => {
+  const [displayValue, setDisplayValue] = useState(value);
+  const prevValue = useRef(value);
+  
+  useEffect(() => {
+    if (value !== prevValue.current) {
+      const diff = value - prevValue.current;
+      const steps = 20;
+      const increment = diff / steps;
+      let current = prevValue.current;
+      let step = 0;
+      
+      const interval = setInterval(() => {
+        step++;
+        current += increment;
+        setDisplayValue(Math.round(current));
+        
+        if (step >= steps) {
+          clearInterval(interval);
+          setDisplayValue(value);
+        }
+      }, 50);
+      
+      prevValue.current = value;
+      return () => clearInterval(interval);
+    }
+  }, [value]);
+  
+  return <span>{format ? formatNumber(displayValue) : displayValue}</span>;
+};
+
+// Last Updated Indicator
+const LastUpdatedIndicator = ({ timestamp, className = '' }) => {
+  const [timeAgo, setTimeAgo] = useState('');
+  
+  useEffect(() => {
+    const updateTime = () => {
+      if (!timestamp) return;
+      const now = new Date();
+      const updated = new Date(timestamp);
+      const diffMs = now - updated;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMins / 60);
+      const diffDays = Math.floor(diffHours / 24);
+      
+      if (diffMins < 1) setTimeAgo('Just now');
+      else if (diffMins < 60) setTimeAgo(`${diffMins}m ago`);
+      else if (diffHours < 24) setTimeAgo(`${diffHours}h ago`);
+      else setTimeAgo(`${diffDays}d ago`);
+    };
+    
+    updateTime();
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
+  }, [timestamp]);
+  
+  return (
+    <span className={`flex items-center gap-1 text-xs text-gray-500 ${className}`}>
+      <Clock className="w-3 h-3" />
+      Updated {timeAgo}
+    </span>
+  );
+};
+
+// Live Pulse Indicator
+const LiveIndicator = () => (
+  <span className="flex items-center gap-1 text-xs text-green-400">
+    <span className="relative flex h-2 w-2">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+    </span>
+    Live
+  </span>
+);
+
+// ==================== EMBED WIDGET CODE GENERATOR ====================
+
+const EmbedWidget = ({ type, data }) => {
+  const [copied, setCopied] = useState(false);
+  
+  const generateEmbedCode = () => {
+    const baseUrl = BACKEND_URL;
+    
+    if (type === 'channel') {
+      return `<iframe src="${baseUrl}/embed/channel/${data.channel_id}" width="300" height="150" frameborder="0" style="border-radius:8px;"></iframe>
+<p style="font-size:11px;color:#666;">Powered by <a href="${baseUrl}" target="_blank">TopTube World Pro</a></p>`;
+    }
+    
+    if (type === 'country') {
+      return `<iframe src="${baseUrl}/embed/country/${data.country_code}" width="300" height="200" frameborder="0" style="border-radius:8px;"></iframe>
+<p style="font-size:11px;color:#666;">Powered by <a href="${baseUrl}" target="_blank">TopTube World Pro</a></p>`;
+    }
+    
+    return '';
+  };
+  
+  const handleCopy = () => {
+    navigator.clipboard.writeText(generateEmbedCode());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  
+  return (
+    <div className="bg-[#0d0d0d] border border-[#333] rounded-lg p-4">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm text-gray-400 flex items-center gap-2">
+          <Code className="w-4 h-4" />
+          Embed Widget
+        </span>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1 text-xs px-2 py-1 bg-[#222] rounded hover:bg-[#333] transition-colors"
+        >
+          {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+          {copied ? 'Copied!' : 'Copy'}
+        </button>
+      </div>
+      <pre className="text-xs text-gray-500 bg-[#111] p-3 rounded overflow-x-auto">
+        {generateEmbedCode()}
+      </pre>
+    </div>
+  );
+};
+
 // ==================== SOCIAL SHARING ====================
 
 const SocialShareButtons = ({ url, title, description }) => {
