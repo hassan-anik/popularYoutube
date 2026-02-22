@@ -1551,7 +1551,7 @@ const LeaderboardPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#222]">
-              {channels.map((channel, idx) => (
+              {filteredChannels.map((channel, idx) => (
                 <tr 
                   key={channel.channel_id}
                   className="hover:bg-[#1a1a1a] cursor-pointer transition-colors"
@@ -1561,7 +1561,7 @@ const LeaderboardPage = () => {
                   <td className="px-4 py-4 font-bold text-gray-400">#{idx + 1}</td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-3">
-                      <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" />
+                      <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" loading="lazy" />
                       <div>
                         <div className="font-medium text-white">{channel.title}</div>
                         <div className="text-xs text-gray-500">{channel.country_name}</div>
@@ -1580,7 +1580,7 @@ const LeaderboardPage = () => {
 
         {/* Mobile Cards */}
         <div className="md:hidden space-y-4">
-          {channels.map((channel, idx) => (
+          {filteredChannels.map((channel, idx) => (
             <ChannelCard key={channel.channel_id} channel={channel} rank={idx + 1} onClick={() => navigate(`/channel/${channel.channel_id}`)} />
           ))}
         </div>
