@@ -1324,6 +1324,10 @@ const Header = () => {
               <Link to="/countries" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Countries</Link>
               <Link to="/trending" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Trending</Link>
               <Link to="/compare" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Compare</Link>
+              <Link to="/favorites" className="text-gray-300 hover:text-white flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                <Heart className="w-4 h-4" /> Favorites
+              </Link>
+              <Link to="/blog" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
             </div>
           </nav>
         )}
