@@ -628,6 +628,7 @@ const HomePage = () => {
 
   return (
     <div data-testid="home-page">
+      <HomeSEO />
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-[#111] to-[#0a0a0a] py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
