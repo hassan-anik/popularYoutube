@@ -479,7 +479,7 @@ const PrivacyPage = () => {
             <h2 className="text-xl font-semibold text-white mb-4">7. Your Rights</h2>
             <p className="text-gray-300 leading-relaxed">
               You have the right to access, correct, or delete any personal data we hold about you. 
-              Contact us at privacy@toptubeworldpro.com for any privacy-related requests.
+              Contact us at anikhasan1100@gmail.com for any privacy-related requests.
             </p>
           </section>
 
