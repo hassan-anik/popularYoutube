@@ -1253,10 +1253,16 @@ const Header = () => {
             <Link to="/compare" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-compare">
               Compare
             </Link>
+            <Link to="/blog" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-blog">
+              Blog
+            </Link>
           </nav>
           
-          {/* Search Button */}
-          <div className="flex items-center gap-3">
+          {/* Search & Favorites */}
+          <div className="flex items-center gap-2">
+            <Link to="/favorites" className="p-2 text-gray-300 hover:text-red-500 transition-colors" data-testid="nav-favorites">
+              <Heart className="w-5 h-5" />
+            </Link>
             <div className="relative">
               <button 
                 onClick={() => setSearchOpen(!searchOpen)}
