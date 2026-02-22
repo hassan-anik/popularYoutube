@@ -2355,6 +2355,555 @@ const TrendingPage = () => {
   );
 };
 
+// ==================== COMPARE PAGE ====================
+
+const ComparePage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [channels, setChannels] = useState([]);
+  const [allChannels, setAllChannels] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const channelIds = searchParams.get('ids')?.split(',').filter(Boolean) || [];
+
+  useSEO({
+    title: "Compare YouTube Channels - TopTube World Pro",
+    description: "Compare multiple YouTube channels side by side. Analyze subscriber counts, growth rates, and performance metrics.",
+    keywords: "compare YouTube channels, YouTube comparison tool, channel analytics comparison",
+    canonical: `${SITE_URL}/compare`
+  });
+
+  useEffect(() => {
+    const fetchAllChannels = async () => {
+      try {
+        const response = await axios.get(`${API}/channels?limit=500`);
+        setAllChannels(response.data.channels || []);
+      } catch (error) {
+        console.error("Error fetching channels:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAllChannels();
+  }, []);
+
+  useEffect(() => {
+    const fetchSelectedChannels = async () => {
+      if (channelIds.length === 0) {
+        setChannels([]);
+        return;
+      }
+      
+      try {
+        const promises = channelIds.map(id => axios.get(`${API}/channels/${id}`));
+        const responses = await Promise.all(promises);
+        setChannels(responses.map(r => r.data));
+      } catch (error) {
+        console.error("Error fetching channel details:", error);
+      }
+    };
+    fetchSelectedChannels();
+  }, [searchParams]);
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (query.length < 2) {
+      setSearchResults([]);
+      return;
+    }
+    const filtered = allChannels.filter(c => 
+      c.title?.toLowerCase().includes(query.toLowerCase()) &&
+      !channelIds.includes(c.channel_id)
+    ).slice(0, 8);
+    setSearchResults(filtered);
+  };
+
+  const addChannel = (channelId) => {
+    if (channelIds.length >= 4) return;
+    const newIds = [...channelIds, channelId];
+    setSearchParams({ ids: newIds.join(',') });
+    setSearchQuery('');
+    setSearchResults([]);
+  };
+
+  const removeChannel = (channelId) => {
+    const newIds = channelIds.filter(id => id !== channelId);
+    setSearchParams({ ids: newIds.join(',') });
+  };
+
+  const shareUrl = `${BACKEND_URL}/compare?ids=${channelIds.join(',')}`;
+
+  // Prepare chart data for comparison
+  const chartData = useMemo(() => {
+    if (channels.length === 0) return [];
+    
+    // Get all unique dates from growth history
+    const allDates = new Set();
+    channels.forEach(ch => {
+      ch.growth_history?.forEach(h => {
+        allDates.add(formatShortDate(h.timestamp));
+      });
+    });
+    
+    return Array.from(allDates).sort().map(date => {
+      const point = { date };
+      channels.forEach(ch => {
+        const historyPoint = ch.growth_history?.find(h => formatShortDate(h.timestamp) === date);
+        point[ch.title] = historyPoint?.subscriber_count || null;
+      });
+      return point;
+    });
+  }, [channels]);
+
+  const colors = ['#ef4444', '#3b82f6', '#22c55e', '#eab308'];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="compare-page">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Compare Channels</h1>
+          <p className="text-gray-500">Compare up to 4 YouTube channels side by side</p>
+        </div>
+
+        {/* Channel Search/Add */}
+        <div className="bg-[#111] border border-[#222] rounded-lg p-4 mb-6">
+          <div className="flex flex-wrap gap-3 mb-4">
+            {channels.map((ch, idx) => (
+              <div key={ch.channel_id} className="flex items-center gap-2 bg-[#0d0d0d] rounded-lg px-3 py-2" style={{ borderLeft: `3px solid ${colors[idx]}` }}>
+                <img src={ch.thumbnail_url} alt="" className="w-6 h-6 rounded-full" />
+                <span className="text-white text-sm">{ch.title}</span>
+                <button onClick={() => removeChannel(ch.channel_id)} className="text-gray-500 hover:text-red-500">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+            {channelIds.length < 4 && (
+              <div className="relative flex-1 min-w-[200px]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder="Add a channel to compare..."
+                  className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg pl-9 pr-4 py-2 text-white text-sm focus:border-red-500 focus:outline-none"
+                  data-testid="compare-search"
+                />
+                {searchResults.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-[#111] border border-[#333] rounded-lg overflow-hidden z-10 max-h-64 overflow-y-auto">
+                    {searchResults.map(ch => (
+                      <button
+                        key={ch.channel_id}
+                        onClick={() => addChannel(ch.channel_id)}
+                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-[#1a1a1a] text-left"
+                      >
+                        <img src={ch.thumbnail_url} alt="" className="w-8 h-8 rounded-full" />
+                        <div>
+                          <div className="text-white text-sm">{ch.title}</div>
+                          <div className="text-gray-500 text-xs">{formatNumber(ch.subscriber_count)} subs</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          
+          {channelIds.length > 0 && (
+            <div className="flex items-center gap-3 pt-3 border-t border-[#222]">
+              <span className="text-sm text-gray-500">Share comparison:</span>
+              <button
+                onClick={() => navigator.clipboard.writeText(shareUrl)}
+                className="flex items-center gap-1 text-xs px-3 py-1 bg-[#222] rounded hover:bg-[#333]"
+              >
+                <Copy className="w-3 h-3" /> Copy Link
+              </button>
+            </div>
+          )}
+        </div>
+
+        {channels.length === 0 ? (
+          <div className="text-center py-16">
+            <BarChart3 className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-white mb-2">No channels selected</h2>
+            <p className="text-gray-500">Search and add channels above to compare them</p>
+          </div>
+        ) : (
+          <>
+            {/* Stats Comparison Table */}
+            <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden mb-6">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-[#222]">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase w-1/5">Metric</th>
+                      {channels.map((ch, idx) => (
+                        <th key={ch.channel_id} className="px-4 py-3 text-center" style={{ borderBottom: `3px solid ${colors[idx]}` }}>
+                          <img src={ch.thumbnail_url} alt="" className="w-10 h-10 rounded-full mx-auto mb-1" />
+                          <div className="text-white text-sm font-medium">{ch.title}</div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#222]">
+                    <tr>
+                      <td className="px-4 py-3 text-gray-400">Subscribers</td>
+                      {channels.map(ch => (
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-white font-bold">{formatNumber(ch.subscriber_count)}</td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-400">Total Views</td>
+                      {channels.map(ch => (
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-white">{formatNumber(ch.view_count)}</td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-400">Videos</td>
+                      {channels.map(ch => (
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-white">{ch.video_count}</td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-400">24h Growth</td>
+                      {channels.map(ch => (
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-green-400">+{formatNumber(ch.daily_subscriber_gain || 0)}</td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-400">Growth Rate</td>
+                      {channels.map(ch => (
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-green-400">{(ch.daily_growth_percent || 0).toFixed(3)}%</td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-400">Status</td>
+                      {channels.map(ch => (
+                        <td key={ch.channel_id} className="px-4 py-3 text-center"><ViralBadge label={ch.viral_label} /></td>
+                      ))}
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-gray-400">Country</td>
+                      {channels.map(ch => (
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-white">{ch.country_name}</td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Growth Chart Overlay */}
+            {chartData.length > 0 && (
+              <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+                <h2 className="text-lg font-bold text-white mb-4">Subscriber Growth Comparison</h2>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#222" />
+                      <XAxis dataKey="date" stroke="#666" tick={{ fill: '#666', fontSize: 11 }} />
+                      <YAxis stroke="#666" tick={{ fill: '#666', fontSize: 11 }} tickFormatter={formatNumber} />
+                      <Tooltip 
+                        contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '8px' }}
+                        labelStyle={{ color: '#999' }}
+                        formatter={(value) => [formatNumber(value), "Subscribers"]}
+                      />
+                      <Legend />
+                      {channels.map((ch, idx) => (
+                        <Line 
+                          key={ch.channel_id}
+                          type="monotone" 
+                          dataKey={ch.title} 
+                          stroke={colors[idx]}
+                          strokeWidth={2}
+                          dot={false}
+                          connectNulls
+                        />
+                      ))}
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ==================== FAVORITES PAGE ====================
+
+const FavoritesPage = () => {
+  const navigate = useNavigate();
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const [channelDetails, setChannelDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useSEO({
+    title: "My Favorites - TopTube World Pro",
+    description: "Your saved favorite YouTube channels for quick access and tracking.",
+    keywords: "favorite YouTube channels, saved channels, YouTube watchlist",
+    canonical: `${SITE_URL}/favorites`
+  });
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      if (favorites.length === 0) {
+        setChannelDetails([]);
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        const promises = favorites.map(f => axios.get(`${API}/channels/${f.channel_id}`).catch(() => null));
+        const responses = await Promise.all(promises);
+        const details = responses.filter(r => r?.data).map(r => r.data);
+        setChannelDetails(details);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDetails();
+  }, [favorites]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="favorites-page">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+            <Heart className="w-8 h-8 text-red-500" />
+            My Favorites
+          </h1>
+          <p className="text-gray-500">Your saved channels for quick access</p>
+        </div>
+
+        {channelDetails.length === 0 ? (
+          <div className="text-center py-16 bg-[#111] border border-[#222] rounded-lg">
+            <Bookmark className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-white mb-2">No favorites yet</h2>
+            <p className="text-gray-500 mb-6">Click the heart icon on any channel to save it here</p>
+            <Link to="/leaderboard" className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700">
+              Browse Channels
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {channelDetails.map((channel, idx) => (
+              <div 
+                key={channel.channel_id}
+                className="bg-[#111] border border-[#222] rounded-lg p-4 hover:border-[#333] transition-colors cursor-pointer"
+                onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                data-testid={`favorite-card-${idx}`}
+              >
+                <div className="flex items-start gap-4">
+                  <img 
+                    src={channel.thumbnail_url || "https://via.placeholder.com/64"} 
+                    alt={channel.title}
+                    className="w-16 h-16 rounded-full"
+                    loading="lazy"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-white truncate">{channel.title}</h3>
+                    <p className="text-gray-500 text-sm">{channel.country_name}</p>
+                    <div className="flex items-center gap-4 mt-2">
+                      <span className="text-lg font-bold text-white">{formatNumber(channel.subscriber_count)}</span>
+                      <span className="text-green-400 text-sm">+{formatNumber(channel.daily_subscriber_gain || 0)}</span>
+                    </div>
+                  </div>
+                  <FavoriteButton 
+                    channel={channel}
+                    isFavorite={isFavorite(channel.channel_id)}
+                    onToggle={toggleFavorite}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ==================== BLOG PAGE ====================
+
+const blogPosts = [
+  {
+    id: 1,
+    slug: 'top-10-rising-youtubers-2025',
+    title: 'Top 10 Rising YouTubers to Watch in 2025',
+    excerpt: 'Discover the fastest-growing YouTube channels that are set to dominate the platform this year.',
+    category: 'Trending',
+    date: '2025-01-15',
+    readTime: '5 min read',
+    image: 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800&auto=format&fit=crop&q=60'
+  },
+  {
+    id: 2,
+    slug: 'how-youtube-algorithm-works-2025',
+    title: 'How the YouTube Algorithm Works in 2025',
+    excerpt: 'An in-depth analysis of YouTube\'s recommendation system and how creators can leverage it.',
+    category: 'Guide',
+    date: '2025-01-10',
+    readTime: '8 min read',
+    image: 'https://images.unsplash.com/photo-1633114128174-2f8aa49759b0?w=800&auto=format&fit=crop&q=60'
+  },
+  {
+    id: 3,
+    slug: 'india-youtube-dominance',
+    title: 'Why India is Dominating YouTube',
+    excerpt: 'Analyzing the explosive growth of Indian YouTube channels and what it means for the platform.',
+    category: 'Analysis',
+    date: '2025-01-05',
+    readTime: '6 min read',
+    image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&auto=format&fit=crop&q=60'
+  },
+  {
+    id: 4,
+    slug: 'mrbeast-phenomenon',
+    title: 'The MrBeast Phenomenon: Breaking Down His Success',
+    excerpt: 'How MrBeast became the most subscribed individual YouTuber and what creators can learn.',
+    category: 'Case Study',
+    date: '2024-12-28',
+    readTime: '10 min read',
+    image: 'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=800&auto=format&fit=crop&q=60'
+  },
+  {
+    id: 5,
+    slug: 'youtube-shorts-growth-strategy',
+    title: 'YouTube Shorts: The Ultimate Growth Strategy',
+    excerpt: 'How short-form content is reshaping YouTube and helping channels explode in subscribers.',
+    category: 'Strategy',
+    date: '2024-12-20',
+    readTime: '7 min read',
+    image: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=800&auto=format&fit=crop&q=60'
+  },
+  {
+    id: 6,
+    slug: 'gaming-youtube-channels-2025',
+    title: 'The State of Gaming YouTube in 2025',
+    excerpt: 'Gaming remains one of the biggest categories on YouTube. Here\'s what\'s trending.',
+    category: 'Gaming',
+    date: '2024-12-15',
+    readTime: '6 min read',
+    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format&fit=crop&q=60'
+  }
+];
+
+const BlogPage = () => {
+  useSEO({
+    title: "Blog - YouTube Trends & Analysis | TopTube World Pro",
+    description: "Read the latest articles about YouTube trends, channel growth strategies, and platform analytics.",
+    keywords: "YouTube blog, YouTube trends, YouTube growth tips, YouTuber analysis",
+    canonical: `${SITE_URL}/blog`
+  });
+
+  return (
+    <div className="py-8" data-testid="blog-page">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+            <BookOpen className="w-8 h-8 text-red-500" />
+            Blog & Insights
+          </h1>
+          <p className="text-gray-500">Latest trends, analysis, and insights from the YouTube world</p>
+        </div>
+
+        {/* Featured Post */}
+        <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden mb-8">
+          <div className="md:flex">
+            <div className="md:w-1/2">
+              <img 
+                src={blogPosts[0].image} 
+                alt={blogPosts[0].title}
+                className="w-full h-64 md:h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div className="md:w-1/2 p-6 flex flex-col justify-center">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-xs font-medium">{blogPosts[0].category}</span>
+                <span className="text-gray-500 text-xs flex items-center gap-1">
+                  <CalendarDays className="w-3 h-3" />
+                  {formatDate(blogPosts[0].date)}
+                </span>
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-3">{blogPosts[0].title}</h2>
+              <p className="text-gray-400 mb-4">{blogPosts[0].excerpt}</p>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500 text-sm flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  {blogPosts[0].readTime}
+                </span>
+                <Link to={`/blog/${blogPosts[0].slug}`} className="text-red-500 hover:text-red-400 font-medium flex items-center gap-1">
+                  Read More <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Ad placement */}
+        <HorizontalAd />
+
+        {/* Blog Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {blogPosts.slice(1).map((post) => (
+            <article key={post.id} className="bg-[#111] border border-[#222] rounded-lg overflow-hidden hover:border-[#333] transition-colors">
+              <img 
+                src={post.image} 
+                alt={post.title}
+                className="w-full h-48 object-cover"
+                loading="lazy"
+              />
+              <div className="p-5">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="bg-[#222] text-gray-300 px-2 py-1 rounded text-xs">{post.category}</span>
+                  <span className="text-gray-500 text-xs">{formatDate(post.date)}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">{post.title}</h3>
+                <p className="text-gray-400 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500 text-xs">{post.readTime}</span>
+                  <Link to={`/blog/${post.slug}`} className="text-red-500 hover:text-red-400 text-sm font-medium">
+                    Read →
+                  </Link>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* Newsletter CTA */}
+        <div className="mt-12">
+          <NewsletterSignup />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Admin Page
 const AdminPage = () => {
   const [stats, setStats] = useState(null);
