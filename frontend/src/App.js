@@ -95,9 +95,6 @@ const Header = () => {
             <Link to="/trending" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-trending">
               Trending
             </Link>
-            <Link to="/admin" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-admin">
-              Admin
-            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
