@@ -212,12 +212,21 @@ const CountrySEO = ({ country, channels }) => {
 
 // Channel Page SEO
 const ChannelSEO = ({ channel }) => {
-  if (!channel) return null;
+  const title = channel ? `${channel.title} - YouTube Channel Stats & Analytics | ${formatNumber(channel.subscriber_count)} Subscribers` : "";
+  const description = channel ? `${channel.title} YouTube channel statistics: ${formatNumber(channel.subscriber_count)} subscribers, ${formatNumber(channel.view_count)} total views, ${channel.video_count} videos. From ${channel.country_name}. Track growth and rankings.` : "";
+  const keywords = channel ? `${channel.title}, ${channel.title} subscribers, ${channel.title} stats, ${channel.title} YouTube, ${channel.country_name} YouTuber, YouTube channel analytics` : "";
+  const pageUrl = channel ? `${SITE_URL}/channel/${channel.channel_id}` : "";
   
-  const title = `${channel.title} - YouTube Channel Stats & Analytics | ${formatNumber(channel.subscriber_count)} Subscribers`;
-  const description = `${channel.title} YouTube channel statistics: ${formatNumber(channel.subscriber_count)} subscribers, ${formatNumber(channel.view_count)} total views, ${channel.video_count} videos. From ${channel.country_name}. Track growth and rankings.`;
-  const keywords = `${channel.title}, ${channel.title} subscribers, ${channel.title} stats, ${channel.title} YouTube, ${channel.country_name} YouTuber, YouTube channel analytics`;
-  const pageUrl = `${SITE_URL}/channel/${channel.channel_id}`;
+  useSEO({
+    title,
+    description,
+    keywords,
+    canonical: pageUrl,
+    ogType: "profile",
+    ogImage: channel?.thumbnail_url
+  });
+  
+  if (!channel) return null;
   
   // Schema.org for YouTube Channel
   const schemaData = {
@@ -251,31 +260,7 @@ const ChannelSEO = ({ channel }) => {
     ]
   };
 
-  return (
-    <>
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="keywords" content={keywords} />
-        <link rel="canonical" href={pageUrl} />
-        
-        {/* Open Graph */}
-        <meta property="og:type" content="profile" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:site_name" content={SITE_NAME} />
-        <meta property="og:image" content={channel.thumbnail_url} />
-        
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={channel.thumbnail_url} />
-      </Helmet>
-      <JsonLd data={schemaData} />
-    </>
-  );
+  return <JsonLd data={schemaData} />;
 };
 
 // Leaderboard Page SEO
