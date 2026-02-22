@@ -74,6 +74,198 @@ const formatShortDate = (dateStr) => {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
 
+// ==================== AD COMPONENTS ====================
+
+// AdSense Display Ad Component
+const AdBanner = ({ slot = "auto", format = "auto", style = {} }) => {
+  const adRef = useRef(null);
+  
+  useEffect(() => {
+    try {
+      if (window.adsbygoogle && adRef.current) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (e) {
+      console.error('AdSense error:', e);
+    }
+  }, []);
+  
+  return (
+    <div className="ad-container my-4" style={style}>
+      <ins
+        ref={adRef}
+        className="adsbygoogle"
+        style={{ display: 'block', ...style }}
+        data-ad-client="ca-pub-3641870553510634"
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      />
+    </div>
+  );
+};
+
+// Horizontal Banner Ad (for between sections)
+const HorizontalAd = () => (
+  <div className="w-full bg-[#0d0d0d] border border-[#222] rounded-lg p-2 my-6">
+    <div className="text-center text-xs text-gray-500 mb-1">Advertisement</div>
+    <AdBanner format="horizontal" style={{ minHeight: '90px' }} />
+  </div>
+);
+
+// ==================== SOCIAL SHARING ====================
+
+const SocialShareButtons = ({ url, title, description }) => {
+  const encodedUrl = encodeURIComponent(url);
+  const encodedTitle = encodeURIComponent(title);
+  const encodedDesc = encodeURIComponent(description || '');
+  
+  const shareLinks = {
+    twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+    whatsapp: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
+    email: `mailto:?subject=${encodedTitle}&body=${encodedDesc}%0A%0A${encodedUrl}`
+  };
+  
+  const handleShare = (platform) => {
+    window.open(shareLinks[platform], '_blank', 'width=600,height=400');
+  };
+  
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-gray-400 text-sm flex items-center gap-1">
+        <Share2 className="w-4 h-4" /> Share:
+      </span>
+      <button
+        onClick={() => handleShare('twitter')}
+        className="p-2 bg-[#1DA1F2]/20 hover:bg-[#1DA1F2]/30 rounded-lg transition-colors"
+        title="Share on Twitter"
+      >
+        <Twitter className="w-4 h-4 text-[#1DA1F2]" />
+      </button>
+      <button
+        onClick={() => handleShare('facebook')}
+        className="p-2 bg-[#4267B2]/20 hover:bg-[#4267B2]/30 rounded-lg transition-colors"
+        title="Share on Facebook"
+      >
+        <Facebook className="w-4 h-4 text-[#4267B2]" />
+      </button>
+      <button
+        onClick={() => handleShare('linkedin')}
+        className="p-2 bg-[#0077B5]/20 hover:bg-[#0077B5]/30 rounded-lg transition-colors"
+        title="Share on LinkedIn"
+      >
+        <Linkedin className="w-4 h-4 text-[#0077B5]" />
+      </button>
+      <button
+        onClick={() => handleShare('whatsapp')}
+        className="p-2 bg-[#25D366]/20 hover:bg-[#25D366]/30 rounded-lg transition-colors"
+        title="Share on WhatsApp"
+      >
+        <MessageCircle className="w-4 h-4 text-[#25D366]" />
+      </button>
+      <button
+        onClick={() => handleShare('email')}
+        className="p-2 bg-gray-500/20 hover:bg-gray-500/30 rounded-lg transition-colors"
+        title="Share via Email"
+      >
+        <Mail className="w-4 h-4 text-gray-400" />
+      </button>
+    </div>
+  );
+};
+
+// ==================== NEWSLETTER SIGNUP ====================
+
+const NewsletterSignup = ({ compact = false }) => {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // idle, loading, success, error
+  const [message, setMessage] = useState('');
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setStatus('loading');
+    try {
+      const response = await axios.post(`${API_URL}/newsletter/subscribe`, { email });
+      if (response.data.status === 'success') {
+        setStatus('success');
+        setMessage('Thanks for subscribing!');
+        setEmail('');
+      }
+    } catch (err) {
+      setStatus('error');
+      setMessage('Already subscribed or invalid email');
+    }
+    
+    setTimeout(() => {
+      setStatus('idle');
+      setMessage('');
+    }, 3000);
+  };
+  
+  if (compact) {
+    return (
+      <form onSubmit={handleSubmit} className="flex gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          className="flex-1 bg-[#0d0d0d] border border-[#333] rounded-lg px-3 py-2 text-white text-sm focus:border-red-500 focus:outline-none"
+          required
+        />
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center gap-1"
+        >
+          <Send className="w-4 h-4" />
+        </button>
+      </form>
+    );
+  }
+  
+  return (
+    <div className="bg-gradient-to-r from-red-600/20 to-red-900/20 border border-red-500/30 rounded-xl p-6">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="p-2 bg-red-500/20 rounded-lg">
+          <Mail className="w-6 h-6 text-red-500" />
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-white">Stay Updated</h3>
+          <p className="text-gray-400 text-sm">Get weekly YouTube ranking updates</p>
+        </div>
+      </div>
+      
+      {status === 'success' ? (
+        <div className="text-green-400 text-center py-3">{message}</div>
+      ) : (
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            className="flex-1 bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-3 text-white focus:border-red-500 focus:outline-none"
+            required
+          />
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:opacity-50"
+          >
+            {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+          </button>
+        </form>
+      )}
+      {status === 'error' && <p className="text-red-400 text-sm mt-2">{message}</p>}
+    </div>
+  );
+};
+
 // ==================== SEO COMPONENTS ====================
 
 // Base site info
