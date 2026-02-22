@@ -59,7 +59,9 @@ import {
   FileText,
   CalendarDays,
   Bookmark,
-  Download
+  Download,
+  Sun,
+  Moon
 } from "lucide-react";
 import "@/App.css";
 
@@ -68,6 +70,71 @@ const API = `${BACKEND_URL}/api`;
 const API_URL = API;
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
+// ==================== THEME SYSTEM ====================
+
+const ThemeContext = React.createContext();
+
+const THEME_KEY = 'toptube_theme';
+
+const getInitialTheme = () => {
+  try {
+    const stored = localStorage.getItem(THEME_KEY);
+    if (stored) return stored;
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      return 'light';
+    }
+  } catch (e) {}
+  return 'dark';
+};
+
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState(getInitialTheme);
+
+  useEffect(() => {
+    localStorage.setItem(THEME_KEY, theme);
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // Update meta theme color
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute('content', theme === 'dark' ? '#0a0a0a' : '#ffffff');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+const useTheme = () => React.useContext(ThemeContext);
+
+// Theme Toggle Button Component
+const ThemeToggle = () => {
+  const { theme, toggleTheme } = useTheme();
+  
+  return (
+    <button
+      onClick={toggleTheme}
+      className="p-2 rounded-lg transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      data-testid="theme-toggle"
+    >
+      {theme === 'dark' ? (
+        <Sun className="w-5 h-5 text-yellow-400" />
+      ) : (
+        <Moon className="w-5 h-5 text-gray-600" />
+      )}
+    </button>
+  );
+};
 
 // Utility functions
 const formatNumber = (num) => {
