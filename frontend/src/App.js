@@ -67,6 +67,277 @@ const formatShortDate = (dateStr) => {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
 
+// ==================== SEO COMPONENTS ====================
+
+// Base site info
+const SITE_NAME = "TopTube World Pro";
+const SITE_URL = process.env.REACT_APP_BACKEND_URL || "https://toptubeworldpro.com";
+
+// Home Page SEO
+const HomeSEO = () => (
+  <Helmet>
+    <title>TopTube World Pro - Global YouTube Channel Rankings & Analytics</title>
+    <meta name="description" content="Track and analyze the most subscribed YouTube channels worldwide. Real-time rankings, growth predictions, and analytics for 197 countries. Discover top YouTubers by country." />
+    <meta name="keywords" content="YouTube rankings, most subscribed YouTubers, top YouTube channels, YouTube analytics, subscriber count, YouTube growth tracker, global YouTube statistics" />
+    <link rel="canonical" href={SITE_URL} />
+    
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="TopTube World Pro - Global YouTube Channel Rankings" />
+    <meta property="og:description" content="Track the most subscribed YouTube channels across 197 countries. Real-time rankings, growth predictions, and viral channel detection." />
+    <meta property="og:url" content={SITE_URL} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    
+    {/* Twitter Card */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TopTube World Pro - Global YouTube Rankings" />
+    <meta name="twitter:description" content="Track the most subscribed YouTube channels across 197 countries with real-time analytics." />
+    
+    {/* Schema.org structured data */}
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": SITE_NAME,
+        "url": SITE_URL,
+        "description": "Track and analyze the most subscribed YouTube channels worldwide with real-time rankings and growth predictions.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": `${SITE_URL}/countries`,
+          "query-input": "required name=search_term_string"
+        }
+      })}
+    </script>
+  </Helmet>
+);
+
+// Country Page SEO
+const CountrySEO = ({ country, channels }) => {
+  if (!country) return null;
+  
+  const topChannel = channels?.[0];
+  const channelCount = channels?.length || 0;
+  const totalSubs = channels?.reduce((sum, c) => sum + (c.subscriber_count || 0), 0) || 0;
+  
+  const title = `Top YouTube Channels in ${country.name} ${country.flag_emoji} - Most Subscribed YouTubers ${new Date().getFullYear()}`;
+  const description = `Discover the ${channelCount} most subscribed YouTube channels in ${country.name}. ${topChannel ? `#1 is ${topChannel.title} with ${formatNumber(topChannel.subscriber_count)} subscribers.` : ''} Real-time rankings and growth analytics.`;
+  const keywords = `top YouTube channels ${country.name}, most subscribed YouTubers ${country.name}, ${country.name} YouTube rankings, popular YouTubers in ${country.name}, ${country.name} YouTube statistics, best YouTubers ${country.name}`;
+  const pageUrl = `${SITE_URL}/country/${country.code}`;
+  
+  // Schema.org ItemList for country rankings
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": `Top YouTube Channels in ${country.name}`,
+    "description": description,
+    "url": pageUrl,
+    "numberOfItems": channelCount,
+    "itemListElement": channels?.slice(0, 10).map((channel, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "item": {
+        "@type": "Organization",
+        "name": channel.title,
+        "url": `https://youtube.com/channel/${channel.channel_id}`,
+        "description": `YouTube channel with ${formatNumber(channel.subscriber_count)} subscribers`,
+        "image": channel.thumbnail_url
+      }
+    })) || []
+  };
+
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
+      <link rel="canonical" href={pageUrl} />
+      
+      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={pageUrl} />
+      <meta property="og:site_name" content={SITE_NAME} />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      
+      {/* Schema.org structured data */}
+      <script type="application/ld+json">
+        {JSON.stringify(schemaData)}
+      </script>
+    </Helmet>
+  );
+};
+
+// Channel Page SEO
+const ChannelSEO = ({ channel }) => {
+  if (!channel) return null;
+  
+  const title = `${channel.title} - YouTube Channel Stats & Analytics | ${formatNumber(channel.subscriber_count)} Subscribers`;
+  const description = `${channel.title} YouTube channel statistics: ${formatNumber(channel.subscriber_count)} subscribers, ${formatNumber(channel.view_count)} total views, ${channel.video_count} videos. From ${channel.country_name}. Track growth and rankings.`;
+  const keywords = `${channel.title}, ${channel.title} subscribers, ${channel.title} stats, ${channel.title} YouTube, ${channel.country_name} YouTuber, YouTube channel analytics`;
+  const pageUrl = `${SITE_URL}/channel/${channel.channel_id}`;
+  
+  // Schema.org for YouTube Channel
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": channel.title,
+    "url": `https://youtube.com/channel/${channel.channel_id}`,
+    "description": channel.description?.substring(0, 500) || `YouTube channel from ${channel.country_name}`,
+    "image": channel.thumbnail_url,
+    "sameAs": [
+      `https://youtube.com/channel/${channel.channel_id}`
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": Math.min(5, Math.max(1, (channel.viral_score || 50) / 20)),
+      "bestRating": 5,
+      "worstRating": 1,
+      "ratingCount": channel.subscriber_count || 1
+    },
+    "interactionStatistic": [
+      {
+        "@type": "InteractionCounter",
+        "interactionType": "https://schema.org/SubscribeAction",
+        "userInteractionCount": channel.subscriber_count
+      },
+      {
+        "@type": "InteractionCounter",
+        "interactionType": "https://schema.org/WatchAction",
+        "userInteractionCount": channel.view_count
+      }
+    ]
+  };
+
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
+      <link rel="canonical" href={pageUrl} />
+      
+      {/* Open Graph */}
+      <meta property="og:type" content="profile" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={pageUrl} />
+      <meta property="og:site_name" content={SITE_NAME} />
+      <meta property="og:image" content={channel.thumbnail_url} />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={channel.thumbnail_url} />
+      
+      {/* Schema.org structured data */}
+      <script type="application/ld+json">
+        {JSON.stringify(schemaData)}
+      </script>
+    </Helmet>
+  );
+};
+
+// Leaderboard Page SEO
+const LeaderboardSEO = ({ totalChannels }) => {
+  const title = `Global YouTube Leaderboard - Top ${totalChannels || 100} Most Subscribed Channels ${new Date().getFullYear()}`;
+  const description = `Complete ranking of the world's most subscribed YouTube channels. Live subscriber counts, daily growth, and viral status for ${totalChannels || 100}+ channels. Updated in real-time.`;
+  const pageUrl = `${SITE_URL}/leaderboard`;
+  
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content="YouTube leaderboard, most subscribed YouTube channels, top YouTubers worldwide, global YouTube rankings, YouTube subscriber count, biggest YouTube channels" />
+      <link rel="canonical" href={pageUrl} />
+      
+      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={pageUrl} />
+      <meta property="og:site_name" content={SITE_NAME} />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      
+      {/* Schema.org structured data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "Global YouTube Channel Leaderboard",
+          "description": description,
+          "url": pageUrl,
+          "numberOfItems": totalChannels || 100
+        })}
+      </script>
+    </Helmet>
+  );
+};
+
+// Countries List Page SEO
+const CountriesListSEO = ({ totalCountries }) => {
+  const title = `YouTube Rankings by Country - Browse ${totalCountries || 197} Countries | TopTube World Pro`;
+  const description = `Explore YouTube channel rankings for ${totalCountries || 197} countries worldwide. Find the most subscribed YouTubers in any country. Real-time subscriber counts and growth analytics.`;
+  const pageUrl = `${SITE_URL}/countries`;
+  
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content="YouTube by country, YouTubers by country, top channels by country, YouTube rankings countries, international YouTubers, YouTube statistics by country" />
+      <link rel="canonical" href={pageUrl} />
+      
+      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={pageUrl} />
+      <meta property="og:site_name" content={SITE_NAME} />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+    </Helmet>
+  );
+};
+
+// Trending Page SEO
+const TrendingSEO = () => {
+  const title = `Trending YouTube Channels - Fastest Growing YouTubers ${new Date().getFullYear()}`;
+  const description = `Discover the fastest growing YouTube channels right now. See which YouTubers are gaining subscribers the fastest with real-time growth analytics and viral predictions.`;
+  const pageUrl = `${SITE_URL}/trending`;
+  
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content="trending YouTube channels, fastest growing YouTubers, viral YouTube channels, YouTube growth, rising YouTubers, YouTube trending, biggest daily gains" />
+      <link rel="canonical" href={pageUrl} />
+      
+      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={pageUrl} />
+      <meta property="og:site_name" content={SITE_NAME} />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+    </Helmet>
+  );
+};
+
 // Header Component
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
