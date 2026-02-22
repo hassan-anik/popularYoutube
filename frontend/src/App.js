@@ -74,42 +74,44 @@ const SITE_NAME = "TopTube World Pro";
 const SITE_URL = process.env.REACT_APP_BACKEND_URL || "https://toptubeworldpro.com";
 
 // Home Page SEO
-const HomeSEO = () => (
-  <Helmet>
-    <title>TopTube World Pro - Global YouTube Channel Rankings & Analytics</title>
-    <meta name="description" content="Track and analyze the most subscribed YouTube channels worldwide. Real-time rankings, growth predictions, and analytics for 197 countries. Discover top YouTubers by country." />
-    <meta name="keywords" content="YouTube rankings, most subscribed YouTubers, top YouTube channels, YouTube analytics, subscriber count, YouTube growth tracker, global YouTube statistics" />
-    <link rel="canonical" href={SITE_URL} />
-    
-    {/* Open Graph */}
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="TopTube World Pro - Global YouTube Channel Rankings" />
-    <meta property="og:description" content="Track the most subscribed YouTube channels across 197 countries. Real-time rankings, growth predictions, and viral channel detection." />
-    <meta property="og:url" content={SITE_URL} />
-    <meta property="og:site_name" content={SITE_NAME} />
-    
-    {/* Twitter Card */}
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="TopTube World Pro - Global YouTube Rankings" />
-    <meta name="twitter:description" content="Track the most subscribed YouTube channels across 197 countries with real-time analytics." />
-    
-    {/* Schema.org structured data */}
-    <script type="application/ld+json">
-      {JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": SITE_NAME,
-        "url": SITE_URL,
-        "description": "Track and analyze the most subscribed YouTube channels worldwide with real-time rankings and growth predictions.",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": `${SITE_URL}/countries`,
-          "query-input": "required name=search_term_string"
-        }
-      })}
-    </script>
-  </Helmet>
-);
+const HomeSEO = () => {
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": SITE_NAME,
+    "url": SITE_URL,
+    "description": "Track and analyze the most subscribed YouTube channels worldwide with real-time rankings and growth predictions.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": `${SITE_URL}/countries`,
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  return (
+    <Helmet>
+      <title>TopTube World Pro - Global YouTube Channel Rankings & Analytics</title>
+      <meta name="description" content="Track and analyze the most subscribed YouTube channels worldwide. Real-time rankings, growth predictions, and analytics for 197 countries. Discover top YouTubers by country." />
+      <meta name="keywords" content="YouTube rankings, most subscribed YouTubers, top YouTube channels, YouTube analytics, subscriber count, YouTube growth tracker, global YouTube statistics" />
+      <link rel="canonical" href={SITE_URL} />
+      
+      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="TopTube World Pro - Global YouTube Channel Rankings" />
+      <meta property="og:description" content="Track the most subscribed YouTube channels across 197 countries. Real-time rankings, growth predictions, and viral channel detection." />
+      <meta property="og:url" content={SITE_URL} />
+      <meta property="og:site_name" content={SITE_NAME} />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="TopTube World Pro - Global YouTube Rankings" />
+      <meta name="twitter:description" content="Track the most subscribed YouTube channels across 197 countries with real-time analytics." />
+      
+      {/* Schema.org structured data */}
+      <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
+    </Helmet>
+  );
+};
 
 // Country Page SEO
 const CountrySEO = ({ country, channels }) => {
