@@ -489,7 +489,7 @@ const LeaderboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API}/leaderboard/global?limit=100`);
+        const response = await axios.get(`${API}/leaderboard/global?limit=500`);
         setChannels(response.data.channels || []);
       } catch (error) {
         console.error("Error:", error);
