@@ -1370,6 +1370,18 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      
+      {/* Newsletter Signup */}
+      <section className="py-12 bg-[#0a0a0a]">
+        <div className="max-w-2xl mx-auto px-4">
+          <NewsletterSignup />
+        </div>
+      </section>
+      
+      {/* Ad Banner */}
+      <section className="max-w-6xl mx-auto px-4">
+        <HorizontalAd />
+      </section>
     </div>
   );
 };
