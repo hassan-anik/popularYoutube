@@ -598,6 +598,8 @@ const TermsPage = () => {
 const ContactPage = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   useSEO({
     title: "Contact Us - TopTube World Pro",
@@ -606,10 +608,22 @@ const ContactPage = () => {
     canonical: `${SITE_URL}/contact`
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In production, this would send to a backend API
-    setSubmitted(true);
+    setSubmitting(true);
+    setError(null);
+    
+    try {
+      const response = await axios.post(`${API_URL}/api/contact`, formData);
+      if (response.data.status === 'success') {
+        setSubmitted(true);
+      }
+    } catch (err) {
+      setError('Failed to send message. Please try again.');
+      console.error('Contact form error:', err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
