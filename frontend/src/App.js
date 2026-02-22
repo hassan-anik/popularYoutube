@@ -585,7 +585,7 @@ const TermsPage = () => {
           <section>
             <h2 className="text-xl font-semibold text-white mb-4">9. Contact</h2>
             <p className="text-gray-300 leading-relaxed">
-              For questions about these Terms of Service, please contact us at legal@toptubeworldpro.com.
+              For questions about these Terms of Service, please contact us at anikhasan1100@gmail.com.
             </p>
           </section>
         </div>
