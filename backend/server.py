@@ -87,6 +87,12 @@ class ChannelResponse(BaseModel):
     viral_score: float = 0
     published_at: str = ""
 
+class ContactFormRequest(BaseModel):
+    name: str
+    email: str
+    subject: str
+    message: str
+
 class StatsSnapshot(BaseModel):
     channel_id: str
     subscriber_count: int
