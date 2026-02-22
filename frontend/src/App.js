@@ -167,9 +167,7 @@ const CountrySEO = ({ country, channels }) => {
       <meta name="twitter:description" content={description} />
       
       {/* Schema.org structured data */}
-      <script type="application/ld+json">
-        {JSON.stringify(schemaData)}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
     </Helmet>
   );
 };
