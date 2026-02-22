@@ -114,6 +114,8 @@
 - `ComparePage` - Channel comparison UI
 - `FavoritesPage` - Saved channels list
 - `BlogPage` - Article listing
+- `ThemeProvider` - Context for dark/light mode
+- `ThemeToggle` - Sun/Moon toggle button
 
 ### Background Scheduler (APScheduler)
 | Job | Interval | Function |
