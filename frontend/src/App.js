@@ -111,10 +111,9 @@ const Header = () => {
           <nav className="md:hidden py-4 border-t border-[#1a1a1a]">
             <div className="flex flex-col gap-4">
               <Link to="/" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-              <Link to="/leaderboard" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Top 100</Link>
+              <Link to="/leaderboard" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Leaderboard</Link>
               <Link to="/countries" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Countries</Link>
               <Link to="/trending" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Trending</Link>
-              <Link to="/admin" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Admin</Link>
             </div>
           </nav>
         )}
