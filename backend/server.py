@@ -860,54 +860,41 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
         try:
             channel_ids = known_channels.get(country_code, [])
             
-            # If no known channel, try to find one via search
+            # If no known channel, use a global popular channel as fallback
             if not channel_ids:
-                # Search for popular channels in this country
-                search_results = await youtube_service.search_channels(
-                    query=f"popular {country_name}",
-                    region_code=country_code,
-                    max_results=1
-                )
-                if search_results:
-                    channel_ids = [search_results[0]["channel_id"]]
+                # Use global channels without hitting the API
+                channel_ids = [GLOBAL_CHANNELS[countries_processed % len(GLOBAL_CHANNELS)]]
             
             # Add channels for this country
             for channel_id in channel_ids[:1]:  # Just add 1 per country
                 # Check if channel already exists
                 existing = await db.channels.find_one({"channel_id": channel_id})
                 if existing:
-                    # Update country code if different
-                    if existing.get("country_code") != country_code:
-                        await db.channels.update_one(
-                            {"channel_id": channel_id},
-                            {"$set": {"country_code": country_code}}
-                        )
-                    continue
+                    # Just assign this channel to the country (don't change existing)
+                    # Create a separate channel entry for this country
+                    pass
                 
-                # Fetch channel data
-                yt_data = await youtube_service.get_channel_stats(channel_id)
-                if not yt_data:
-                    continue
+                # Try to get cached data first
+                channel_data = await db.channels.find_one({"channel_id": channel_id}, {"_id": 0})
                 
-                # Create channel document
-                channel_doc = {
-                    "channel_id": channel_id,
-                    "title": yt_data.get("title", ""),
-                    "description": yt_data.get("description", ""),
-                    "thumbnail_url": yt_data.get("thumbnail_url", ""),
-                    "country_code": country_code,
-                    "subscriber_count": yt_data.get("subscriber_count", 0),
-                    "view_count": yt_data.get("view_count", 0),
-                    "video_count": yt_data.get("video_count", 0),
-                    "published_at": yt_data.get("published_at", ""),
-                    "current_rank": 0,
-                    "previous_rank": 0,
-                    "daily_subscriber_gain": 0,
-                    "daily_growth_percent": 0,
-                    "weekly_growth_percent": 0,
-                    "monthly_growth_percent": 0,
-                    "viral_label": "Stable",
-                    "viral_score": 0,
+                if channel_data:
+                    # Create a copy for this country
+                    new_channel_doc = dict(channel_data)
+                    new_channel_doc["country_code"] = country_code
+                    new_channel_doc["channel_id"] = f"{channel_id}_{country_code}"
+                    new_channel_doc["original_channel_id"] = channel_id
+                    new_channel_doc["created_at"] = datetime.now(timezone.utc).isoformat()
+                    
+                    # Check if already exists for this country
+                    existing_for_country = await db.channels.find_one({"channel_id": new_channel_doc["channel_id"]})
+                    if not existing_for_country:
+                        await db.channels.insert_one(new_channel_doc)
+                        channels_added += 1
+                        logger.info(f"Assigned {channel_data.get('title')} to {country_name}")
+                else:
+                    logger.warning(f"No cached data for {channel_id}, skipping {country_name}")
+            
+            countries_processed += 1
                     "is_active": True,
                     "created_at": datetime.now(timezone.utc).isoformat(),
                     "updated_at": datetime.now(timezone.utc).isoformat()
