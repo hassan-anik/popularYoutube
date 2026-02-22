@@ -1327,13 +1327,14 @@ const Header = () => {
           
           {/* Search & Favorites */}
           <div className="flex items-center gap-2">
-            <Link to="/favorites" className="p-2 text-gray-300 hover:text-red-500 transition-colors" data-testid="nav-favorites">
+            <ThemeToggle />
+            <Link to="/favorites" className="p-2 text-gray-300 dark:text-gray-300 hover:text-red-500 transition-colors" data-testid="nav-favorites">
               <Heart className="w-5 h-5" />
             </Link>
             <div className="relative">
               <button 
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="p-2 text-gray-300 hover:text-white transition-colors"
+                className="p-2 text-gray-300 dark:text-gray-300 hover:text-white transition-colors"
                 data-testid="search-toggle"
               >
                 <Search className="w-5 h-5" />
@@ -1341,13 +1342,13 @@ const Header = () => {
               
               {/* Search Dropdown */}
               {searchOpen && (
-                <div className="absolute right-0 top-12 w-80 bg-[#111] border border-[#333] rounded-lg shadow-xl overflow-hidden">
+                <div className="absolute right-0 top-12 w-80 bg-white dark:bg-[#111] border border-gray-200 dark:border-[#333] rounded-lg shadow-xl overflow-hidden z-50">
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
                     placeholder="Search channels..."
-                    className="w-full bg-[#0d0d0d] px-4 py-3 text-white focus:outline-none"
+                    className="w-full bg-gray-50 dark:bg-[#0d0d0d] px-4 py-3 text-gray-900 dark:text-white focus:outline-none"
                     autoFocus
                     data-testid="global-search-input"
                   />
@@ -1357,11 +1358,11 @@ const Header = () => {
                         <button
                           key={channel.channel_id}
                           onClick={() => handleSelectResult(channel.channel_id)}
-                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#1a1a1a] transition-colors text-left"
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] transition-colors text-left"
                         >
                           <img src={channel.thumbnail_url} alt="" className="w-8 h-8 rounded-full" />
                           <div>
-                            <div className="text-white text-sm font-medium">{channel.title}</div>
+                            <div className="text-gray-900 dark:text-white text-sm font-medium">{channel.title}</div>
                             <div className="text-gray-500 text-xs">{formatNumber(channel.subscriber_count)} subs</div>
                           </div>
                         </button>
