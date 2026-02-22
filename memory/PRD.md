@@ -31,7 +31,8 @@
 
 ### Database Stats
 - **197 Countries** - All world countries added with flags and regions
-- **32 Channels** - Top YouTube channels tracked
+- **127 Channels** - Top YouTube channels tracked from 125 countries
+- **72 Countries** with 0 channels (smaller nations without prominent YouTube presence)
 - Real-time data from YouTube Data API v3
 
 ### MVP Features Completed
