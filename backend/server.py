@@ -1217,7 +1217,8 @@ async def admin_upload_image(admin_key: str = Query(...)):
 @api_router.get("/sitemap.xml", response_class=PlainTextResponse)
 async def get_sitemap():
     """Generate dynamic XML sitemap for SEO"""
-    base_url = os.environ.get('SITE_URL', 'https://channel-leaderboard.preview.emergentagent.com')
+    base_url = os.environ.get('SITE_URL', 'https://mostpopularyoutubechannel.com').rstrip('/')
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     
     # Start XML
     xml_parts = [
@@ -1225,14 +1226,13 @@ async def get_sitemap():
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
     
-    # Static pages
+    # Static pages (no trailing slash for consistency)
     static_pages = [
-        ('/', '1.0', 'daily'),
+        ('', '1.0', 'daily'),  # Homepage - empty string = no trailing slash after base_url
         ('/leaderboard', '0.9', 'hourly'),
         ('/countries', '0.8', 'daily'),
         ('/trending', '0.9', 'hourly'),
-        ('/compare', '0.7', 'daily'),
-        ('/favorites', '0.5', 'weekly'),
+        ('/compare', '0.7', 'weekly'),
         ('/blog', '0.8', 'daily'),
         ('/about', '0.3', 'monthly'),
         ('/privacy', '0.2', 'monthly'),
