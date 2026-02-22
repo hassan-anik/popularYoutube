@@ -1465,80 +1465,87 @@ async def seed_historical_data_if_needed():
     """
     import random
     
-    # Check how many unique timestamps we have in channel_stats
-    pipeline = [
-        {"$group": {"_id": "$timestamp"}},
-        {"$count": "total"}
-    ]
-    result = await db.channel_stats.aggregate(pipeline).to_list(1)
-    unique_timestamps = result[0]["total"] if result else 0
+    logger.info("Checking if historical data seeding is needed...")
     
-    logger.info(f"Found {unique_timestamps} unique timestamps in channel_stats")
-    
-    # If we have less than 3 unique timestamps, seed historical data
-    if unique_timestamps < 3:
-        logger.info("Seeding historical data for growth calculations...")
-        
-        # Get all active channels
-        channels = await db.channels.find(
-            {"is_active": True},
-            {"channel_id": 1, "subscriber_count": 1, "view_count": 1, "video_count": 1}
-        ).to_list(500)
-        
-        if not channels:
-            logger.info("No channels found, skipping historical data seeding")
-            return
-        
-        # Create timestamps for 24h ago, 48h ago, 72h ago
-        now = datetime.now(timezone.utc)
-        timestamps = [
-            (now - timedelta(hours=24)).isoformat(),
-            (now - timedelta(hours=48)).isoformat(),
-            (now - timedelta(hours=72)).isoformat(),
+    try:
+        # Check how many unique timestamps we have in channel_stats
+        pipeline = [
+            {"$group": {"_id": "$timestamp"}},
+            {"$count": "total"}
         ]
+        result = await db.channel_stats.aggregate(pipeline).to_list(1)
+        unique_timestamps = result[0]["total"] if result else 0
         
-        inserted_count = 0
-        for channel in channels:
-            subs = channel.get("subscriber_count", 0)
-            if subs <= 0:
-                continue
+        logger.info(f"Found {unique_timestamps} unique timestamps in channel_stats")
+        
+        # If we have less than 3 unique timestamps, seed historical data
+        if unique_timestamps < 3:
+            logger.info("Seeding historical data for growth calculations...")
             
-            for i, timestamp in enumerate(timestamps):
-                # Check if we already have data for this channel at this timestamp
-                existing = await db.channel_stats.find_one({
-                    "channel_id": channel["channel_id"],
-                    "timestamp": {"$regex": f"^{timestamp[:10]}"}  # Check same day
-                })
-                
-                if existing:
+            # Get all active channels
+            channels = await db.channels.find(
+                {"is_active": True},
+                {"channel_id": 1, "subscriber_count": 1, "view_count": 1, "video_count": 1}
+            ).to_list(500)
+            
+            if not channels:
+                logger.info("No channels found, skipping historical data seeding")
+                return
+            
+            # Create timestamps for 24h ago, 48h ago, 72h ago
+            now = datetime.now(timezone.utc)
+            timestamps = [
+                (now - timedelta(hours=24)).isoformat(),
+                (now - timedelta(hours=48)).isoformat(),
+                (now - timedelta(hours=72)).isoformat(),
+            ]
+            
+            inserted_count = 0
+            for channel in channels:
+                subs = channel.get("subscriber_count", 0)
+                if subs <= 0:
                     continue
                 
-                # Simulate realistic growth rates (0.01% to 0.05% per day)
-                days_ago = i + 1
-                growth_factor = 1 + (random.uniform(0.0001, 0.0005) * days_ago)
-                historical_subs = int(subs / growth_factor)
-                
-                stats_doc = {
-                    "channel_id": channel["channel_id"],
-                    "subscriber_count": historical_subs,
-                    "view_count": channel.get("view_count", 0),
-                    "video_count": channel.get("video_count", 0),
-                    "timestamp": timestamp
-                }
-                await db.channel_stats.insert_one(stats_doc)
-                inserted_count += 1
-        
-        logger.info(f"Seeded {inserted_count} historical data points")
-        
-        # Now trigger growth calculation
-        if inserted_count > 0:
-            logger.info("Calculating growth metrics...")
-            for channel in channels:
-                try:
-                    await growth_analyzer.update_channel_growth_metrics(channel["channel_id"])
-                except Exception as e:
-                    logger.warning(f"Error calculating growth for {channel['channel_id']}: {e}")
-            logger.info("Growth metrics calculation complete")
+                for i, timestamp in enumerate(timestamps):
+                    # Check if we already have data for this channel at this timestamp
+                    existing = await db.channel_stats.find_one({
+                        "channel_id": channel["channel_id"],
+                        "timestamp": {"$regex": f"^{timestamp[:10]}"}  # Check same day
+                    })
+                    
+                    if existing:
+                        continue
+                    
+                    # Simulate realistic growth rates (0.01% to 0.05% per day)
+                    days_ago = i + 1
+                    growth_factor = 1 + (random.uniform(0.0001, 0.0005) * days_ago)
+                    historical_subs = int(subs / growth_factor)
+                    
+                    stats_doc = {
+                        "channel_id": channel["channel_id"],
+                        "subscriber_count": historical_subs,
+                        "view_count": channel.get("view_count", 0),
+                        "video_count": channel.get("video_count", 0),
+                        "timestamp": timestamp
+                    }
+                    await db.channel_stats.insert_one(stats_doc)
+                    inserted_count += 1
+            
+            logger.info(f"Seeded {inserted_count} historical data points")
+            
+            # Now trigger growth calculation
+            if inserted_count > 0:
+                logger.info("Calculating growth metrics after seeding...")
+                for channel in channels:
+                    try:
+                        await growth_analyzer.update_channel_growth_metrics(channel["channel_id"])
+                    except Exception as e:
+                        pass  # Silently continue on individual channel errors
+                logger.info("Growth metrics calculation complete")
+        else:
+            logger.info(f"Sufficient historical data exists ({unique_timestamps} timestamps), skipping seeding")
+    except Exception as e:
+        logger.error(f"Error in seed_historical_data_if_needed: {e}")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
