@@ -779,6 +779,7 @@ const LeaderboardPage = () => {
 
   return (
     <div className="py-8" data-testid="leaderboard-page">
+      <LeaderboardSEO totalChannels={channels.length} />
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Global Leaderboard</h1>
