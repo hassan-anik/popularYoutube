@@ -2870,76 +2870,72 @@ const FavoritesPage = () => {
 
 // ==================== BLOG PAGE ====================
 
-const blogPosts = [
+// Default blog posts (fallback if no posts in database)
+const defaultBlogPosts = [
   {
-    id: 1,
+    id: '1',
     slug: 'top-10-rising-youtubers-2025',
     title: 'Top 10 Rising YouTubers to Watch in 2025',
     excerpt: 'Discover the fastest-growing YouTube channels that are set to dominate the platform this year.',
     category: 'Trending',
-    date: '2025-01-15',
-    readTime: '5 min read',
-    image: 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800&auto=format&fit=crop&q=60'
+    created_at: '2025-01-15',
+    read_time: '5 min read',
+    image: 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800&auto=format&fit=crop&q=60',
+    status: 'published'
   },
   {
-    id: 2,
+    id: '2',
     slug: 'how-youtube-algorithm-works-2025',
     title: 'How the YouTube Algorithm Works in 2025',
     excerpt: 'An in-depth analysis of YouTube\'s recommendation system and how creators can leverage it.',
     category: 'Guide',
-    date: '2025-01-10',
-    readTime: '8 min read',
-    image: 'https://images.unsplash.com/photo-1633114128174-2f8aa49759b0?w=800&auto=format&fit=crop&q=60'
-  },
-  {
-    id: 3,
-    slug: 'india-youtube-dominance',
-    title: 'Why India is Dominating YouTube',
-    excerpt: 'Analyzing the explosive growth of Indian YouTube channels and what it means for the platform.',
-    category: 'Analysis',
-    date: '2025-01-05',
-    readTime: '6 min read',
-    image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&auto=format&fit=crop&q=60'
-  },
-  {
-    id: 4,
-    slug: 'mrbeast-phenomenon',
-    title: 'The MrBeast Phenomenon: Breaking Down His Success',
-    excerpt: 'How MrBeast became the most subscribed individual YouTuber and what creators can learn.',
-    category: 'Case Study',
-    date: '2024-12-28',
-    readTime: '10 min read',
-    image: 'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=800&auto=format&fit=crop&q=60'
-  },
-  {
-    id: 5,
-    slug: 'youtube-shorts-growth-strategy',
-    title: 'YouTube Shorts: The Ultimate Growth Strategy',
-    excerpt: 'How short-form content is reshaping YouTube and helping channels explode in subscribers.',
-    category: 'Strategy',
-    date: '2024-12-20',
-    readTime: '7 min read',
-    image: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=800&auto=format&fit=crop&q=60'
-  },
-  {
-    id: 6,
-    slug: 'gaming-youtube-channels-2025',
-    title: 'The State of Gaming YouTube in 2025',
-    excerpt: 'Gaming remains one of the biggest categories on YouTube. Here\'s what\'s trending.',
-    category: 'Gaming',
-    date: '2024-12-15',
-    readTime: '6 min read',
-    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format&fit=crop&q=60'
+    created_at: '2025-01-10',
+    read_time: '8 min read',
+    image: 'https://images.unsplash.com/photo-1633114128174-2f8aa49759b0?w=800&auto=format&fit=crop&q=60',
+    status: 'published'
   }
 ];
 
 const BlogPage = () => {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useSEO({
     title: "Blog - YouTube Trends & Analysis | TopTube World Pro",
     description: "Read the latest articles about YouTube trends, channel growth strategies, and platform analytics.",
     keywords: "YouTube blog, YouTube trends, YouTube growth tips, YouTuber analysis",
     canonical: `${SITE_URL}/blog`
   });
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`${API}/blog/posts?status=published`);
+        if (response.data.posts && response.data.posts.length > 0) {
+          setPosts(response.data.posts);
+        } else {
+          setPosts(defaultBlogPosts);
+        }
+      } catch (error) {
+        console.error("Error fetching blog posts:", error);
+        setPosts(defaultBlogPosts);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  const featuredPost = posts[0];
+  const otherPosts = posts.slice(1);
 
   return (
     <div className="py-8" data-testid="blog-page">
@@ -2952,74 +2948,586 @@ const BlogPage = () => {
           <p className="text-gray-500">Latest trends, analysis, and insights from the YouTube world</p>
         </div>
 
-        {/* Featured Post */}
-        <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden mb-8">
-          <div className="md:flex">
-            <div className="md:w-1/2">
-              <img 
-                src={blogPosts[0].image} 
-                alt={blogPosts[0].title}
-                className="w-full h-64 md:h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div className="md:w-1/2 p-6 flex flex-col justify-center">
-              <div className="flex items-center gap-3 mb-3">
-                <span className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-xs font-medium">{blogPosts[0].category}</span>
-                <span className="text-gray-500 text-xs flex items-center gap-1">
-                  <CalendarDays className="w-3 h-3" />
-                  {formatDate(blogPosts[0].date)}
-                </span>
+        {featuredPost && (
+          <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden mb-8">
+            <div className="md:flex">
+              <div className="md:w-1/2">
+                <img 
+                  src={featuredPost.image || 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800'} 
+                  alt={featuredPost.title}
+                  className="w-full h-64 md:h-full object-cover"
+                  loading="lazy"
+                />
               </div>
-              <h2 className="text-2xl font-bold text-white mb-3">{blogPosts[0].title}</h2>
-              <p className="text-gray-400 mb-4">{blogPosts[0].excerpt}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-500 text-sm flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
-                  {blogPosts[0].readTime}
-                </span>
-                <Link to={`/blog/${blogPosts[0].slug}`} className="text-red-500 hover:text-red-400 font-medium flex items-center gap-1">
-                  Read More <ChevronRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Ad placement */}
-        <HorizontalAd />
-
-        {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogPosts.slice(1).map((post) => (
-            <article key={post.id} className="bg-[#111] border border-[#222] rounded-lg overflow-hidden hover:border-[#333] transition-colors">
-              <img 
-                src={post.image} 
-                alt={post.title}
-                className="w-full h-48 object-cover"
-                loading="lazy"
-              />
-              <div className="p-5">
+              <div className="md:w-1/2 p-6 flex flex-col justify-center">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="bg-[#222] text-gray-300 px-2 py-1 rounded text-xs">{post.category}</span>
-                  <span className="text-gray-500 text-xs">{formatDate(post.date)}</span>
+                  <span className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-xs font-medium">{featuredPost.category}</span>
+                  <span className="text-gray-500 text-xs flex items-center gap-1">
+                    <CalendarDays className="w-3 h-3" />
+                    {formatDate(featuredPost.created_at)}
+                  </span>
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{post.title}</h3>
-                <p className="text-gray-400 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
+                <h2 className="text-2xl font-bold text-white mb-3">{featuredPost.title}</h2>
+                <p className="text-gray-400 mb-4">{featuredPost.excerpt}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-xs">{post.readTime}</span>
-                  <Link to={`/blog/${post.slug}`} className="text-red-500 hover:text-red-400 text-sm font-medium">
-                    Read →
+                  <span className="text-gray-500 text-sm flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {featuredPost.read_time}
+                  </span>
+                  <Link to={`/blog/${featuredPost.slug}`} className="text-red-500 hover:text-red-400 font-medium flex items-center gap-1">
+                    Read More <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
-            </article>
-          ))}
-        </div>
+            </div>
+          </div>
+        )}
 
-        {/* Newsletter CTA */}
+        <HorizontalAd />
+
+        {otherPosts.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {otherPosts.map((post) => (
+              <article key={post.id} className="bg-[#111] border border-[#222] rounded-lg overflow-hidden hover:border-[#333] transition-colors">
+                <img 
+                  src={post.image || 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800'} 
+                  alt={post.title}
+                  className="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+                <div className="p-5">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="bg-[#222] text-gray-300 px-2 py-1 rounded text-xs">{post.category}</span>
+                    <span className="text-gray-500 text-xs">{formatDate(post.created_at)}</span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-white mb-2">{post.title}</h3>
+                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-500 text-xs">{post.read_time}</span>
+                    <Link to={`/blog/${post.slug}`} className="text-red-500 hover:text-red-400 text-sm font-medium">
+                      Read →
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+
         <div className="mt-12">
           <NewsletterSignup />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==================== BLOG POST DETAIL PAGE ====================
+
+const BlogPostPage = () => {
+  const { slug } = useParams();
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(`${API}/blog/posts/${slug}`);
+        setPost(response.data);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+        // Try to find in default posts
+        const defaultPost = defaultBlogPosts.find(p => p.slug === slug);
+        if (defaultPost) {
+          setPost({ ...defaultPost, content: defaultPost.excerpt });
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPost();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        <div className="text-center">
+          <FileText className="w-16 h-16 mx-auto mb-4 opacity-50" />
+          <h2 className="text-xl font-semibold text-white mb-2">Post not found</h2>
+          <Link to="/blog" className="text-red-500 hover:text-red-400">← Back to Blog</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="blog-post-page">
+      <article className="max-w-4xl mx-auto px-4">
+        <Link to="/blog" className="text-gray-500 hover:text-white mb-6 inline-flex items-center gap-1">
+          ← Back to Blog
+        </Link>
+        
+        <header className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-xs font-medium">{post.category}</span>
+            <span className="text-gray-500 text-sm">{formatDate(post.created_at)}</span>
+            <span className="text-gray-500 text-sm">• {post.read_time}</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{post.title}</h1>
+          <p className="text-xl text-gray-400">{post.excerpt}</p>
+        </header>
+
+        {post.image && (
+          <img 
+            src={post.image} 
+            alt={post.title}
+            className="w-full h-80 object-cover rounded-lg mb-8"
+          />
+        )}
+
+        <div className="prose prose-invert prose-lg max-w-none">
+          <div 
+            className="text-gray-300 leading-relaxed whitespace-pre-wrap"
+            dangerouslySetInnerHTML={{ __html: post.content?.replace(/\n/g, '<br/>') || post.excerpt }}
+          />
+        </div>
+
+        <footer className="mt-12 pt-8 border-t border-[#222]">
+          <SocialShareButtons url={`${SITE_URL}/blog/${post.slug}`} title={post.title} />
+        </footer>
+      </article>
+    </div>
+  );
+};
+
+// ==================== BLOG ADMIN PAGE ====================
+
+const BLOG_CATEGORIES = ['Trending', 'Guide', 'Analysis', 'Case Study', 'Strategy', 'Gaming', 'News', 'Tips'];
+
+const BlogAdminPage = () => {
+  const [searchParams] = useSearchParams();
+  const adminKey = searchParams.get('key') || '';
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [inputKey, setInputKey] = useState('');
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [editingPost, setEditingPost] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [message, setMessage] = useState(null);
+  
+  const [formData, setFormData] = useState({
+    title: '',
+    slug: '',
+    excerpt: '',
+    content: '',
+    category: 'Trending',
+    image: '',
+    status: 'draft',
+    read_time: '5 min read'
+  });
+
+  const verifyAndFetchPosts = async (key) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API}/admin/blog/posts?admin_key=${key}`);
+      setPosts(response.data.posts);
+      setIsAuthenticated(true);
+      setMessage({ type: 'success', text: 'Authenticated successfully!' });
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Invalid admin key' });
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (adminKey) {
+      setInputKey(adminKey);
+      verifyAndFetchPosts(adminKey);
+    }
+  }, [adminKey]);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    verifyAndFetchPosts(inputKey);
+  };
+
+  const generateSlug = (title) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  };
+
+  const handleTitleChange = (e) => {
+    const title = e.target.value;
+    setFormData(prev => ({
+      ...prev,
+      title,
+      slug: prev.slug || generateSlug(title)
+    }));
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      slug: '',
+      excerpt: '',
+      content: '',
+      category: 'Trending',
+      image: '',
+      status: 'draft',
+      read_time: '5 min read'
+    });
+    setEditingPost(null);
+    setShowForm(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      if (editingPost) {
+        await axios.put(`${API}/admin/blog/posts/${editingPost.id}?admin_key=${inputKey}`, formData);
+        setMessage({ type: 'success', text: 'Post updated successfully!' });
+      } else {
+        await axios.post(`${API}/admin/blog/posts?admin_key=${inputKey}`, formData);
+        setMessage({ type: 'success', text: 'Post created successfully!' });
+      }
+      resetForm();
+      verifyAndFetchPosts(inputKey);
+    } catch (error) {
+      setMessage({ type: 'error', text: error.response?.data?.detail || 'Error saving post' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (post) => {
+    setFormData({
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content || '',
+      category: post.category,
+      image: post.image || '',
+      status: post.status,
+      read_time: post.read_time
+    });
+    setEditingPost(post);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (postId) => {
+    if (!window.confirm('Are you sure you want to delete this post?')) return;
+    
+    try {
+      await axios.delete(`${API}/admin/blog/posts/${postId}?admin_key=${inputKey}`);
+      setMessage({ type: 'success', text: 'Post deleted!' });
+      verifyAndFetchPosts(inputKey);
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Error deleting post' });
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" data-testid="blog-admin-login">
+        <div className="bg-[#111] border border-[#222] rounded-lg p-8 w-full max-w-md">
+          <h1 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <Settings className="w-6 h-6 text-red-500" />
+            Blog Admin
+          </h1>
+          
+          {message && (
+            <div className={`mb-4 p-3 rounded ${message.type === 'error' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+              {message.text}
+            </div>
+          )}
+          
+          <form onSubmit={handleLogin}>
+            <label className="block text-gray-400 text-sm mb-2">Admin Key</label>
+            <input
+              type="password"
+              value={inputKey}
+              onChange={(e) => setInputKey(e.target.value)}
+              placeholder="Enter admin key..."
+              className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-3 text-white mb-4 focus:border-red-500 focus:outline-none"
+              required
+              data-testid="admin-key-input"
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50"
+            >
+              {loading ? 'Verifying...' : 'Login'}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="blog-admin-page">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+            <Settings className="w-8 h-8 text-red-500" />
+            Blog Admin
+          </h1>
+          <button
+            onClick={() => { resetForm(); setShowForm(true); }}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" /> New Post
+          </button>
+        </div>
+
+        {message && (
+          <div className={`mb-6 p-4 rounded-lg ${message.type === 'error' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
+            {message.text}
+          </div>
+        )}
+
+        {/* Post Form Modal */}
+        {showForm && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <div className="bg-[#111] border border-[#222] rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-white">
+                    {editingPost ? 'Edit Post' : 'Create New Post'}
+                  </h2>
+                  <button onClick={resetForm} className="text-gray-500 hover:text-white">
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-1">Title *</label>
+                    <input
+                      type="text"
+                      value={formData.title}
+                      onChange={handleTitleChange}
+                      className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-1">Slug *</label>
+                    <input
+                      type="text"
+                      value={formData.slug}
+                      onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                      className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-gray-400 text-sm mb-1">Category</label>
+                      <select
+                        value={formData.category}
+                        onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                        className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      >
+                        {BLOG_CATEGORIES.map(cat => (
+                          <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 text-sm mb-1">Status</label>
+                      <select
+                        value={formData.status}
+                        onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                        className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      >
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-gray-400 text-sm mb-1">Read Time</label>
+                      <input
+                        type="text"
+                        value={formData.read_time}
+                        onChange={(e) => setFormData(prev => ({ ...prev, read_time: e.target.value }))}
+                        placeholder="5 min read"
+                        className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 text-sm mb-1">Image URL</label>
+                      <input
+                        type="url"
+                        value={formData.image}
+                        onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
+                        placeholder="https://images.unsplash.com/..."
+                        className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-1">Excerpt *</label>
+                    <textarea
+                      value={formData.excerpt}
+                      onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
+                      rows={2}
+                      className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-1">Content *</label>
+                    <textarea
+                      value={formData.content}
+                      onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+                      rows={12}
+                      className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none font-mono text-sm"
+                      placeholder="Write your blog post content here..."
+                      required
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-50"
+                    >
+                      {loading ? 'Saving...' : (editingPost ? 'Update Post' : 'Create Post')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={resetForm}
+                      className="px-6 bg-[#222] text-white py-3 rounded-lg font-semibold hover:bg-[#333]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Posts List */}
+        <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-[#0d0d0d]">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Post</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Date</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#222]">
+              {posts.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="px-4 py-12 text-center text-gray-500">
+                    <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                    No blog posts yet. Create your first post!
+                  </td>
+                </tr>
+              ) : (
+                posts.map((post) => (
+                  <tr key={post.id} className="hover:bg-[#1a1a1a]">
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-3">
+                        {post.image && (
+                          <img src={post.image} alt="" className="w-12 h-12 rounded object-cover" />
+                        )}
+                        <div>
+                          <div className="font-medium text-white">{post.title}</div>
+                          <div className="text-xs text-gray-500">/blog/{post.slug}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <span className="bg-[#222] text-gray-300 px-2 py-1 rounded text-xs">{post.category}</span>
+                    </td>
+                    <td className="px-4 py-4">
+                      <span className={`px-2 py-1 rounded text-xs ${post.status === 'published' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
+                        {post.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 text-gray-500 text-sm">
+                      {formatDate(post.created_at)}
+                    </td>
+                    <td className="px-4 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <a
+                          href={`/blog/${post.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 text-gray-500 hover:text-white"
+                          title="View"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                        <button
+                          onClick={() => handleEdit(post)}
+                          className="p-2 text-gray-500 hover:text-blue-400"
+                          title="Edit"
+                        >
+                          <Settings className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(post.id)}
+                          className="p-2 text-gray-500 hover:text-red-400"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Image Upload Help */}
+        <div className="mt-6 bg-[#111] border border-[#222] rounded-lg p-4">
+          <h3 className="text-white font-semibold mb-2">Image Upload Tips</h3>
+          <p className="text-gray-500 text-sm mb-2">
+            For blog post images, upload to a free image hosting service and paste the URL:
+          </p>
+          <div className="flex gap-4 text-sm">
+            <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:text-red-400">
+              Unsplash (Free Photos)
+            </a>
+            <a href="https://imgur.com/upload" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:text-red-400">
+              Imgur
+            </a>
+            <a href="https://imgbb.com" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:text-red-400">
+              ImgBB
+            </a>
+          </div>
         </div>
       </div>
     </div>
