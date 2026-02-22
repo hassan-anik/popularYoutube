@@ -234,6 +234,42 @@ class SchedulerService:
         except Exception as e:
             logger.error(f"Error calculating growth metrics: {e}")
     
+    async def record_stats_snapshot(self):
+        """Record current stats for all channels (for growth tracking without YouTube API)"""
+        logger.info("Recording stats snapshot...")
+        
+        try:
+            # Get all active channels with their current stats
+            channels = await self.db.channels.find(
+                {"is_active": True},
+                {"channel_id": 1, "subscriber_count": 1, "view_count": 1, "video_count": 1}
+            ).to_list(1000)
+            
+            timestamp = datetime.now(timezone.utc).isoformat()
+            
+            for channel in channels:
+                # Insert a new stats snapshot
+                stats_doc = {
+                    "channel_id": channel["channel_id"],
+                    "subscriber_count": channel.get("subscriber_count", 0),
+                    "view_count": channel.get("view_count", 0),
+                    "video_count": channel.get("video_count", 0),
+                    "timestamp": timestamp
+                }
+                await self.db.channel_stats.insert_one(stats_doc)
+            
+            # Update system status
+            await self.db.system_status.update_one(
+                {"_id": "scheduler"},
+                {"$set": {"last_stats_snapshot": timestamp}},
+                upsert=True
+            )
+            
+            logger.info(f"Stats snapshot recorded for {len(channels)} channels")
+            
+        except Exception as e:
+            logger.error(f"Error recording stats snapshot: {e}")
+    
     async def get_scheduler_status(self):
         """Get current scheduler status and job information"""
         jobs = []
