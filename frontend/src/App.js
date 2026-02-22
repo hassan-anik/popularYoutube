@@ -371,7 +371,7 @@ const HomePage = () => {
           </p>
           <div className="flex justify-center gap-4">
             <Link to="/leaderboard" className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors" data-testid="cta-leaderboard">
-              View Top 100
+              View Leaderboard
             </Link>
             <Link to="/countries" className="bg-[#222] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#333] transition-colors" data-testid="cta-countries">
               Browse Countries
