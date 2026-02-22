@@ -221,29 +221,29 @@ const ChannelSEO = ({ channel }) => {
   };
 
   return (
-    <Helmet>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
-      <link rel="canonical" href={pageUrl} />
-      
-      {/* Open Graph */}
-      <meta property="og:type" content="profile" />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:url" content={pageUrl} />
-      <meta property="og:site_name" content={SITE_NAME} />
-      <meta property="og:image" content={channel.thumbnail_url} />
-      
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={channel.thumbnail_url} />
-      
-      {/* Schema.org structured data */}
-      <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
-    </Helmet>
+    <>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
+        <link rel="canonical" href={pageUrl} />
+        
+        {/* Open Graph */}
+        <meta property="og:type" content="profile" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:image" content={channel.thumbnail_url} />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={channel.thumbnail_url} />
+      </Helmet>
+      <JsonLd data={schemaData} />
+    </>
   );
 };
 
