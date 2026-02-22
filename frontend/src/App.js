@@ -828,13 +828,15 @@ const Footer = () => (
         <div>
           <h4 className="font-semibold text-white mb-4">About</h4>
           <ul className="space-y-2 text-sm">
-            <li><span className="text-gray-400">Data from YouTube API</span></li>
-            <li><span className="text-gray-400">Updated in real-time</span></li>
+            <li><Link to="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
+            <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
+            <li><Link to="/privacy" className="text-gray-400 hover:text-white">Privacy Policy</Link></li>
+            <li><Link to="/terms" className="text-gray-400 hover:text-white">Terms of Service</Link></li>
           </ul>
         </div>
       </div>
       <div className="border-t border-[#1a1a1a] mt-8 pt-8 text-center text-gray-500 text-sm">
-        © 2026 TopTube World Pro. All rights reserved.
+        © {new Date().getFullYear()} TopTube World Pro. All rights reserved. Data sourced from YouTube Data API.
       </div>
     </div>
   </footer>
