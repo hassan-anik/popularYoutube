@@ -614,7 +614,7 @@ const ContactPage = () => {
     setError(null);
     
     try {
-      const response = await axios.post(`${API_URL}/api/contact`, formData);
+      const response = await axios.post(`${API}/contact`, formData);
       if (response.data.status === 'success') {
         setSubmitted(true);
       }
