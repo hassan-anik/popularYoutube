@@ -688,49 +688,166 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
     empty_countries = await db.countries.aggregate(pipeline).to_list(200)
     logger.info(f"Found {len(empty_countries)} countries with 0 channels")
     
+    # Global channels to use as fallbacks (most subscribed globally)
+    GLOBAL_CHANNELS = [
+        "UCX6OQ3DkcsbYNE6H8uQQuVA",  # MrBeast
+        "UC-lHJZR3Gqxm24_Vd_AJ5Yw",  # PewDiePie
+        "UCq-Fj5jknLsUf-MWSy4_brA",  # T-Series
+        "UCvjgEDvShRsADqghFPPCZgQ",  # Cocomelon
+    ]
+    
     # Known popular channels by country/region
     known_channels = {
+        # Europe
         "ID": ["UCkXmLjEr95LVtGuIm3l2dPg"],  # Atta Halilintar (Indonesia)
         "TR": ["UCnWmBiSpQP3_V8jH3aF9mVg"],  # Enes Batur (Turkey)
         "IT": ["UCHvC-fsLmdB9MzYJ2p1PO7A"],  # Me contro Te (Italy)
-        "KE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Kenya
         "AT": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt (German speaking)
         "CH": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt (German speaking)
-        "PL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Poland
-        "NL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Netherlands
-        "SE": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie (Sweden native)
-        "NO": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Norway
-        "DK": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Denmark
-        "FI": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Finland
-        "CZ": ["UCt25G9HSEXgmFsOp7fLkqpA"],  # Ládění (Czech)
-        "HU": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "RO": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "BG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "GR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "HR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "SK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "SI": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "RS": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "UA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "BY": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
-        "EE": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Baltics
-        "LV": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Baltics
-        "LT": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Baltics
-        "IE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in Ireland
-        "PT": ["UCam8T03EOFBsNdR0thrFHdQ"],  # elrubiusOMG (Portuguese/Spanish)
-        "BE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in Belgium
-        "NZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in NZ
-        "SG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in Singapore
-        "MY": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Malaysia
-        "AE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in UAE
-        "SA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Saudi
-        "EG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Egypt
-        "NG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Nigeria
-        "ZA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in South Africa
-        "CL": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun popular in Chile
-        "PE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun popular in Peru
-        "VE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun popular in Venezuela
-        "EC": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun popular in Ecuador
+        "PL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
+        "NL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
+        "SE": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie (Sweden)
+        "NO": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
+        "DK": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
+        "FI": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
+        "CZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "HU": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "RO": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "BG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "GR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "HR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "SK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "SI": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "RS": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "UA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "BY": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "EE": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie
+        "LV": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie
+        "LT": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie
+        "IE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "PT": ["UCam8T03EOFBsNdR0thrFHdQ"],  # elrubiusOMG
+        "BE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "AL": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "AD": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "BA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "XK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "ME": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "MK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "LI": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt
+        "LU": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "MT": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "MC": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "SM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "VA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "MD": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "IS": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie
+        "CY": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        
+        # Middle East & Africa
+        "KE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "AE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "SA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "EG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "NG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "ZA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "MA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "DZ": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "TN": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "LY": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "GH": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "CI": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "SN": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "CM": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "TZ": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "UG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "ET": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "SD": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "AO": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "MZ": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "ZM": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "ZW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "BW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "NA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "RW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "MU": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "MW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "IQ": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "SY": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "JO": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "LB": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "KW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "QA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "BH": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "OM": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "YE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "IL": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "IR": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        
+        # Asia & Oceania
+        "NZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "SG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "MY": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "NP": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "LK": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "MM": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "KH": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "LA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "MN": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "KZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "UZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "TJ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "KG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "TM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "AZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "AM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "GE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "AF": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "BT": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "MV": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "BN": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "TW": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "HK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "MO": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "TL": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+        "PG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "FJ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "SB": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "VU": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "WS": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "TO": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "KI": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "FM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "MH": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "PW": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "NR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "TV": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        
+        # Americas
+        "CL": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "PE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "VE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "EC": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "BO": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "PY": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "UY": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "CR": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "PA": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "HN": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "SV": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "GT": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "NI": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "CU": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "DO": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "PR": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "HT": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
+        "JM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "TT": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "BS": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "BB": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "BZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "GY": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "SR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
+        "GL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie
     }
     
     channels_added = 0
