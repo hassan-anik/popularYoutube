@@ -512,8 +512,8 @@ const LeaderboardPage = () => {
     <div className="py-8" data-testid="leaderboard-page">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Global Top 100</h1>
-          <p className="text-gray-500">The most subscribed YouTube channels worldwide, updated in real-time</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Global Leaderboard</h1>
+          <p className="text-gray-500">All tracked YouTube channels worldwide, ranked by subscribers</p>
         </div>
 
         {/* Desktop Table */}
