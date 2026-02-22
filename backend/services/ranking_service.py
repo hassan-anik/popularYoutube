@@ -144,6 +144,21 @@ class RankingService:
         ).sort("timestamp", -1).limit(limit).to_list(limit)
         
         return changes
+    
+    async def update_all_rankings(self) -> Dict:
+        """Update rankings for all countries"""
+        countries = await self.db.countries.find({}, {"code": 1}).to_list(300)
+        
+        total_updated = 0
+        total_changes = []
+        
+        for country in countries:
+            result = await self.update_rankings(country["code"])
+            total_updated += result.get("updated", 0)
+            total_changes.extend(result.get("changes", []))
+        
+        logger.info(f"Updated rankings for {len(countries)} countries, {total_updated} channels")
+        return {"countries": len(countries), "channels_updated": total_updated, "changes": len(total_changes)}
 
 
 def get_ranking_service(db: AsyncIOMotorDatabase) -> RankingService:
