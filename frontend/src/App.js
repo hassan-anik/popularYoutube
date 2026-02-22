@@ -1724,6 +1724,15 @@ const ChannelPage = () => {
               >
                 View on YouTube <ExternalLink className="w-3 h-3" />
               </a>
+              
+              {/* Social Sharing */}
+              <div className="mt-4 pt-4 border-t border-[#222]">
+                <SocialShareButtons 
+                  url={`${BACKEND_URL}/channel/${channel.channel_id}`}
+                  title={`${channel.title} - ${formatNumber(channel.subscriber_count)} subscribers on YouTube`}
+                  description={`Check out ${channel.title}'s YouTube stats: ${formatNumber(channel.subscriber_count)} subscribers, ${formatNumber(channel.view_count)} views`}
+                />
+              </div>
             </div>
           </div>
         </div>
