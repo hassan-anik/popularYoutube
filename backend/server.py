@@ -198,13 +198,18 @@ async def create_country(country: CountryCreate):
 @api_router.get("/channels")
 async def get_all_channels(
     country_code: Optional[str] = None,
+    search: Optional[str] = None,
     limit: int = Query(default=100, le=500),
     skip: int = 0
 ):
-    """Get all tracked channels, optionally filtered by country"""
+    """Get all tracked channels, optionally filtered by country or search query"""
     query = {"is_active": True}
     if country_code:
         query["country_code"] = country_code.upper()
+    
+    # Add search filter for channel title
+    if search and len(search) >= 2:
+        query["title"] = {"$regex": search, "$options": "i"}
     
     channels = await db.channels.find(query, {"_id": 0}).sort(
         "subscriber_count", -1
