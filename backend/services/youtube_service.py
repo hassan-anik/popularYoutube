@@ -1,35 +1,21 @@
 """
-YouTube Service - Handles all YouTube Data API v3 interactions
+YouTube Service - Handles all YouTube Data API v3 interactions using direct HTTP requests
 """
 import os
 import logging
+import aiohttp
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-import asyncio
 
 logger = logging.getLogger(__name__)
 
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3"
 
 class YouTubeService:
     def __init__(self):
         self.api_key = os.environ.get('YOUTUBE_API_KEY')
-        self._service = None
         self._cache = {}
         self._cache_ttl = 300  # 5 minutes cache
-    
-    def _get_service(self):
-        if self._service is None:
-            self._service = build(
-                YOUTUBE_API_SERVICE_NAME,
-                YOUTUBE_API_VERSION,
-                developerKey=self.api_key,
-                cache_discovery=False
-            )
-        return self._service
     
     def _get_cache_key(self, prefix: str, identifier: str) -> str:
         return f"{prefix}:{identifier}"
@@ -63,18 +49,29 @@ class YouTubeService:
             return cached
         
         try:
-            service = self._get_service()
-            request = service.channels().list(
-                part="statistics,snippet,contentDetails,brandingSettings",
-                id=channel_id
-            )
-            response = await asyncio.get_event_loop().run_in_executor(None, request.execute)
+            url = f"{YOUTUBE_API_BASE}/channels"
+            params = {
+                "key": self.api_key,
+                "part": "statistics,snippet,contentDetails",
+                "id": channel_id
+            }
             
-            if not response.get("items"):
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, params=params) as response:
+                    if response.status != 200:
+                        error_text = await response.text()
+                        logger.error(f"YouTube API error: {response.status} - {error_text}")
+                        if "quotaExceeded" in error_text:
+                            raise Exception("YouTube API quota exceeded")
+                        raise Exception(f"YouTube API error: {response.status}")
+                    
+                    data = await response.json()
+            
+            if not data.get("items"):
                 logger.warning(f"Channel not found: {channel_id}")
                 return None
             
-            item = response["items"][0]
+            item = data["items"][0]
             stats = item.get("statistics", {})
             snippet = item.get("snippet", {})
             
@@ -96,17 +93,9 @@ class YouTubeService:
             self._set_cache(cache_key, channel_data)
             return channel_data
             
-        except HttpError as e:
-            error_content = e.content.decode('utf-8') if e.content else str(e)
-            if "quotaExceeded" in error_content:
-                logger.error("YouTube API quota exceeded")
-                raise Exception("YouTube API quota exceeded")
-            elif "keyInvalid" in error_content:
-                logger.error("Invalid YouTube API key")
-                raise Exception("Invalid YouTube API key")
-            else:
-                logger.error(f"YouTube API error: {error_content}")
-                raise Exception(f"YouTube API error: {str(e)}")
+        except aiohttp.ClientError as e:
+            logger.error(f"HTTP error fetching channel stats: {str(e)}")
+            raise Exception(f"Network error: {str(e)}")
         except Exception as e:
             logger.error(f"Error fetching channel stats: {str(e)}")
             raise
@@ -137,14 +126,23 @@ class YouTubeService:
                 continue
             
             try:
-                service = self._get_service()
-                request = service.channels().list(
-                    part="statistics,snippet,contentDetails",
-                    id=",".join(uncached_ids)
-                )
-                response = await asyncio.get_event_loop().run_in_executor(None, request.execute)
+                url = f"{YOUTUBE_API_BASE}/channels"
+                params = {
+                    "key": self.api_key,
+                    "part": "statistics,snippet",
+                    "id": ",".join(uncached_ids)
+                }
                 
-                for item in response.get("items", []):
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(url, params=params) as response:
+                        if response.status != 200:
+                            error_text = await response.text()
+                            logger.error(f"YouTube API batch error: {error_text}")
+                            continue
+                        
+                        data = await response.json()
+                
+                for item in data.get("items", []):
                     stats = item.get("statistics", {})
                     snippet = item.get("snippet", {})
                     
@@ -167,10 +165,9 @@ class YouTubeService:
                     self._set_cache(cache_key, channel_data)
                     results.append(channel_data)
                     
-            except HttpError as e:
-                error_content = e.content.decode('utf-8') if e.content else str(e)
-                logger.error(f"Batch processing error: {error_content}")
-                raise
+            except Exception as e:
+                logger.error(f"Batch processing error for chunk {i}: {e}")
+                continue
         
         return results
 
@@ -182,42 +179,61 @@ class YouTubeService:
             return cached
         
         try:
-            service = self._get_service()
-            
             # First get the uploads playlist ID
-            channel_request = service.channels().list(
-                part="contentDetails",
-                id=channel_id
-            )
-            channel_response = await asyncio.get_event_loop().run_in_executor(None, channel_request.execute)
+            url = f"{YOUTUBE_API_BASE}/channels"
+            params = {
+                "key": self.api_key,
+                "part": "contentDetails",
+                "id": channel_id
+            }
             
-            if not channel_response.get("items"):
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, params=params) as response:
+                    if response.status != 200:
+                        return []
+                    channel_data = await response.json()
+            
+            if not channel_data.get("items"):
                 return []
             
-            uploads_playlist_id = channel_response["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
+            uploads_playlist_id = channel_data["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
             
             # Get videos from uploads playlist
-            playlist_request = service.playlistItems().list(
-                part="snippet,contentDetails",
-                playlistId=uploads_playlist_id,
-                maxResults=50  # Get more to sort by views
-            )
-            playlist_response = await asyncio.get_event_loop().run_in_executor(None, playlist_request.execute)
+            url = f"{YOUTUBE_API_BASE}/playlistItems"
+            params = {
+                "key": self.api_key,
+                "part": "contentDetails",
+                "playlistId": uploads_playlist_id,
+                "maxResults": 50
+            }
             
-            video_ids = [item["contentDetails"]["videoId"] for item in playlist_response.get("items", [])]
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, params=params) as response:
+                    if response.status != 200:
+                        return []
+                    playlist_data = await response.json()
+            
+            video_ids = [item["contentDetails"]["videoId"] for item in playlist_data.get("items", [])]
             
             if not video_ids:
                 return []
             
             # Get video statistics
-            videos_request = service.videos().list(
-                part="snippet,statistics",
-                id=",".join(video_ids[:50])
-            )
-            videos_response = await asyncio.get_event_loop().run_in_executor(None, videos_request.execute)
+            url = f"{YOUTUBE_API_BASE}/videos"
+            params = {
+                "key": self.api_key,
+                "part": "snippet,statistics",
+                "id": ",".join(video_ids[:50])
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, params=params) as response:
+                    if response.status != 200:
+                        return []
+                    videos_data = await response.json()
             
             videos = []
-            for item in videos_response.get("items", []):
+            for item in videos_data.get("items", []):
                 stats = item.get("statistics", {})
                 snippet = item.get("snippet", {})
                 
@@ -239,19 +255,16 @@ class YouTubeService:
             self._set_cache(cache_key, result)
             return result
             
-        except HttpError as e:
-            logger.error(f"Error fetching top videos: {str(e)}")
-            return []
         except Exception as e:
-            logger.error(f"Unexpected error fetching top videos: {str(e)}")
+            logger.error(f"Error fetching top videos: {str(e)}")
             return []
 
     async def search_channels(self, query: str, region_code: str = "", max_results: int = 10) -> List[Dict]:
         """Search for channels"""
         try:
-            service = self._get_service()
-            
-            request_params = {
+            url = f"{YOUTUBE_API_BASE}/search"
+            params = {
+                "key": self.api_key,
                 "part": "snippet",
                 "q": query,
                 "type": "channel",
@@ -259,13 +272,19 @@ class YouTubeService:
             }
             
             if region_code:
-                request_params["regionCode"] = region_code
+                params["regionCode"] = region_code
             
-            request = service.search().list(**request_params)
-            response = await asyncio.get_event_loop().run_in_executor(None, request.execute)
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, params=params) as response:
+                    if response.status != 200:
+                        error_text = await response.text()
+                        logger.error(f"YouTube search error: {error_text}")
+                        raise Exception(f"YouTube API error: {response.status}")
+                    
+                    data = await response.json()
             
             results = []
-            for item in response.get("items", []):
+            for item in data.get("items", []):
                 results.append({
                     "channel_id": item["id"]["channelId"],
                     "title": item["snippet"]["title"],
@@ -275,11 +294,8 @@ class YouTubeService:
             
             return results
             
-        except HttpError as e:
-            logger.error(f"Error searching channels: {str(e)}")
-            raise
         except Exception as e:
-            logger.error(f"Unexpected error searching channels: {str(e)}")
+            logger.error(f"Error searching channels: {str(e)}")
             raise
 
 
