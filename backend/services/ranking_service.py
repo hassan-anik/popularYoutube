@@ -82,11 +82,11 @@ class RankingService:
         return {"updated": len(channels), "changes": changes}
     
     async def get_global_top_100(self) -> List[Dict]:
-        """Get top 100 channels globally"""
+        """Get all channels globally sorted by subscribers"""
         channels = await self.db.channels.find(
             {"is_active": True},
             {"_id": 0}
-        ).sort("subscriber_count", -1).limit(100).to_list(100)
+        ).sort("subscriber_count", -1).limit(1000).to_list(1000)
         
         for idx, channel in enumerate(channels):
             channel["global_rank"] = idx + 1
