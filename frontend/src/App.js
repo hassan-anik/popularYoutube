@@ -3146,8 +3146,21 @@ const AdminPage = () => {
 
 // Main App
 function App() {
+  // Register service worker for PWA
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('SW registered:', registration.scope);
+        })
+        .catch(error => {
+          console.log('SW registration failed:', error);
+        });
+    }
+  }, []);
+
   return (
-    <div className="App bg-[#0a0a0a] min-h-screen">
+    <div className="App bg-[#0a0a0a] min-h-screen pb-16 md:pb-0">
       <BrowserRouter>
         <Header />
         <main className="min-h-[calc(100vh-200px)]">
@@ -3158,6 +3171,9 @@ function App() {
             <Route path="/country/:countryCode" element={<CountryPage />} />
             <Route path="/channel/:channelId" element={<ChannelPage />} />
             <Route path="/trending" element={<TrendingPage />} />
+            <Route path="/compare" element={<ComparePage />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/blog" element={<BlogPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
@@ -3165,6 +3181,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <StickyMobileAd />
       </BrowserRouter>
     </div>
   );
