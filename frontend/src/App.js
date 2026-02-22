@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback, useRef, useMemo, lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route, Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import {
   ComposableMap,
@@ -14,7 +14,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  Legend
 } from "recharts";
 import {
   TrendingUp,
@@ -43,7 +46,20 @@ import {
   Linkedin,
   Mail,
   Send,
-  MessageCircle
+  MessageCircle,
+  Heart,
+  Star,
+  Clock,
+  Code,
+  Copy,
+  Check,
+  Plus,
+  Trash2,
+  BookOpen,
+  FileText,
+  CalendarDays,
+  Bookmark,
+  Download
 } from "lucide-react";
 import "@/App.css";
 
