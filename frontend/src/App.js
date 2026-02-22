@@ -952,6 +952,7 @@ const CountryPage = () => {
 
   return (
     <div className="py-8" data-testid="country-detail-page">
+      <CountrySEO country={country} channels={country.channels} />
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
