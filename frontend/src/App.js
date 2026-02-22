@@ -263,27 +263,27 @@ const LeaderboardSEO = ({ totalChannels }) => {
   };
   
   return (
-    <Helmet>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content="YouTube leaderboard, most subscribed YouTube channels, top YouTubers worldwide, global YouTube rankings, YouTube subscriber count, biggest YouTube channels" />
-      <link rel="canonical" href={pageUrl} />
-      
-      {/* Open Graph */}
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:url" content={pageUrl} />
-      <meta property="og:site_name" content={SITE_NAME} />
-      
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      
-      {/* Schema.org structured data */}
-      <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
-    </Helmet>
+    <>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="keywords" content="YouTube leaderboard, most subscribed YouTube channels, top YouTubers worldwide, global YouTube rankings, YouTube subscriber count, biggest YouTube channels" />
+        <link rel="canonical" href={pageUrl} />
+        
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:site_name" content={SITE_NAME} />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+      </Helmet>
+      <JsonLd data={schemaData} />
+    </>
   );
 };
 
