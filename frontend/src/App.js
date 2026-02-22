@@ -957,6 +957,31 @@ const ContactPage = () => {
 // Header Component
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const navigate = useNavigate();
+
+  const handleSearch = async (query) => {
+    setSearchQuery(query);
+    if (query.length < 2) {
+      setSearchResults([]);
+      return;
+    }
+    try {
+      const response = await axios.get(`${API}/channels?search=${encodeURIComponent(query)}&limit=5`);
+      setSearchResults(response.data.channels || []);
+    } catch (error) {
+      console.error("Search error:", error);
+    }
+  };
+
+  const handleSelectResult = (channelId) => {
+    setSearchOpen(false);
+    setSearchQuery('');
+    setSearchResults([]);
+    navigate(`/channel/${channelId}`);
+  };
 
   return (
     <header className="bg-[#0d0d0d] border-b border-[#1a1a1a] sticky top-0 z-50" data-testid="header">
@@ -966,11 +991,11 @@ const Header = () => {
             <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
               <PlayCircle className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-white">TopTube World Pro</span>
+            <span className="text-xl font-bold text-white hidden sm:block">TopTube World Pro</span>
           </Link>
           
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-6">
             <Link to="/" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-home">
               Home
             </Link>
@@ -983,15 +1008,63 @@ const Header = () => {
             <Link to="/trending" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-trending">
               Trending
             </Link>
+            <Link to="/compare" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-compare">
+              Compare
+            </Link>
           </nav>
+          
+          {/* Search Button */}
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <button 
+                onClick={() => setSearchOpen(!searchOpen)}
+                className="p-2 text-gray-300 hover:text-white transition-colors"
+                data-testid="search-toggle"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+              
+              {/* Search Dropdown */}
+              {searchOpen && (
+                <div className="absolute right-0 top-12 w-80 bg-[#111] border border-[#333] rounded-lg shadow-xl overflow-hidden">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    placeholder="Search channels..."
+                    className="w-full bg-[#0d0d0d] px-4 py-3 text-white focus:outline-none"
+                    autoFocus
+                    data-testid="global-search-input"
+                  />
+                  {searchResults.length > 0 && (
+                    <div className="max-h-64 overflow-y-auto">
+                      {searchResults.map(channel => (
+                        <button
+                          key={channel.channel_id}
+                          onClick={() => handleSelectResult(channel.channel_id)}
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#1a1a1a] transition-colors text-left"
+                        >
+                          <img src={channel.thumbnail_url} alt="" className="w-8 h-8 rounded-full" />
+                          <div>
+                            <div className="text-white text-sm font-medium">{channel.title}</div>
+                            <div className="text-gray-500 text-xs">{formatNumber(channel.subscriber_count)} subs</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-gray-300"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <Menu className="w-6 h-6" />
-          </button>
+            {/* Mobile Menu Button */}
+            <button 
+              className="md:hidden text-gray-300"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         {/* Mobile Nav */}
@@ -1002,6 +1075,7 @@ const Header = () => {
               <Link to="/leaderboard" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Leaderboard</Link>
               <Link to="/countries" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Countries</Link>
               <Link to="/trending" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Trending</Link>
+              <Link to="/compare" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Compare</Link>
             </div>
           </nav>
         )}
