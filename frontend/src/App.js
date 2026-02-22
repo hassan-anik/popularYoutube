@@ -1881,27 +1881,30 @@ const LeaderboardPage = () => {
             </thead>
             <tbody className="divide-y divide-[#222]">
               {filteredChannels.map((channel, idx) => (
-                <tr 
-                  key={channel.channel_id}
-                  className="hover:bg-[#1a1a1a] cursor-pointer transition-colors"
-                  onClick={() => navigate(`/channel/${channel.channel_id}`)}
-                  data-testid={`leaderboard-row-${idx}`}
-                >
-                  <td className="px-4 py-4 font-bold text-gray-400">#{idx + 1}</td>
-                  <td className="px-4 py-4">
-                    <div className="flex items-center gap-3">
-                      <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" loading="lazy" />
-                      <div>
-                        <div className="font-medium text-white">{channel.title}</div>
-                        <div className="text-xs text-gray-500">{channel.country_name}</div>
+                <React.Fragment key={channel.channel_id}>
+                  {/* In-feed ad every 10 rows */}
+                  <InFeedAd index={idx} />
+                  <tr 
+                    className="hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+                    onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                    data-testid={`leaderboard-row-${idx}`}
+                  >
+                    <td className="px-4 py-4 font-bold text-gray-400">#{idx + 1}</td>
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-3">
+                        <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" loading="lazy" />
+                        <div>
+                          <div className="font-medium text-white">{channel.title}</div>
+                          <div className="text-xs text-gray-500">{channel.country_name}</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4 font-bold text-white">{formatNumber(channel.subscriber_count)}</td>
-                  <td className="px-4 py-4"><RankChange current={channel.current_rank || idx + 1} previous={channel.previous_rank || idx + 1} /></td>
-                  <td className="px-4 py-4 text-green-400">+{formatNumber(channel.daily_subscriber_gain || 0)}</td>
-                  <td className="px-4 py-4"><ViralBadge label={channel.viral_label} /></td>
-                </tr>
+                    </td>
+                    <td className="px-4 py-4 font-bold text-white">{formatNumber(channel.subscriber_count)}</td>
+                    <td className="px-4 py-4"><RankChange current={channel.current_rank || idx + 1} previous={channel.previous_rank || idx + 1} /></td>
+                    <td className="px-4 py-4 text-green-400">+{formatNumber(channel.daily_subscriber_gain || 0)}</td>
+                    <td className="px-4 py-4"><ViralBadge label={channel.viral_label} /></td>
+                  </tr>
+                </React.Fragment>
               ))}
             </tbody>
           </table>
