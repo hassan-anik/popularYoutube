@@ -294,54 +294,26 @@ const CountriesListSEO = ({ totalCountries }) => {
   const description = `Explore YouTube channel rankings for ${totalCountries || 197} countries worldwide. Find the most subscribed YouTubers in any country. Real-time subscriber counts and growth analytics.`;
   const pageUrl = `${SITE_URL}/countries`;
   
-  return (
-    <Helmet>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content="YouTube by country, YouTubers by country, top channels by country, YouTube rankings countries, international YouTubers, YouTube statistics by country" />
-      <link rel="canonical" href={pageUrl} />
-      
-      {/* Open Graph */}
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:url" content={pageUrl} />
-      <meta property="og:site_name" content={SITE_NAME} />
-      
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-    </Helmet>
-  );
+  useSEO({
+    title,
+    description,
+    keywords: "YouTube by country, YouTubers by country, top channels by country, YouTube rankings countries, international YouTubers, YouTube statistics by country",
+    canonical: pageUrl
+  });
+  
+  return null;
 };
 
 // Trending Page SEO
 const TrendingSEO = () => {
-  const title = `Trending YouTube Channels - Fastest Growing YouTubers ${new Date().getFullYear()}`;
-  const description = `Discover the fastest growing YouTube channels right now. See which YouTubers are gaining subscribers the fastest with real-time growth analytics and viral predictions.`;
-  const pageUrl = `${SITE_URL}/trending`;
+  useSEO({
+    title: `Trending YouTube Channels - Fastest Growing YouTubers ${new Date().getFullYear()}`,
+    description: "Discover the fastest growing YouTube channels right now. See which YouTubers are gaining subscribers the fastest with real-time growth analytics and viral predictions.",
+    keywords: "trending YouTube channels, fastest growing YouTubers, viral YouTube channels, YouTube growth, rising YouTubers, YouTube trending, biggest daily gains",
+    canonical: `${SITE_URL}/trending`
+  });
   
-  return (
-    <Helmet>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content="trending YouTube channels, fastest growing YouTubers, viral YouTube channels, YouTube growth, rising YouTubers, YouTube trending, biggest daily gains" />
-      <link rel="canonical" href={pageUrl} />
-      
-      {/* Open Graph */}
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:url" content={pageUrl} />
-      <meta property="og:site_name" content={SITE_NAME} />
-      
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-    </Helmet>
-  );
+  return null;
 };
 
 // Header Component
