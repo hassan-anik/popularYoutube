@@ -235,9 +235,7 @@ const ChannelSEO = ({ channel }) => {
       <meta name="twitter:image" content={channel.thumbnail_url} />
       
       {/* Schema.org structured data */}
-      <script type="application/ld+json">
-        {JSON.stringify(schemaData)}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
     </Helmet>
   );
 };
