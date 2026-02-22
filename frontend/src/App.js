@@ -1255,7 +1255,6 @@ function App() {
             <Route path="/country/:countryCode" element={<CountryPage />} />
             <Route path="/channel/:channelId" element={<ChannelPage />} />
             <Route path="/trending" element={<TrendingPage />} />
-            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </main>
         <Footer />
