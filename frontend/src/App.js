@@ -73,7 +73,7 @@ const formatShortDate = (dateStr) => {
 const SITE_NAME = "TopTube World Pro";
 const SITE_URL = process.env.REACT_APP_BACKEND_URL || "https://toptubeworldpro.com";
 
-// Helper component for JSON-LD structured data (avoids react-helmet script issue)
+// Helper component for JSON-LD structured data
 const JsonLd = ({ data }) => (
   <script
     type="application/ld+json"
@@ -81,8 +81,76 @@ const JsonLd = ({ data }) => (
   />
 );
 
+// Custom hook for dynamic SEO
+const useSEO = ({ title, description, keywords, canonical, ogType = "website", ogImage = null }) => {
+  useEffect(() => {
+    // Update document title
+    if (title) {
+      document.title = title;
+    }
+    
+    // Update or create meta tags
+    const updateMeta = (name, content, isProperty = false) => {
+      const attr = isProperty ? 'property' : 'name';
+      let meta = document.querySelector(`meta[${attr}="${name}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute(attr, name);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    };
+    
+    if (description) {
+      updateMeta('description', description);
+      updateMeta('og:description', description, true);
+      updateMeta('twitter:description', description);
+    }
+    
+    if (keywords) {
+      updateMeta('keywords', keywords);
+    }
+    
+    if (title) {
+      updateMeta('og:title', title, true);
+      updateMeta('twitter:title', title);
+    }
+    
+    if (ogType) {
+      updateMeta('og:type', ogType, true);
+    }
+    
+    if (canonical) {
+      updateMeta('og:url', canonical, true);
+      // Update canonical link
+      let link = document.querySelector('link[rel="canonical"]');
+      if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'canonical');
+        document.head.appendChild(link);
+      }
+      link.setAttribute('href', canonical);
+    }
+    
+    if (ogImage) {
+      updateMeta('og:image', ogImage, true);
+      updateMeta('twitter:image', ogImage);
+    }
+    
+    updateMeta('og:site_name', SITE_NAME, true);
+    
+  }, [title, description, keywords, canonical, ogType, ogImage]);
+};
+
 // Home Page SEO
 const HomeSEO = () => {
+  useSEO({
+    title: "TopTube World Pro - Global YouTube Channel Rankings & Analytics",
+    description: "Track and analyze the most subscribed YouTube channels worldwide. Real-time rankings, growth predictions, and analytics for 197 countries. Discover top YouTubers by country.",
+    keywords: "YouTube rankings, most subscribed YouTubers, top YouTube channels, YouTube analytics, subscriber count, YouTube growth tracker, global YouTube statistics",
+    canonical: SITE_URL
+  });
+  
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -96,29 +164,7 @@ const HomeSEO = () => {
     }
   };
   
-  return (
-    <>
-      <Helmet>
-        <title>TopTube World Pro - Global YouTube Channel Rankings & Analytics</title>
-        <meta name="description" content="Track and analyze the most subscribed YouTube channels worldwide. Real-time rankings, growth predictions, and analytics for 197 countries. Discover top YouTubers by country." />
-        <meta name="keywords" content="YouTube rankings, most subscribed YouTubers, top YouTube channels, YouTube analytics, subscriber count, YouTube growth tracker, global YouTube statistics" />
-        <link rel="canonical" href={SITE_URL} />
-        
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="TopTube World Pro - Global YouTube Channel Rankings" />
-        <meta property="og:description" content="Track the most subscribed YouTube channels across 197 countries. Real-time rankings, growth predictions, and viral channel detection." />
-        <meta property="og:url" content={SITE_URL} />
-        <meta property="og:site_name" content={SITE_NAME} />
-        
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="TopTube World Pro - Global YouTube Rankings" />
-        <meta name="twitter:description" content="Track the most subscribed YouTube channels across 197 countries with real-time analytics." />
-      </Helmet>
-      <JsonLd data={schemaData} />
-    </>
-  );
+  return <JsonLd data={schemaData} />;
 };
 
 // Country Page SEO
