@@ -2,7 +2,8 @@
 TopTube World Pro - Main FastAPI Server
 Tracks, ranks, and predicts the most subscribed YouTube channels per country
 """
-from fastapi import FastAPI, APIRouter, HTTPException, BackgroundTasks, Query
+from fastapi import FastAPI, APIRouter, HTTPException, BackgroundTasks, Query, Response
+from fastapi.responses import PlainTextResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -17,6 +18,7 @@ from datetime import datetime, timezone
 from services.youtube_service import youtube_service
 from services.ranking_service import get_ranking_service
 from services.growth_analyzer import get_growth_analyzer
+from services.scheduler_service import get_scheduler_service
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -29,6 +31,7 @@ db = client[os.environ['DB_NAME']]
 # Initialize services
 ranking_service = get_ranking_service(db)
 growth_analyzer = get_growth_analyzer(db)
+scheduler_service = None  # Will be initialized on startup
 
 # Create the main app
 app = FastAPI(title="TopTube World Pro", version="1.0.0")
