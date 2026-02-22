@@ -3267,7 +3267,7 @@ const AdminPage = () => {
 };
 
 // Main App
-function App() {
+function AppContent() {
   // Register service worker for PWA
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -3282,7 +3282,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App bg-[#0a0a0a] min-h-screen pb-16 md:pb-0">
+    <div className="App min-h-screen pb-16 md:pb-0">
       <BrowserRouter>
         <Header />
         <main className="min-h-[calc(100vh-200px)]">
@@ -3306,6 +3306,15 @@ function App() {
         <StickyMobileAd />
       </BrowserRouter>
     </div>
+  );
+}
+
+// Main App with Theme Provider
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 
