@@ -1163,6 +1163,73 @@ async def trigger_manual_ranking(background_tasks: BackgroundTasks):
 
 # ==================== APP SETUP ====================
 
+# Root-level sitemap (for Google Search Console - must be at /sitemap.xml)
+@app.get("/sitemap.xml", response_class=PlainTextResponse)
+async def root_sitemap():
+    """Serve sitemap at root level for search engines"""
+    base_url = os.environ.get('SITE_URL', 'https://channel-leaderboard.preview.emergentagent.com')
+    
+    xml_parts = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    
+    static_pages = [
+        ('/', '1.0', 'daily'),
+        ('/leaderboard', '0.9', 'hourly'),
+        ('/countries', '0.8', 'daily'),
+        ('/trending', '0.9', 'hourly'),
+        ('/compare', '0.7', 'daily'),
+        ('/favorites', '0.5', 'weekly'),
+        ('/blog', '0.8', 'daily'),
+        ('/about', '0.3', 'monthly'),
+        ('/privacy', '0.2', 'monthly'),
+        ('/terms', '0.2', 'monthly'),
+        ('/contact', '0.3', 'monthly'),
+    ]
+    
+    for path, priority, freq in static_pages:
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}{path}</loc>
+    <changefreq>{freq}</changefreq>
+    <priority>{priority}</priority>
+  </url>''')
+    
+    countries = await db.countries.find({}, {"code": 1}).to_list(300)
+    for country in countries:
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}/country/{country["code"]}</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>''')
+    
+    channels = await db.channels.find({"is_active": True}, {"channel_id": 1, "updated_at": 1}).to_list(1000)
+    for channel in channels:
+        lastmod = channel.get("updated_at", datetime.now(timezone.utc).isoformat())
+        if isinstance(lastmod, str):
+            lastmod = lastmod[:10]
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}/channel/{channel["channel_id"]}</loc>
+    <lastmod>{lastmod}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>''')
+    
+    xml_parts.append('</urlset>')
+    
+    return Response(content='\n'.join(xml_parts), media_type='application/xml')
+
+# Root-level robots.txt
+@app.get("/robots.txt", response_class=PlainTextResponse)
+async def root_robots():
+    """Serve robots.txt at root level"""
+    base_url = os.environ.get('SITE_URL', 'https://channel-leaderboard.preview.emergentagent.com')
+    return f"""User-agent: *
+Allow: /
+
+Sitemap: {base_url}/sitemap.xml
+"""
+
 # Include the router in the main app
 app.include_router(api_router)
 
