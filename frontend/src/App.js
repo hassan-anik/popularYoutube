@@ -2257,7 +2257,7 @@ const ChannelPage = () => {
 
         {/* Top Videos */}
         {channel.top_videos?.length > 0 && (
-          <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+          <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
             <h2 className="text-xl font-bold text-white mb-4">Top Videos</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {channel.top_videos.map((video) => (
@@ -2269,7 +2269,7 @@ const ChannelPage = () => {
                   className="block hover:opacity-80 transition-opacity"
                   data-testid={`video-${video.video_id}`}
                 >
-                  <img src={video.thumbnail_url} alt="" className="w-full rounded-lg mb-2" />
+                  <img src={video.thumbnail_url} alt="" className="w-full rounded-lg mb-2" loading="lazy" />
                   <h4 className="font-medium text-white text-sm line-clamp-2 mb-1">{video.title}</h4>
                   <p className="text-gray-500 text-xs">{formatNumber(video.view_count)} views • {formatShortDate(video.published_at)}</p>
                 </a>
@@ -2277,6 +2277,32 @@ const ChannelPage = () => {
             </div>
           </div>
         )}
+        
+        {/* Embed Widget */}
+        <EmbedWidget type="channel" data={channel} />
+        </div>
+          
+          {/* Sidebar with Ads */}
+          <div className="hidden lg:block w-[300px] flex-shrink-0">
+            <SidebarAd />
+            <div className="mt-6 bg-[#111] border border-[#222] rounded-lg p-4">
+              <h3 className="font-semibold text-white mb-3">Quick Actions</h3>
+              <div className="space-y-2">
+                <Link to={`/compare?ids=${channel.channel_id}`} className="flex items-center gap-2 text-gray-400 hover:text-white text-sm">
+                  <BarChart3 className="w-4 h-4" /> Compare this channel
+                </Link>
+                <a 
+                  href={`https://youtube.com/channel/${channel.channel_id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-400 hover:text-white text-sm"
+                >
+                  <ExternalLink className="w-4 h-4" /> View on YouTube
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
