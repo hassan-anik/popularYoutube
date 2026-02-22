@@ -2106,6 +2106,7 @@ const ChannelPage = () => {
   const navigate = useNavigate();
   const [channel, setChannel] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -2140,9 +2141,12 @@ const ChannelPage = () => {
   return (
     <div className="py-8" data-testid="channel-detail-page">
       <ChannelSEO channel={channel} />
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Channel Header */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex gap-6">
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* Channel Header */}
+            <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
           <div className="flex flex-col md:flex-row items-start gap-6">
             <img 
               src={channel.thumbnail_url || "https://via.placeholder.com/120"} 
