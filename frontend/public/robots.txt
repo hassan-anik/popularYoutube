@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://global-leaderboard.preview.emergentagent.com/api/sitemap.xml
+
+# Crawl-delay for polite bots
+Crawl-delay: 1
+
+# Block common bot patterns that waste bandwidth
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Allow Google and Bing full access
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
