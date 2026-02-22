@@ -1522,22 +1522,24 @@ const AdminPage = () => {
 // Main App
 function App() {
   return (
-    <div className="App bg-[#0a0a0a] min-h-screen">
-      <BrowserRouter>
-        <Header />
-        <main className="min-h-[calc(100vh-200px)]">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/leaderboard" element={<LeaderboardPage />} />
-            <Route path="/countries" element={<CountriesPage />} />
-            <Route path="/country/:countryCode" element={<CountryPage />} />
-            <Route path="/channel/:channelId" element={<ChannelPage />} />
-            <Route path="/trending" element={<TrendingPage />} />
-          </Routes>
-        </main>
-        <Footer />
-      </BrowserRouter>
-    </div>
+    <HelmetProvider>
+      <div className="App bg-[#0a0a0a] min-h-screen">
+        <BrowserRouter>
+          <Header />
+          <main className="min-h-[calc(100vh-200px)]">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/leaderboard" element={<LeaderboardPage />} />
+              <Route path="/countries" element={<CountriesPage />} />
+              <Route path="/country/:countryCode" element={<CountryPage />} />
+              <Route path="/channel/:channelId" element={<ChannelPage />} />
+              <Route path="/trending" element={<TrendingPage />} />
+            </Routes>
+          </main>
+          <Footer />
+        </BrowserRouter>
+      </div>
+    </HelmetProvider>
   );
 }
 
