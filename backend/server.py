@@ -1066,6 +1066,152 @@ async def submit_contact_form(form: ContactFormRequest):
         }
 
 
+# ==================== BLOG ADMIN ====================
+
+BLOG_ADMIN_KEY = os.environ.get('BLOG_ADMIN_KEY', 'toptube2024admin')
+BLOG_CATEGORIES = ['Trending', 'Guide', 'Analysis', 'Case Study', 'Strategy', 'Gaming', 'News', 'Tips']
+
+def verify_admin_key(admin_key: str):
+    """Verify the admin key for protected endpoints"""
+    if admin_key != BLOG_ADMIN_KEY:
+        raise HTTPException(status_code=401, detail="Invalid admin key")
+
+class BlogPostCreate(BaseModel):
+    title: str
+    slug: str
+    excerpt: str
+    content: str
+    category: str
+    image: str = ""
+    status: str = "draft"  # draft or published
+    read_time: str = "5 min read"
+
+class BlogPostUpdate(BaseModel):
+    title: Optional[str] = None
+    slug: Optional[str] = None
+    excerpt: Optional[str] = None
+    content: Optional[str] = None
+    category: Optional[str] = None
+    image: Optional[str] = None
+    status: Optional[str] = None
+    read_time: Optional[str] = None
+
+@api_router.get("/blog/categories")
+async def get_blog_categories():
+    """Get available blog categories"""
+    return {"categories": BLOG_CATEGORIES}
+
+@api_router.get("/blog/posts")
+async def get_blog_posts(
+    status: Optional[str] = None,
+    category: Optional[str] = None,
+    limit: int = Query(default=20, le=100),
+    skip: int = 0
+):
+    """Get all blog posts (public - only published unless admin)"""
+    query = {}
+    if status:
+        query["status"] = status
+    else:
+        query["status"] = "published"  # Default to published for public
+    
+    if category:
+        query["category"] = category
+    
+    posts = await db.blog_posts.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    total = await db.blog_posts.count_documents(query)
+    
+    return {"posts": posts, "total": total}
+
+@api_router.get("/blog/posts/{slug}")
+async def get_blog_post(slug: str):
+    """Get a single blog post by slug"""
+    post = await db.blog_posts.find_one({"slug": slug}, {"_id": 0})
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post
+
+@api_router.get("/admin/blog/posts")
+async def admin_get_all_posts(admin_key: str = Query(...)):
+    """Admin: Get all posts including drafts"""
+    verify_admin_key(admin_key)
+    posts = await db.blog_posts.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return {"posts": posts}
+
+@api_router.post("/admin/blog/posts")
+async def admin_create_post(post: BlogPostCreate, admin_key: str = Query(...)):
+    """Admin: Create a new blog post"""
+    verify_admin_key(admin_key)
+    
+    # Check for duplicate slug
+    existing = await db.blog_posts.find_one({"slug": post.slug})
+    if existing:
+        raise HTTPException(status_code=400, detail="A post with this slug already exists")
+    
+    post_doc = {
+        "id": str(uuid.uuid4()),
+        "title": post.title,
+        "slug": post.slug,
+        "excerpt": post.excerpt,
+        "content": post.content,
+        "category": post.category,
+        "image": post.image,
+        "status": post.status,
+        "read_time": post.read_time,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.blog_posts.insert_one(post_doc)
+    del post_doc["_id"]  # Remove MongoDB _id before returning
+    
+    return {"message": "Post created", "post": post_doc}
+
+@api_router.put("/admin/blog/posts/{post_id}")
+async def admin_update_post(post_id: str, post: BlogPostUpdate, admin_key: str = Query(...)):
+    """Admin: Update a blog post"""
+    verify_admin_key(admin_key)
+    
+    existing = await db.blog_posts.find_one({"id": post_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Post not found")
+    
+    update_data = {k: v for k, v in post.dict().items() if v is not None}
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.blog_posts.update_one({"id": post_id}, {"$set": update_data})
+    
+    updated_post = await db.blog_posts.find_one({"id": post_id}, {"_id": 0})
+    return {"message": "Post updated", "post": updated_post}
+
+@api_router.delete("/admin/blog/posts/{post_id}")
+async def admin_delete_post(post_id: str, admin_key: str = Query(...)):
+    """Admin: Delete a blog post"""
+    verify_admin_key(admin_key)
+    
+    result = await db.blog_posts.delete_one({"id": post_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Post not found")
+    
+    return {"message": "Post deleted"}
+
+@api_router.post("/admin/blog/upload-image")
+async def admin_upload_image(admin_key: str = Query(...)):
+    """Admin: Get a placeholder for image upload (use external service)"""
+    verify_admin_key(admin_key)
+    
+    # For now, return instructions for using external image hosting
+    return {
+        "message": "For image uploads, use one of these free services:",
+        "options": [
+            {"name": "Imgur", "url": "https://imgur.com/upload"},
+            {"name": "ImgBB", "url": "https://imgbb.com/"},
+            {"name": "Unsplash", "url": "https://unsplash.com/"}
+        ],
+        "instructions": "Upload your image to one of these services and paste the URL in the image field"
+    }
+
+
 # ==================== SITEMAP ====================
 
 @api_router.get("/sitemap.xml", response_class=PlainTextResponse)
