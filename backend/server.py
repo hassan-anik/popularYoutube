@@ -13,7 +13,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from services.youtube_service import youtube_service
 from services.ranking_service import get_ranking_service
