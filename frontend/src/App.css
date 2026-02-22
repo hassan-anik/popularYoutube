@@ -1,3 +1,148 @@
+/* ==================== THEME VARIABLES ==================== */
+
+:root {
+  /* Default: Dark Theme */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #0d0d0d;
+  --bg-card: #111111;
+  --bg-card-hover: #1a1a1a;
+  --border-color: #222222;
+  --border-color-light: #333333;
+  --text-primary: #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-muted: #a3a3a3;
+  --text-faded: #737373;
+  --accent-red: #dc2626;
+  --accent-red-hover: #b91c1c;
+  --accent-green: #22c55e;
+  --accent-blue: #3b82f6;
+  --accent-yellow: #eab308;
+}
+
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f5f5f5;
+  --border-color: #e5e5e5;
+  --border-color-light: #d4d4d4;
+  --text-primary: #171717;
+  --text-secondary: #262626;
+  --text-muted: #525252;
+  --text-faded: #737373;
+}
+
+/* ==================== BASE STYLES ==================== */
+
 .App {
   min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card styles */
+.theme-card {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+.theme-card:hover {
+  background-color: var(--bg-card-hover);
+}
+
+/* Text styles */
+.theme-text {
+  color: var(--text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--text-muted);
+}
+
+/* Border styles */
+.theme-border {
+  border-color: var(--border-color);
+}
+
+/* Input styles for light mode */
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+[data-theme="light"] input:focus,
+[data-theme="light"] select:focus,
+[data-theme="light"] textarea:focus {
+  border-color: #dc2626;
+}
+
+/* Override dark backgrounds for light mode */
+[data-theme="light"] .bg-\[\#0a0a0a\],
+[data-theme="light"] .bg-\[\#0d0d0d\],
+[data-theme="light"] .bg-\[\#111\] {
+  background-color: var(--bg-card) !important;
+}
+
+[data-theme="light"] .bg-\[\#1a1a1a\] {
+  background-color: var(--bg-card-hover) !important;
+}
+
+[data-theme="light"] .border-\[\#1a1a1a\],
+[data-theme="light"] .border-\[\#222\],
+[data-theme="light"] .border-\[\#333\] {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="light"] .divide-\[\#222\] > :not([hidden]) ~ :not([hidden]),
+[data-theme="light"] .divide-\[\#1a1a1a\] > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--border-color) !important;
+}
+
+/* Text colors for light mode */
+[data-theme="light"] .text-white {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .text-gray-300 {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="light"] .text-gray-400 {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="light"] .text-gray-500 {
+  color: var(--text-faded) !important;
+}
+
+/* Header/Footer specific overrides */
+[data-theme="light"] header,
+[data-theme="light"] footer {
+  background-color: #f9fafb !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Hero gradient for light mode */
+[data-theme="light"] .bg-gradient-to-b.from-\[\#111\].to-\[\#0a0a0a\] {
+  background: linear-gradient(to bottom, #f5f5f5, #ffffff) !important;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-in-out;
+}
+
+/* Disable transitions for elements that shouldn't animate */
+img, svg, video, canvas {
+  transition: none;
 }
