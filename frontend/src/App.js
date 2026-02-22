@@ -719,24 +719,24 @@ const ContactPage = () => {
             <div className="bg-[#111] border border-[#222] rounded-lg p-6">
               <h3 className="font-semibold text-white mb-4">General Inquiries</h3>
               <p className="text-gray-400 text-sm mb-2">For general questions and information:</p>
-              <a href="mailto:info@toptubeworldpro.com" className="text-red-500 hover:text-red-400">
-                info@toptubeworldpro.com
+              <a href="mailto:anikhasan1100@gmail.com" className="text-red-500 hover:text-red-400">
+                anikhasan1100@gmail.com
               </a>
             </div>
 
             <div className="bg-[#111] border border-[#222] rounded-lg p-6">
               <h3 className="font-semibold text-white mb-4">Technical Support</h3>
               <p className="text-gray-400 text-sm mb-2">Need help with the platform?</p>
-              <a href="mailto:support@toptubeworldpro.com" className="text-red-500 hover:text-red-400">
-                support@toptubeworldpro.com
+              <a href="mailto:anikhasan1100@gmail.com" className="text-red-500 hover:text-red-400">
+                anikhasan1100@gmail.com
               </a>
             </div>
 
             <div className="bg-[#111] border border-[#222] rounded-lg p-6">
               <h3 className="font-semibold text-white mb-4">Business & Partnerships</h3>
               <p className="text-gray-400 text-sm mb-2">For business opportunities:</p>
-              <a href="mailto:business@toptubeworldpro.com" className="text-red-500 hover:text-red-400">
-                business@toptubeworldpro.com
+              <a href="mailto:anikhasan1100@gmail.com" className="text-red-500 hover:text-red-400">
+                anikhasan1100@gmail.com
               </a>
             </div>
 
