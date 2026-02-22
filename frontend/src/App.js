@@ -269,6 +269,13 @@ const LeaderboardSEO = ({ totalChannels }) => {
   const description = `Complete ranking of the world's most subscribed YouTube channels. Live subscriber counts, daily growth, and viral status for ${totalChannels || 100}+ channels. Updated in real-time.`;
   const pageUrl = `${SITE_URL}/leaderboard`;
   
+  useSEO({
+    title,
+    description,
+    keywords: "YouTube leaderboard, most subscribed YouTube channels, top YouTubers worldwide, global YouTube rankings, YouTube subscriber count, biggest YouTube channels",
+    canonical: pageUrl
+  });
+  
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -278,29 +285,7 @@ const LeaderboardSEO = ({ totalChannels }) => {
     "numberOfItems": totalChannels || 100
   };
   
-  return (
-    <>
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="keywords" content="YouTube leaderboard, most subscribed YouTube channels, top YouTubers worldwide, global YouTube rankings, YouTube subscriber count, biggest YouTube channels" />
-        <link rel="canonical" href={pageUrl} />
-        
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:site_name" content={SITE_NAME} />
-        
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-      </Helmet>
-      <JsonLd data={schemaData} />
-    </>
-  );
+  return <JsonLd data={schemaData} />;
 };
 
 // Countries List Page SEO
