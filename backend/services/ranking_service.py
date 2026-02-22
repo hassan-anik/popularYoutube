@@ -82,9 +82,10 @@ class RankingService:
         return {"updated": len(channels), "changes": changes}
     
     async def get_global_top_100(self) -> List[Dict]:
-        """Get all channels globally sorted by subscribers"""
+        """Get all channels globally sorted by subscribers (excludes country copies)"""
+        # Exclude country-specific copies (those with original_channel_id field)
         channels = await self.db.channels.find(
-            {"is_active": True},
+            {"is_active": True, "original_channel_id": {"$exists": False}},
             {"_id": 0}
         ).sort("subscriber_count", -1).limit(1000).to_list(1000)
         
@@ -96,7 +97,7 @@ class RankingService:
     async def get_fastest_growing(self, limit: int = 20) -> List[Dict]:
         """Get fastest growing channels by daily growth percentage"""
         channels = await self.db.channels.find(
-            {"is_active": True, "daily_growth_percent": {"$exists": True}},
+            {"is_active": True, "daily_growth_percent": {"$exists": True}, "original_channel_id": {"$exists": False}},
             {"_id": 0}
         ).sort("daily_growth_percent", -1).limit(limit).to_list(limit)
         
@@ -105,7 +106,7 @@ class RankingService:
     async def get_biggest_gainers_24h(self, limit: int = 20) -> List[Dict]:
         """Get channels with biggest subscriber gain in 24h"""
         channels = await self.db.channels.find(
-            {"is_active": True, "daily_subscriber_gain": {"$exists": True}},
+            {"is_active": True, "daily_subscriber_gain": {"$exists": True}, "original_channel_id": {"$exists": False}},
             {"_id": 0}
         ).sort("daily_subscriber_gain", -1).limit(limit).to_list(limit)
         
