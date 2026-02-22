@@ -169,15 +169,22 @@ const HomeSEO = () => {
 
 // Country Page SEO
 const CountrySEO = ({ country, channels }) => {
-  if (!country) return null;
-  
   const topChannel = channels?.[0];
   const channelCount = channels?.length || 0;
   
-  const title = `Top YouTube Channels in ${country.name} ${country.flag_emoji} - Most Subscribed YouTubers ${new Date().getFullYear()}`;
-  const description = `Discover the ${channelCount} most subscribed YouTube channels in ${country.name}. ${topChannel ? `#1 is ${topChannel.title} with ${formatNumber(topChannel.subscriber_count)} subscribers.` : ''} Real-time rankings and growth analytics.`;
-  const keywords = `top YouTube channels ${country.name}, most subscribed YouTubers ${country.name}, ${country.name} YouTube rankings, popular YouTubers in ${country.name}, ${country.name} YouTube statistics, best YouTubers ${country.name}`;
-  const pageUrl = `${SITE_URL}/country/${country.code}`;
+  const title = country ? `Top YouTube Channels in ${country.name} ${country.flag_emoji} - Most Subscribed YouTubers ${new Date().getFullYear()}` : "";
+  const description = country ? `Discover the ${channelCount} most subscribed YouTube channels in ${country.name}. ${topChannel ? `#1 is ${topChannel.title} with ${formatNumber(topChannel.subscriber_count)} subscribers.` : ''} Real-time rankings and growth analytics.` : "";
+  const keywords = country ? `top YouTube channels ${country.name}, most subscribed YouTubers ${country.name}, ${country.name} YouTube rankings, popular YouTubers in ${country.name}, ${country.name} YouTube statistics, best YouTubers ${country.name}` : "";
+  const pageUrl = country ? `${SITE_URL}/country/${country.code}` : "";
+  
+  useSEO({
+    title,
+    description,
+    keywords,
+    canonical: pageUrl
+  });
+  
+  if (!country) return null;
   
   // Schema.org ItemList for country rankings
   const schemaData = {
@@ -200,29 +207,7 @@ const CountrySEO = ({ country, channels }) => {
     })) || []
   };
 
-  return (
-    <>
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="keywords" content={keywords} />
-        <link rel="canonical" href={pageUrl} />
-        
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:site_name" content={SITE_NAME} />
-        
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-      </Helmet>
-      <JsonLd data={schemaData} />
-    </>
-  );
+  return <JsonLd data={schemaData} />;
 };
 
 // Channel Page SEO
