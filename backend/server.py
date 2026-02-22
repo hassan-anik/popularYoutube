@@ -1317,6 +1317,22 @@ async def trigger_manual_ranking(background_tasks: BackgroundTasks):
     background_tasks.add_task(scheduler_service.update_all_rankings)
     return {"message": "Ranking update triggered"}
 
+@api_router.post("/scheduler/trigger-stats-snapshot")
+async def trigger_stats_snapshot(background_tasks: BackgroundTasks):
+    """Manually trigger a stats snapshot for growth tracking"""
+    if scheduler_service is None:
+        raise HTTPException(status_code=500, detail="Scheduler not initialized")
+    background_tasks.add_task(scheduler_service.record_stats_snapshot)
+    return {"message": "Stats snapshot recording triggered"}
+
+@api_router.post("/scheduler/trigger-growth-calc")
+async def trigger_growth_calculation(background_tasks: BackgroundTasks):
+    """Manually trigger growth metrics calculation"""
+    if scheduler_service is None:
+        raise HTTPException(status_code=500, detail="Scheduler not initialized")
+    background_tasks.add_task(scheduler_service.calculate_growth_metrics)
+    return {"message": "Growth metrics calculation triggered"}
+
 
 # ==================== APP SETUP ====================
 
