@@ -1059,6 +1059,7 @@ const ChannelPage = () => {
 
   return (
     <div className="py-8" data-testid="channel-detail-page">
+      <ChannelSEO channel={channel} />
       <div className="max-w-6xl mx-auto px-4">
         {/* Channel Header */}
         <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
