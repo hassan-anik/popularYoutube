@@ -1052,6 +1052,13 @@ const Footer = () => (
             <li><Link to="/terms" className="text-gray-400 hover:text-white">Terms of Service</Link></li>
           </ul>
         </div>
+        
+        {/* Newsletter Signup in Footer */}
+        <div>
+          <h4 className="font-semibold text-white mb-4">Newsletter</h4>
+          <p className="text-gray-400 text-sm mb-3">Get weekly ranking updates</p>
+          <NewsletterSignup compact={true} />
+        </div>
       </div>
       <div className="border-t border-[#1a1a1a] mt-8 pt-8 text-center text-gray-500 text-sm">
         © {new Date().getFullYear()} TopTube World Pro. All rights reserved. Data sourced from YouTube Data API.
