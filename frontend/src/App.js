@@ -14,9 +14,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar
+  ResponsiveContainer
 } from "recharts";
 import {
   TrendingUp,
@@ -34,8 +32,11 @@ import {
   Zap,
   BarChart3,
   Settings,
-  ArrowUpRight,
-  X
+  ArrowUp,
+  ArrowDown,
+  X,
+  Menu,
+  ExternalLink
 } from "lucide-react";
 import "@/App.css";
 
@@ -56,160 +57,168 @@ const formatNumber = (num) => {
 const formatDate = (dateStr) => {
   if (!dateStr) return "";
   const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+};
+
+const formatShortDate = (dateStr) => {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
 
-const getViralBadgeClass = (label) => {
-  switch (label) {
-    case "Exploding": return "badge-exploding";
-    case "Rising Fast": return "badge-rising";
-    case "Stable": return "badge-stable";
-    case "Slowing": return "badge-slowing";
-    default: return "badge-stable";
-  }
+// Header Component
+const Header = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  return (
+    <header className="bg-[#0d0d0d] border-b border-[#1a1a1a] sticky top-0 z-50" data-testid="header">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <Link to="/" className="flex items-center gap-3" data-testid="logo-link">
+            <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
+              <PlayCircle className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-bold text-white">TopTube World Pro</span>
+          </Link>
+          
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-8">
+            <Link to="/" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-home">
+              Home
+            </Link>
+            <Link to="/leaderboard" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-leaderboard">
+              Top 100
+            </Link>
+            <Link to="/countries" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-countries">
+              Countries
+            </Link>
+            <Link to="/trending" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-trending">
+              Trending
+            </Link>
+            <Link to="/admin" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-admin">
+              Admin
+            </Link>
+          </nav>
+
+          {/* Mobile Menu Button */}
+          <button 
+            className="md:hidden text-gray-300"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Mobile Nav */}
+        {mobileMenuOpen && (
+          <nav className="md:hidden py-4 border-t border-[#1a1a1a]">
+            <div className="flex flex-col gap-4">
+              <Link to="/" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+              <Link to="/leaderboard" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Top 100</Link>
+              <Link to="/countries" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Countries</Link>
+              <Link to="/trending" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Trending</Link>
+              <Link to="/admin" className="text-gray-300 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Admin</Link>
+            </div>
+          </nav>
+        )}
+      </div>
+    </header>
+  );
 };
 
-const getViralIcon = (label) => {
-  switch (label) {
-    case "Exploding": return <Flame className="w-3 h-3" />;
-    case "Rising Fast": return <TrendingUp className="w-3 h-3" />;
-    case "Stable": return <Minus className="w-3 h-3" />;
-    case "Slowing": return <TrendingDown className="w-3 h-3" />;
-    default: return null;
-  }
-};
-
-// Components
-
-const Header = () => (
-  <header className="glass sticky top-0 z-50 border-b border-[var(--border)]" data-testid="header">
-    <div className="container flex items-center justify-between h-16">
-      <Link to="/" className="flex items-center gap-3" data-testid="logo-link">
-        <div className="w-10 h-10 bg-[var(--primary)] rounded-lg flex items-center justify-center">
-          <PlayCircle className="w-6 h-6 text-white" />
+// Footer Component
+const Footer = () => (
+  <footer className="bg-[#0d0d0d] border-t border-[#1a1a1a] py-12 mt-16" data-testid="footer">
+    <div className="max-w-6xl mx-auto px-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center">
+              <PlayCircle className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-bold text-white">TopTube World Pro</span>
+          </div>
+          <p className="text-gray-500 text-sm">
+            Track and analyze the most subscribed YouTube channels worldwide in real-time.
+          </p>
         </div>
         <div>
-          <h1 className="text-lg font-bold tracking-tight">TopTube World Pro</h1>
-          <p className="text-xs text-[#71717a]">Global YouTube Rankings</p>
+          <h4 className="font-semibold text-white mb-4">Rankings</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link to="/leaderboard" className="text-gray-400 hover:text-white">Global Top 100</Link></li>
+            <li><Link to="/trending" className="text-gray-400 hover:text-white">Fastest Growing</Link></li>
+            <li><Link to="/countries" className="text-gray-400 hover:text-white">By Country</Link></li>
+          </ul>
         </div>
-      </Link>
-      <nav className="flex items-center gap-6">
-        <Link to="/" className="nav-link flex items-center gap-2" data-testid="nav-dashboard">
-          <Globe className="w-4 h-4" /> Dashboard
-        </Link>
-        <Link to="/leaderboard" className="nav-link flex items-center gap-2" data-testid="nav-leaderboard">
-          <Crown className="w-4 h-4" /> Global Top 100
-        </Link>
-        <Link to="/admin" className="nav-link flex items-center gap-2" data-testid="nav-admin">
-          <Settings className="w-4 h-4" /> Admin
-        </Link>
-      </nav>
+        <div>
+          <h4 className="font-semibold text-white mb-4">Popular Countries</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link to="/country/US" className="text-gray-400 hover:text-white">United States</Link></li>
+            <li><Link to="/country/IN" className="text-gray-400 hover:text-white">India</Link></li>
+            <li><Link to="/country/BR" className="text-gray-400 hover:text-white">Brazil</Link></li>
+            <li><Link to="/country/KR" className="text-gray-400 hover:text-white">South Korea</Link></li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="font-semibold text-white mb-4">About</h4>
+          <ul className="space-y-2 text-sm">
+            <li><span className="text-gray-400">Data from YouTube API</span></li>
+            <li><span className="text-gray-400">Updated in real-time</span></li>
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-[#1a1a1a] mt-8 pt-8 text-center text-gray-500 text-sm">
+        © 2026 TopTube World Pro. All rights reserved.
+      </div>
     </div>
-  </header>
+  </footer>
 );
 
-const LiveIndicator = () => (
-  <div className="flex items-center gap-2 text-xs" data-testid="live-indicator">
-    <span className="w-2 h-2 bg-[var(--accent)] rounded-full live-pulse"></span>
-    <span className="text-[#71717a]">Live Data</span>
-  </div>
-);
+// Viral Badge
+const ViralBadge = ({ label }) => {
+  const styles = {
+    "Exploding": "bg-red-500/20 text-red-400 border-red-500/30",
+    "Rising Fast": "bg-green-500/20 text-green-400 border-green-500/30",
+    "Stable": "bg-blue-500/20 text-blue-400 border-blue-500/30",
+    "Slowing": "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+  };
+  
+  const icons = {
+    "Exploding": <Flame className="w-3 h-3" />,
+    "Rising Fast": <TrendingUp className="w-3 h-3" />,
+    "Stable": <Minus className="w-3 h-3" />,
+    "Slowing": <TrendingDown className="w-3 h-3" />
+  };
 
-const ViralBadge = ({ label }) => (
-  <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getViralBadgeClass(label)}`} data-testid={`viral-badge-${label?.toLowerCase()}`}>
-    {getViralIcon(label)}
-    {label}
-  </span>
-);
-
-const RankChange = ({ current, previous }) => {
-  const change = previous - current;
-  if (change > 0) {
-    return (
-      <span className="rank-up flex items-center gap-1 text-sm font-mono" data-testid="rank-up">
-        <TrendingUp className="w-3 h-3" /> +{change}
-      </span>
-    );
-  }
-  if (change < 0) {
-    return (
-      <span className="rank-down flex items-center gap-1 text-sm font-mono" data-testid="rank-down">
-        <TrendingDown className="w-3 h-3" /> {change}
-      </span>
-    );
-  }
   return (
-    <span className="rank-same flex items-center gap-1 text-sm font-mono" data-testid="rank-same">
-      <Minus className="w-3 h-3" /> 0
+    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium border ${styles[label] || styles["Stable"]}`} data-testid={`viral-badge-${label?.toLowerCase()}`}>
+      {icons[label]} {label || "Stable"}
     </span>
   );
 };
 
-const StatCard = ({ label, value, icon: Icon, trend, color = "var(--foreground)" }) => (
-  <div className="card p-4 stat-card" data-testid={`stat-card-${label?.toLowerCase().replace(/\s/g, '-')}`}>
-    <div className="flex items-center justify-between">
-      <span className="stat-label">{label}</span>
-      {Icon && <Icon className="w-4 h-4 text-[#71717a]" />}
-    </div>
-    <div className="stat-value font-mono" style={{ color }}>{value}</div>
-    {trend !== undefined && (
-      <div className={`text-xs ${trend >= 0 ? 'text-[var(--growth)]' : 'text-[var(--decline)]'}`}>
-        {trend >= 0 ? '+' : ''}{trend}% today
-      </div>
-    )}
-  </div>
-);
+// Rank Change Display
+const RankChange = ({ current, previous }) => {
+  const change = previous - current;
+  if (change > 0) {
+    return <span className="text-green-400 flex items-center gap-1 text-sm"><ArrowUp className="w-3 h-3" /> {change}</span>;
+  }
+  if (change < 0) {
+    return <span className="text-red-400 flex items-center gap-1 text-sm"><ArrowDown className="w-3 h-3" /> {Math.abs(change)}</span>;
+  }
+  return <span className="text-gray-500 text-sm">-</span>;
+};
 
-const ChannelRow = ({ channel, rank, onClick }) => (
-  <tr className="cursor-pointer hover:bg-[rgba(255,255,255,0.02)] transition-colors" onClick={onClick} data-testid={`channel-row-${channel.channel_id}`}>
-    <td className="font-mono font-bold text-lg">#{rank}</td>
-    <td>
-      <div className="flex items-center gap-3">
-        <img 
-          src={channel.thumbnail_url || "https://via.placeholder.com/48"} 
-          alt={channel.title} 
-          className="channel-thumbnail"
-          onError={(e) => e.target.src = "https://via.placeholder.com/48"}
-        />
-        <div>
-          <div className="font-medium">{channel.title}</div>
-          <div className="text-xs text-[#71717a]">{channel.country_name}</div>
-        </div>
-      </div>
-    </td>
-    <td className="font-mono text-lg">{formatNumber(channel.subscriber_count)}</td>
-    <td><RankChange current={channel.current_rank || rank} previous={channel.previous_rank || rank} /></td>
-    <td className="font-mono text-[var(--growth)]">+{formatNumber(channel.daily_subscriber_gain || 0)}</td>
-    <td><ViralBadge label={channel.viral_label || "Stable"} /></td>
-    <td><ChevronRight className="w-4 h-4 text-[#71717a]" /></td>
-  </tr>
-);
-
+// World Map Component
 const WorldMap = ({ mapData, onCountryClick }) => {
-  const [tooltipContent, setTooltipContent] = useState(null);
-  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
-
   const countryDataMap = {};
   mapData?.forEach(item => {
     countryDataMap[item.country_code] = item;
   });
 
-  const handleMouseEnter = (geo, evt) => {
-    const countryCode = geo.properties.ISO_A2;
-    const data = countryDataMap[countryCode];
-    if (data) {
-      setTooltipContent(data);
-      setTooltipPos({ x: evt.clientX, y: evt.clientY });
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setTooltipContent(null);
-  };
-
   return (
-    <div className="world-map-container relative" data-testid="world-map">
-      <ComposableMap projectionConfig={{ scale: 147 }}>
+    <div className="bg-[#111] rounded-lg border border-[#222] overflow-hidden" data-testid="world-map">
+      <ComposableMap projectionConfig={{ scale: 140 }} style={{ width: "100%", height: "350px" }}>
         <ZoomableGroup center={[0, 20]} zoom={1}>
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
@@ -220,14 +229,22 @@ const WorldMap = ({ mapData, onCountryClick }) => {
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    className={`country-path ${hasData ? 'has-data' : ''}`}
                     onClick={() => hasData && onCountryClick(countryCode)}
-                    onMouseEnter={(evt) => handleMouseEnter(geo, evt)}
-                    onMouseLeave={handleMouseLeave}
                     style={{
-                      default: { outline: 'none' },
-                      hover: { outline: 'none' },
-                      pressed: { outline: 'none' }
+                      default: {
+                        fill: hasData ? "#1e40af" : "#1a1a1a",
+                        stroke: "#333",
+                        strokeWidth: 0.5,
+                        outline: "none",
+                        cursor: hasData ? "pointer" : "default"
+                      },
+                      hover: {
+                        fill: hasData ? "#2563eb" : "#1a1a1a",
+                        stroke: "#333",
+                        strokeWidth: 0.5,
+                        outline: "none"
+                      },
+                      pressed: { outline: "none" }
                     }}
                   />
                 );
@@ -236,397 +253,394 @@ const WorldMap = ({ mapData, onCountryClick }) => {
           </Geographies>
         </ZoomableGroup>
       </ComposableMap>
-      
-      {tooltipContent && (
-        <div 
-          className="tooltip"
-          style={{ 
-            left: tooltipPos.x + 10, 
-            top: tooltipPos.y - 60,
-            position: 'fixed'
-          }}
-        >
-          <div className="font-bold mb-1">{tooltipContent.flag_emoji} {tooltipContent.country_name}</div>
-          <div className="flex items-center gap-2 mt-2">
-            <img 
-              src={tooltipContent.top_channel?.thumbnail_url} 
-              alt="" 
-              className="w-8 h-8 rounded-full"
-            />
-            <div>
-              <div className="text-sm font-medium">{tooltipContent.top_channel?.title}</div>
-              <div className="text-xs text-[#71717a] font-mono">{formatNumber(tooltipContent.top_channel?.subscriber_count)} subs</div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-const GrowthChart = ({ data, dataKey = "subscriber_count", color = "var(--accent)" }) => {
+// Growth Chart
+const GrowthChart = ({ data }) => {
   const chartData = data?.map(item => ({
-    ...item,
-    date: formatDate(item.timestamp),
-    value: item[dataKey]
+    date: formatShortDate(item.timestamp),
+    subscribers: item.subscriber_count
   })) || [];
 
   return (
-    <div className="h-[200px]" data-testid="growth-chart">
+    <div className="h-64" data-testid="growth-chart">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={chartData}>
           <defs>
-            <linearGradient id="colorGrowth" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={color} stopOpacity={0.3}/>
-              <stop offset="95%" stopColor={color} stopOpacity={0}/>
+            <linearGradient id="colorSubs" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
+              <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-          <XAxis 
-            dataKey="date" 
-            stroke="#71717a" 
-            tick={{ fill: '#71717a', fontSize: 11 }}
-            axisLine={{ stroke: '#27272a' }}
-          />
-          <YAxis 
-            stroke="#71717a" 
-            tick={{ fill: '#71717a', fontSize: 11 }}
-            axisLine={{ stroke: '#27272a' }}
-            tickFormatter={formatNumber}
-          />
+          <CartesianGrid strokeDasharray="3 3" stroke="#222" />
+          <XAxis dataKey="date" stroke="#666" tick={{ fill: '#666', fontSize: 11 }} />
+          <YAxis stroke="#666" tick={{ fill: '#666', fontSize: 11 }} tickFormatter={formatNumber} />
           <Tooltip 
-            contentStyle={{ 
-              background: 'rgba(18, 18, 18, 0.95)', 
-              border: '1px solid #27272a',
-              borderRadius: '8px',
-              fontFamily: 'JetBrains Mono, monospace'
-            }}
+            contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '8px' }}
+            labelStyle={{ color: '#999' }}
             formatter={(value) => [formatNumber(value), "Subscribers"]}
           />
-          <Area 
-            type="monotone" 
-            dataKey="value" 
-            stroke={color} 
-            fillOpacity={1} 
-            fill="url(#colorGrowth)" 
-          />
+          <Area type="monotone" dataKey="subscribers" stroke="#22c55e" fill="url(#colorSubs)" />
         </AreaChart>
       </ResponsiveContainer>
     </div>
   );
 };
 
-// Pages
+// Channel Card Component
+const ChannelCard = ({ channel, rank, onClick }) => (
+  <div 
+    className="bg-[#111] border border-[#222] rounded-lg p-4 hover:border-[#333] transition-colors cursor-pointer"
+    onClick={onClick}
+    data-testid={`channel-card-${channel.channel_id}`}
+  >
+    <div className="flex items-start gap-4">
+      <div className="text-2xl font-bold text-gray-600">#{rank}</div>
+      <img 
+        src={channel.thumbnail_url || "https://via.placeholder.com/64"} 
+        alt={channel.title}
+        className="w-16 h-16 rounded-full"
+        onError={(e) => e.target.src = "https://via.placeholder.com/64"}
+      />
+      <div className="flex-1 min-w-0">
+        <h3 className="font-semibold text-white truncate">{channel.title}</h3>
+        <p className="text-gray-500 text-sm">{channel.country_name}</p>
+        <div className="flex items-center gap-4 mt-2">
+          <span className="text-lg font-bold text-white">{formatNumber(channel.subscriber_count)}</span>
+          <span className="text-green-400 text-sm">+{formatNumber(channel.daily_subscriber_gain || 0)}/day</span>
+        </div>
+      </div>
+      <ViralBadge label={channel.viral_label} />
+    </div>
+  </div>
+);
 
-const Dashboard = () => {
+// ==================== PAGES ====================
+
+// Home Page
+const HomePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [mapData, setMapData] = useState([]);
   const [globalTop, setGlobalTop] = useState([]);
   const [fastestGrowing, setFastestGrowing] = useState([]);
-  const [biggestGainers, setBiggestGainers] = useState([]);
-  const [adminStats, setAdminStats] = useState(null);
-
-  const fetchData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const [mapRes, globalRes, growingRes, gainersRes, statsRes] = await Promise.all([
-        axios.get(`${API}/stats/map-data`),
-        axios.get(`${API}/leaderboard/global?limit=10`),
-        axios.get(`${API}/leaderboard/fastest-growing?limit=5`),
-        axios.get(`${API}/leaderboard/biggest-gainers?limit=5`),
-        axios.get(`${API}/admin/stats`)
-      ]);
-      
-      setMapData(mapRes.data.map_data || []);
-      setGlobalTop(globalRes.data.channels || []);
-      setFastestGrowing(growingRes.data.channels || []);
-      setBiggestGainers(gainersRes.data.channels || []);
-      setAdminStats(statsRes.data);
-    } catch (error) {
-      console.error("Error fetching dashboard data:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    fetchData();
-    const interval = setInterval(fetchData, 60000); // Refresh every minute
-    return () => clearInterval(interval);
-  }, [fetchData]);
-
-  const handleCountryClick = (countryCode) => {
-    navigate(`/country/${countryCode}`);
-  };
-
-  if (loading && !globalTop.length) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="spinner"></div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen" data-testid="dashboard-page">
-      <div className="hero-glow">
-        <div className="container py-8">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Global YouTube Rankings</h1>
-              <p className="text-[#71717a]">Track the world's most subscribed channels in real-time</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <LiveIndicator />
-              <button 
-                onClick={fetchData} 
-                className="btn-secondary flex items-center gap-2"
-                data-testid="refresh-btn"
-              >
-                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                Refresh
-              </button>
-            </div>
-          </div>
-
-          {/* Stats Overview */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <StatCard 
-              label="Countries Tracked" 
-              value={adminStats?.total_countries || 0} 
-              icon={Globe}
-            />
-            <StatCard 
-              label="Channels Tracked" 
-              value={adminStats?.total_channels || 0} 
-              icon={Users}
-            />
-            <StatCard 
-              label="Data Points" 
-              value={formatNumber(adminStats?.total_stats_records || 0)} 
-              icon={BarChart3}
-            />
-            <StatCard 
-              label="Last Updated" 
-              value={adminStats?.last_update ? formatDate(adminStats.last_update) : "N/A"} 
-              icon={RefreshCw}
-            />
-          </div>
-
-          {/* Bento Grid Layout */}
-          <div className="bento-grid">
-            {/* World Map - spans 8 columns */}
-            <div className="bento-item col-span-12 lg:col-span-8">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">Top Channel by Country</h2>
-                <span className="text-xs text-[#71717a]">Click a country to view details</span>
-              </div>
-              <WorldMap mapData={mapData} onCountryClick={handleCountryClick} />
-            </div>
-
-            {/* Fastest Growing - spans 4 columns */}
-            <div className="bento-item col-span-12 lg:col-span-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Zap className="w-5 h-5 text-[var(--viral)]" />
-                <h2 className="text-lg font-bold">Fastest Growing</h2>
-              </div>
-              <div className="space-y-3">
-                {fastestGrowing.map((channel, idx) => (
-                  <div 
-                    key={channel.channel_id}
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--muted)] cursor-pointer transition-colors"
-                    onClick={() => navigate(`/channel/${channel.channel_id}`)}
-                    data-testid={`fastest-growing-${idx}`}
-                  >
-                    <span className="font-mono text-sm text-[#71717a]">#{idx + 1}</span>
-                    <img 
-                      src={channel.thumbnail_url || "https://via.placeholder.com/32"} 
-                      alt="" 
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm truncate">{channel.title}</div>
-                      <div className="text-xs text-[#71717a]">{channel.country_name}</div>
-                    </div>
-                    <span className="text-[var(--growth)] font-mono text-sm">
-                      +{channel.daily_growth_percent?.toFixed(2) || 0}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Global Top 10 - spans 8 columns */}
-            <div className="bento-item col-span-12 lg:col-span-8">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <Crown className="w-5 h-5 text-[var(--viral)]" />
-                  <h2 className="text-lg font-bold">Global Top 10</h2>
-                </div>
-                <Link to="/leaderboard" className="text-xs text-[var(--secondary)] hover:underline flex items-center gap-1">
-                  View All <ArrowUpRight className="w-3 h-3" />
-                </Link>
-              </div>
-              <div className="table-container">
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Rank</th>
-                      <th>Channel</th>
-                      <th>Subscribers</th>
-                      <th>Change</th>
-                      <th>24h Gain</th>
-                      <th>Status</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {globalTop.map((channel, idx) => (
-                      <ChannelRow 
-                        key={channel.channel_id} 
-                        channel={channel} 
-                        rank={idx + 1}
-                        onClick={() => navigate(`/channel/${channel.channel_id}`)}
-                      />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Biggest 24h Gainers - spans 4 columns */}
-            <div className="bento-item col-span-12 lg:col-span-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Flame className="w-5 h-5 text-[var(--primary)]" />
-                <h2 className="text-lg font-bold">24h Subscriber Gain</h2>
-              </div>
-              <div className="space-y-3">
-                {biggestGainers.map((channel, idx) => (
-                  <div 
-                    key={channel.channel_id}
-                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--muted)] cursor-pointer transition-colors"
-                    onClick={() => navigate(`/channel/${channel.channel_id}`)}
-                    data-testid={`biggest-gainer-${idx}`}
-                  >
-                    <span className="font-mono text-sm text-[#71717a]">#{idx + 1}</span>
-                    <img 
-                      src={channel.thumbnail_url || "https://via.placeholder.com/32"} 
-                      alt="" 
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm truncate">{channel.title}</div>
-                      <div className="text-xs text-[#71717a]">{channel.country_name}</div>
-                    </div>
-                    <span className="text-[var(--growth)] font-mono text-sm">
-                      +{formatNumber(channel.daily_subscriber_gain || 0)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const GlobalLeaderboard = () => {
-  const navigate = useNavigate();
-  const [channels, setChannels] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchLeaderboard = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${API}/leaderboard/global?limit=100`);
-        setChannels(response.data.channels || []);
+        const [mapRes, globalRes, growingRes, statsRes] = await Promise.all([
+          axios.get(`${API}/stats/map-data`),
+          axios.get(`${API}/leaderboard/global?limit=5`),
+          axios.get(`${API}/leaderboard/fastest-growing?limit=5`),
+          axios.get(`${API}/admin/stats`)
+        ]);
+        setMapData(mapRes.data.map_data || []);
+        setGlobalTop(globalRes.data.channels || []);
+        setFastestGrowing(growingRes.data.channels || []);
+        setStats(statsRes.data);
       } catch (error) {
-        console.error("Error fetching leaderboard:", error);
+        console.error("Error:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchLeaderboard();
+    fetchData();
   }, []);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="spinner"></div>
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" data-testid="leaderboard-page">
-      <div className="container py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Global Top 100</h1>
-            <p className="text-[#71717a]">The most subscribed YouTube channels worldwide</p>
+    <div data-testid="home-page">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-b from-[#111] to-[#0a0a0a] py-16">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Global YouTube Channel Rankings
+          </h1>
+          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+            Track, analyze, and predict the most subscribed YouTube channels across {stats?.total_countries || 0} countries in real-time.
+          </p>
+          <div className="flex justify-center gap-4">
+            <Link to="/leaderboard" className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors" data-testid="cta-leaderboard">
+              View Top 100
+            </Link>
+            <Link to="/countries" className="bg-[#222] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#333] transition-colors" data-testid="cta-countries">
+              Browse Countries
+            </Link>
           </div>
-          <LiveIndicator />
+        </div>
+      </section>
+
+      {/* Stats Bar */}
+      <section className="bg-[#0d0d0d] border-y border-[#1a1a1a] py-6">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div className="text-3xl font-bold text-white">{stats?.total_countries || 0}</div>
+              <div className="text-gray-500 text-sm">Countries</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-white">{stats?.total_channels || 0}</div>
+              <div className="text-gray-500 text-sm">Channels Tracked</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-white">{formatNumber(stats?.total_stats_records || 0)}</div>
+              <div className="text-gray-500 text-sm">Data Points</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-green-400">Live</div>
+              <div className="text-gray-500 text-sm">Real-time Updates</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* World Map Section */}
+      <section className="py-12">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-2xl font-bold text-white mb-2">Top Channels by Country</h2>
+          <p className="text-gray-500 mb-6">Click on a highlighted country to view its top YouTube channels</p>
+          <WorldMap mapData={mapData} onCountryClick={(code) => navigate(`/country/${code}`)} />
+        </div>
+      </section>
+
+      {/* Top Channels Section */}
+      <section className="py-12 bg-[#0d0d0d]">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-white">Top 5 Worldwide</h2>
+              <p className="text-gray-500">Most subscribed YouTube channels globally</p>
+            </div>
+            <Link to="/leaderboard" className="text-red-500 hover:text-red-400 flex items-center gap-1">
+              View all <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="space-y-4">
+            {globalTop.map((channel, idx) => (
+              <ChannelCard 
+                key={channel.channel_id}
+                channel={channel}
+                rank={idx + 1}
+                onClick={() => navigate(`/channel/${channel.channel_id}`)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trending Section */}
+      <section className="py-12">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Zap className="w-6 h-6 text-yellow-500" /> Fastest Growing
+              </h2>
+              <p className="text-gray-500">Channels with highest daily growth rate</p>
+            </div>
+            <Link to="/trending" className="text-red-500 hover:text-red-400 flex items-center gap-1">
+              View all <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {fastestGrowing.map((channel, idx) => (
+              <div 
+                key={channel.channel_id}
+                className="bg-[#111] border border-[#222] rounded-lg p-4 hover:border-[#333] cursor-pointer"
+                onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                data-testid={`trending-card-${idx}`}
+              >
+                <div className="flex items-center gap-3">
+                  <img src={channel.thumbnail_url || "https://via.placeholder.com/48"} alt="" className="w-12 h-12 rounded-full" />
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-medium text-white truncate">{channel.title}</h4>
+                    <p className="text-gray-500 text-sm">{channel.country_name}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-green-400 font-bold">+{channel.daily_growth_percent?.toFixed(2) || 0}%</div>
+                    <div className="text-gray-500 text-xs">daily</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// Global Leaderboard Page
+const LeaderboardPage = () => {
+  const navigate = useNavigate();
+  const [channels, setChannels] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API}/leaderboard/global?limit=100`);
+        setChannels(response.data.channels || []);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="leaderboard-page">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Global Top 100</h1>
+          <p className="text-gray-500">The most subscribed YouTube channels worldwide, updated in real-time</p>
         </div>
 
-        <div className="card">
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Channel</th>
-                  <th>Subscribers</th>
-                  <th>Change</th>
-                  <th>24h Gain</th>
-                  <th>Weekly</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {channels.map((channel, idx) => (
-                  <tr 
-                    key={channel.channel_id}
-                    className="cursor-pointer hover:bg-[rgba(255,255,255,0.02)] transition-colors"
-                    onClick={() => navigate(`/channel/${channel.channel_id}`)}
-                    data-testid={`leaderboard-row-${idx}`}
-                  >
-                    <td className="font-mono font-bold text-lg">#{idx + 1}</td>
-                    <td>
-                      <div className="flex items-center gap-3">
-                        <img 
-                          src={channel.thumbnail_url || "https://via.placeholder.com/48"} 
-                          alt={channel.title} 
-                          className="channel-thumbnail"
-                        />
-                        <div>
-                          <div className="font-medium">{channel.title}</div>
-                          <div className="text-xs text-[#71717a]">{channel.country_name}</div>
-                        </div>
+        {/* Desktop Table */}
+        <div className="hidden md:block bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-[#0d0d0d] border-b border-[#222]">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Rank</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Channel</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Subscribers</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Change</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">24h Gain</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#222]">
+              {channels.map((channel, idx) => (
+                <tr 
+                  key={channel.channel_id}
+                  className="hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+                  onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                  data-testid={`leaderboard-row-${idx}`}
+                >
+                  <td className="px-4 py-4 font-bold text-gray-400">#{idx + 1}</td>
+                  <td className="px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" />
+                      <div>
+                        <div className="font-medium text-white">{channel.title}</div>
+                        <div className="text-xs text-gray-500">{channel.country_name}</div>
                       </div>
-                    </td>
-                    <td className="font-mono text-lg">{formatNumber(channel.subscriber_count)}</td>
-                    <td><RankChange current={channel.current_rank || idx + 1} previous={channel.previous_rank || idx + 1} /></td>
-                    <td className="font-mono text-[var(--growth)]">+{formatNumber(channel.daily_subscriber_gain || 0)}</td>
-                    <td className={`font-mono ${(channel.weekly_growth_percent || 0) >= 0 ? 'text-[var(--growth)]' : 'text-[var(--decline)]'}`}>
-                      {channel.weekly_growth_percent >= 0 ? '+' : ''}{channel.weekly_growth_percent?.toFixed(2) || 0}%
-                    </td>
-                    <td><ViralBadge label={channel.viral_label || "Stable"} /></td>
-                    <td><ChevronRight className="w-4 h-4 text-[#71717a]" /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-4 font-bold text-white">{formatNumber(channel.subscriber_count)}</td>
+                  <td className="px-4 py-4"><RankChange current={channel.current_rank || idx + 1} previous={channel.previous_rank || idx + 1} /></td>
+                  <td className="px-4 py-4 text-green-400">+{formatNumber(channel.daily_subscriber_gain || 0)}</td>
+                  <td className="px-4 py-4"><ViralBadge label={channel.viral_label} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden space-y-4">
+          {channels.map((channel, idx) => (
+            <ChannelCard key={channel.channel_id} channel={channel} rank={idx + 1} onClick={() => navigate(`/channel/${channel.channel_id}`)} />
+          ))}
         </div>
       </div>
     </div>
   );
 };
 
+// Countries List Page
+const CountriesPage = () => {
+  const navigate = useNavigate();
+  const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API}/countries`);
+        setCountries(response.data || []);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="countries-page">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Countries</h1>
+          <p className="text-gray-500">Explore YouTube rankings by country</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {countries.map(country => (
+            <div
+              key={country.code}
+              className="bg-[#111] border border-[#222] rounded-lg p-5 hover:border-[#333] cursor-pointer transition-colors"
+              onClick={() => navigate(`/country/${country.code}`)}
+              data-testid={`country-card-${country.code}`}
+            >
+              <div className="flex items-center gap-4">
+                <span className="text-4xl">{country.flag_emoji}</span>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-white text-lg">{country.name}</h3>
+                  <p className="text-gray-500 text-sm">{country.channel_count} channels</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-gray-600" />
+              </div>
+              {country.top_channel && (
+                <div className="mt-4 pt-4 border-t border-[#222]">
+                  <p className="text-xs text-gray-500 mb-2">Top Channel</p>
+                  <div className="flex items-center gap-2">
+                    <img src={country.top_channel.thumbnail_url || "https://via.placeholder.com/32"} alt="" className="w-8 h-8 rounded-full" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-white truncate">{country.top_channel.title}</div>
+                      <div className="text-xs text-gray-500">{formatNumber(country.top_channel.subscriber_count)} subs</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Country Detail Page
 const CountryPage = () => {
   const { countryCode } = useParams();
   const navigate = useNavigate();
@@ -634,138 +648,99 @@ const CountryPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCountry = async () => {
+    const fetchData = async () => {
       try {
         const response = await axios.get(`${API}/countries/${countryCode}`);
         setCountry(response.data);
       } catch (error) {
-        console.error("Error fetching country:", error);
+        console.error("Error:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchCountry();
+    fetchData();
   }, [countryCode]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="spinner"></div>
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!country) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Country not found</p>
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Country not found
       </div>
     );
   }
 
-  const topChannels = country.channels?.slice(0, 3) || [];
+  const topThree = country.channels?.slice(0, 3) || [];
 
   return (
-    <div className="min-h-screen" data-testid="country-page">
-      <div className="container py-8">
-        {/* Country Header */}
-        <div className="card p-8 mb-8">
-          <div className="flex items-center gap-4 mb-4">
+    <div className="py-8" data-testid="country-detail-page">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-4 mb-2">
             <span className="text-5xl">{country.flag_emoji}</span>
             <div>
-              <h1 className="text-3xl font-bold">{country.name}</h1>
-              <p className="text-[#71717a]">{country.region} • {country.channels?.length || 0} channels tracked</p>
+              <h1 className="text-3xl font-bold text-white">{country.name}</h1>
+              <p className="text-gray-500">{country.region} • {country.channels?.length || 0} channels tracked</p>
             </div>
           </div>
         </div>
 
         {/* Top 3 Podium */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          {topChannels.map((channel, idx) => (
-            <div 
+          {topThree.map((channel, idx) => (
+            <div
               key={channel.channel_id}
-              className={`card p-6 cursor-pointer ${idx === 0 ? 'border-[var(--viral)]' : ''}`}
+              className={`bg-[#111] border rounded-lg p-6 cursor-pointer hover:border-[#444] transition-colors ${idx === 0 ? 'border-yellow-600' : 'border-[#222]'}`}
               onClick={() => navigate(`/channel/${channel.channel_id}`)}
-              data-testid={`top-channel-${idx}`}
+              data-testid={`podium-${idx}`}
             >
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">
-                  {idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉'}
-                </span>
-                <span className="font-bold">#{idx + 1}</span>
+              <div className="text-center mb-4">
+                <span className="text-3xl">{idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉'}</span>
               </div>
-              <div className="flex items-center gap-4 mb-4">
-                <img 
-                  src={channel.thumbnail_url || "https://via.placeholder.com/64"} 
-                  alt={channel.title}
-                  className="channel-thumbnail-lg"
-                />
-                <div>
-                  <h3 className="font-bold text-lg">{channel.title}</h3>
-                  <p className="text-[#71717a] text-sm">{formatNumber(channel.subscriber_count)} subscribers</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <div className="text-[#71717a]">Views</div>
-                  <div className="font-mono">{formatNumber(channel.view_count)}</div>
-                </div>
-                <div>
-                  <div className="text-[#71717a]">Videos</div>
-                  <div className="font-mono">{channel.video_count}</div>
-                </div>
-              </div>
-              <div className="mt-4">
-                <ViralBadge label={channel.viral_label || "Stable"} />
+              <img src={channel.thumbnail_url || "https://via.placeholder.com/80"} alt="" className="w-20 h-20 rounded-full mx-auto mb-4" />
+              <h3 className="font-bold text-white text-center mb-1">{channel.title}</h3>
+              <p className="text-2xl font-bold text-white text-center">{formatNumber(channel.subscriber_count)}</p>
+              <p className="text-gray-500 text-sm text-center">subscribers</p>
+              <div className="mt-4 text-center">
+                <ViralBadge label={channel.viral_label} />
               </div>
             </div>
           ))}
         </div>
 
-        {/* Full Rankings Table */}
-        <div className="card">
-          <div className="p-4 border-b border-[var(--border)]">
-            <h2 className="text-xl font-bold">All Rankings</h2>
+        {/* All Rankings */}
+        <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+          <div className="px-4 py-3 border-b border-[#222]">
+            <h2 className="font-bold text-white">All Rankings</h2>
           </div>
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Channel</th>
-                  <th>Subscribers</th>
-                  <th>Views</th>
-                  <th>Daily Gain</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {country.channels?.map((channel, idx) => (
-                  <tr 
-                    key={channel.channel_id}
-                    className="cursor-pointer"
-                    onClick={() => navigate(`/channel/${channel.channel_id}`)}
-                    data-testid={`country-channel-${idx}`}
-                  >
-                    <td className="font-mono font-bold">#{idx + 1}</td>
-                    <td>
-                      <div className="flex items-center gap-3">
-                        <img 
-                          src={channel.thumbnail_url || "https://via.placeholder.com/40"} 
-                          alt="" 
-                          className="w-10 h-10 rounded-full"
-                        />
-                        <span className="font-medium">{channel.title}</span>
-                      </div>
-                    </td>
-                    <td className="font-mono">{formatNumber(channel.subscriber_count)}</td>
-                    <td className="font-mono">{formatNumber(channel.view_count)}</td>
-                    <td className="font-mono text-[var(--growth)]">+{formatNumber(channel.daily_subscriber_gain || 0)}</td>
-                    <td><ViralBadge label={channel.viral_label || "Stable"} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="divide-y divide-[#222]">
+            {country.channels?.map((channel, idx) => (
+              <div
+                key={channel.channel_id}
+                className="px-4 py-4 hover:bg-[#1a1a1a] cursor-pointer flex items-center gap-4"
+                onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                data-testid={`country-rank-${idx}`}
+              >
+                <div className="w-8 font-bold text-gray-500">#{idx + 1}</div>
+                <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" />
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-white truncate">{channel.title}</div>
+                  <div className="text-sm text-gray-500">{formatNumber(channel.view_count)} views</div>
+                </div>
+                <div className="text-right">
+                  <div className="font-bold text-white">{formatNumber(channel.subscriber_count)}</div>
+                  <div className="text-green-400 text-sm">+{formatNumber(channel.daily_subscriber_gain || 0)}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -773,150 +748,156 @@ const CountryPage = () => {
   );
 };
 
+// Channel Detail Page
 const ChannelPage = () => {
   const { channelId } = useParams();
+  const navigate = useNavigate();
   const [channel, setChannel] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchChannel = async () => {
+    const fetchData = async () => {
       try {
         const response = await axios.get(`${API}/channels/${channelId}`);
         setChannel(response.data);
       } catch (error) {
-        console.error("Error fetching channel:", error);
+        console.error("Error:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchChannel();
+    fetchData();
   }, [channelId]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="spinner"></div>
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!channel) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Channel not found</p>
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Channel not found
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" data-testid="channel-page">
-      <div className="container py-8">
+    <div className="py-8" data-testid="channel-detail-page">
+      <div className="max-w-6xl mx-auto px-4">
         {/* Channel Header */}
-        <div className="card p-8 mb-8">
-          <div className="flex items-start gap-6">
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+          <div className="flex flex-col md:flex-row items-start gap-6">
             <img 
               src={channel.thumbnail_url || "https://via.placeholder.com/120"} 
               alt={channel.title}
-              className="w-24 h-24 rounded-full border-4 border-[var(--border)]"
+              className="w-24 h-24 rounded-full border-4 border-[#222]"
             />
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold">{channel.title}</h1>
-                <ViralBadge label={channel.viral_label || "Stable"} />
+              <div className="flex flex-wrap items-center gap-3 mb-2">
+                <h1 className="text-2xl md:text-3xl font-bold text-white">{channel.title}</h1>
+                <ViralBadge label={channel.viral_label} />
               </div>
-              <p className="text-[#71717a] mb-4">{channel.country_name} • Rank #{channel.current_rank || "N/A"}</p>
-              <p className="text-sm text-[#a1a1aa] line-clamp-2">{channel.description}</p>
+              <p className="text-gray-500 mb-3">
+                <Link to={`/country/${channel.country_code}`} className="hover:text-white">{channel.country_name}</Link>
+                {channel.current_rank && ` • Rank #${channel.current_rank}`}
+              </p>
+              <p className="text-gray-400 text-sm line-clamp-2">{channel.description}</p>
+              <a 
+                href={`https://youtube.com/channel/${channel.channel_id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-red-500 hover:text-red-400 mt-3 text-sm"
+              >
+                View on YouTube <ExternalLink className="w-3 h-3" />
+              </a>
             </div>
           </div>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard 
-            label="Subscribers" 
-            value={formatNumber(channel.subscriber_count)} 
-            icon={Users}
-            color="var(--primary)"
-          />
-          <StatCard 
-            label="Total Views" 
-            value={formatNumber(channel.view_count)} 
-            icon={Eye}
-          />
-          <StatCard 
-            label="Videos" 
-            value={channel.video_count} 
-            icon={PlayCircle}
-          />
-          <StatCard 
-            label="Viral Score" 
-            value={channel.viral_prediction?.viral_score || 0} 
-            icon={Zap}
-            color="var(--viral)"
-          />
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <Users className="w-6 h-6 text-red-500 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-white">{formatNumber(channel.subscriber_count)}</div>
+            <div className="text-gray-500 text-sm">Subscribers</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <Eye className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-white">{formatNumber(channel.view_count)}</div>
+            <div className="text-gray-500 text-sm">Total Views</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <PlayCircle className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-white">{channel.video_count}</div>
+            <div className="text-gray-500 text-sm">Videos</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <Zap className="w-6 h-6 text-yellow-500 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-white">{channel.viral_prediction?.viral_score || 0}</div>
+            <div className="text-gray-500 text-sm">Viral Score</div>
+          </div>
         </div>
 
         {/* Growth Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="card p-6">
-            <div className="text-[#71717a] text-sm mb-1">24h Growth</div>
-            <div className={`text-2xl font-mono font-bold ${(channel.daily_subscriber_gain || 0) >= 0 ? 'text-[var(--growth)]' : 'text-[var(--decline)]'}`}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-[#111] border border-[#222] rounded-lg p-5">
+            <h3 className="text-gray-500 text-sm mb-2">24-Hour Growth</h3>
+            <div className={`text-3xl font-bold ${(channel.daily_subscriber_gain || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
               {channel.daily_subscriber_gain >= 0 ? '+' : ''}{formatNumber(channel.daily_subscriber_gain || 0)}
             </div>
-            <div className="text-xs text-[#71717a]">
+            <div className="text-gray-500 text-sm">
               {channel.daily_growth_percent >= 0 ? '+' : ''}{channel.daily_growth_percent?.toFixed(4) || 0}%
             </div>
           </div>
-          <div className="card p-6">
-            <div className="text-[#71717a] text-sm mb-1">7-Day Growth</div>
-            <div className={`text-2xl font-mono font-bold ${(channel.weekly_subscriber_gain || 0) >= 0 ? 'text-[var(--growth)]' : 'text-[var(--decline)]'}`}>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-5">
+            <h3 className="text-gray-500 text-sm mb-2">7-Day Growth</h3>
+            <div className={`text-3xl font-bold ${(channel.weekly_subscriber_gain || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
               {channel.weekly_subscriber_gain >= 0 ? '+' : ''}{formatNumber(channel.weekly_subscriber_gain || 0)}
             </div>
-            <div className="text-xs text-[#71717a]">
+            <div className="text-gray-500 text-sm">
               {channel.weekly_growth_percent >= 0 ? '+' : ''}{channel.weekly_growth_percent?.toFixed(4) || 0}%
             </div>
           </div>
-          <div className="card p-6">
-            <div className="text-[#71717a] text-sm mb-1">30-Day Growth</div>
-            <div className={`text-2xl font-mono font-bold ${(channel.monthly_subscriber_gain || 0) >= 0 ? 'text-[var(--growth)]' : 'text-[var(--decline)]'}`}>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-5">
+            <h3 className="text-gray-500 text-sm mb-2">30-Day Growth</h3>
+            <div className={`text-3xl font-bold ${(channel.monthly_subscriber_gain || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
               {channel.monthly_subscriber_gain >= 0 ? '+' : ''}{formatNumber(channel.monthly_subscriber_gain || 0)}
             </div>
-            <div className="text-xs text-[#71717a]">
+            <div className="text-gray-500 text-sm">
               {channel.monthly_growth_percent >= 0 ? '+' : ''}{channel.monthly_growth_percent?.toFixed(4) || 0}%
             </div>
           </div>
         </div>
 
         {/* Growth Chart */}
-        <div className="card p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">Subscriber Growth (30 Days)</h2>
-          <GrowthChart data={channel.growth_history || []} />
-        </div>
+        {channel.growth_history?.length > 0 && (
+          <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-bold text-white mb-4">Subscriber Growth (30 Days)</h2>
+            <GrowthChart data={channel.growth_history} />
+          </div>
+        )}
 
         {/* Top Videos */}
         {channel.top_videos?.length > 0 && (
-          <div className="card p-6">
-            <h2 className="text-xl font-bold mb-4">Top Videos</h2>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+            <h2 className="text-xl font-bold text-white mb-4">Top Videos</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {channel.top_videos.map((video) => (
-                <a 
+                <a
                   key={video.video_id}
                   href={`https://youtube.com/watch?v=${video.video_id}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block hover:bg-[var(--muted)] rounded-lg p-3 transition-colors"
+                  className="block hover:opacity-80 transition-opacity"
                   data-testid={`video-${video.video_id}`}
                 >
-                  <img 
-                    src={video.thumbnail_url} 
-                    alt={video.title}
-                    className="w-full rounded-lg mb-2"
-                  />
-                  <h4 className="font-medium text-sm line-clamp-2 mb-1">{video.title}</h4>
-                  <div className="flex items-center gap-3 text-xs text-[#71717a]">
-                    <span className="font-mono">{formatNumber(video.view_count)} views</span>
-                    <span>{formatDate(video.published_at)}</span>
-                  </div>
+                  <img src={video.thumbnail_url} alt="" className="w-full rounded-lg mb-2" />
+                  <h4 className="font-medium text-white text-sm line-clamp-2 mb-1">{video.title}</h4>
+                  <p className="text-gray-500 text-xs">{formatNumber(video.view_count)} views • {formatShortDate(video.published_at)}</p>
                 </a>
               ))}
             </div>
@@ -927,37 +908,134 @@ const ChannelPage = () => {
   );
 };
 
-const AdminDashboard = () => {
+// Trending Page
+const TrendingPage = () => {
+  const navigate = useNavigate();
+  const [fastestGrowing, setFastestGrowing] = useState([]);
+  const [biggestGainers, setBiggestGainers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [growingRes, gainersRes] = await Promise.all([
+          axios.get(`${API}/leaderboard/fastest-growing?limit=20`),
+          axios.get(`${API}/leaderboard/biggest-gainers?limit=20`)
+        ]);
+        setFastestGrowing(growingRes.data.channels || []);
+        setBiggestGainers(gainersRes.data.channels || []);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="trending-page">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Trending</h1>
+          <p className="text-gray-500">Channels with the fastest growth and biggest gains</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Fastest Growing */}
+          <div>
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <Zap className="w-5 h-5 text-yellow-500" /> Fastest Growing (by %)
+            </h2>
+            <div className="bg-[#111] border border-[#222] rounded-lg divide-y divide-[#222]">
+              {fastestGrowing.map((channel, idx) => (
+                <div
+                  key={channel.channel_id}
+                  className="p-4 hover:bg-[#1a1a1a] cursor-pointer flex items-center gap-4"
+                  onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                  data-testid={`fastest-${idx}`}
+                >
+                  <div className="w-6 font-bold text-gray-500">{idx + 1}</div>
+                  <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-white truncate">{channel.title}</div>
+                    <div className="text-xs text-gray-500">{channel.country_name}</div>
+                  </div>
+                  <div className="text-green-400 font-bold">+{channel.daily_growth_percent?.toFixed(2) || 0}%</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Biggest Gainers */}
+          <div>
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <Flame className="w-5 h-5 text-red-500" /> Biggest 24h Gains
+            </h2>
+            <div className="bg-[#111] border border-[#222] rounded-lg divide-y divide-[#222]">
+              {biggestGainers.map((channel, idx) => (
+                <div
+                  key={channel.channel_id}
+                  className="p-4 hover:bg-[#1a1a1a] cursor-pointer flex items-center gap-4"
+                  onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                  data-testid={`gainer-${idx}`}
+                >
+                  <div className="w-6 font-bold text-gray-500">{idx + 1}</div>
+                  <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-white truncate">{channel.title}</div>
+                    <div className="text-xs text-gray-500">{channel.country_name}</div>
+                  </div>
+                  <div className="text-green-400 font-bold">+{formatNumber(channel.daily_subscriber_gain || 0)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Admin Page
+const AdminPage = () => {
   const [stats, setStats] = useState(null);
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [seeding, setSeeding] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [message, setMessage] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [addingChannel, setAddingChannel] = useState(false);
-  const [message, setMessage] = useState(null);
 
-  const fetchData = useCallback(async () => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
     try {
       const [statsRes, countriesRes] = await Promise.all([
         axios.get(`${API}/admin/stats`),
         axios.get(`${API}/countries`)
       ]);
       setStats(statsRes.data);
-      setCountries(countriesRes.data);
+      setCountries(countriesRes.data || []);
     } catch (error) {
-      console.error("Error fetching admin data:", error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  };
 
   const handleSeed = async () => {
     setSeeding(true);
@@ -966,20 +1044,20 @@ const AdminDashboard = () => {
       setMessage({ type: "success", text: response.data.message });
       fetchData();
     } catch (error) {
-      setMessage({ type: "error", text: error.response?.data?.detail || "Failed to seed database" });
+      setMessage({ type: "error", text: error.response?.data?.detail || "Failed to seed" });
     } finally {
       setSeeding(false);
     }
   };
 
-  const handleRefreshAll = async () => {
+  const handleRefresh = async () => {
     setRefreshing(true);
     try {
       const response = await axios.post(`${API}/admin/refresh-all`);
       setMessage({ type: "success", text: response.data.message });
       fetchData();
     } catch (error) {
-      setMessage({ type: "error", text: error.response?.data?.detail || "Failed to refresh channels" });
+      setMessage({ type: "error", text: error.response?.data?.detail || "Failed to refresh" });
     } finally {
       setRefreshing(false);
     }
@@ -989,10 +1067,10 @@ const AdminDashboard = () => {
     if (!searchQuery) return;
     setSearching(true);
     try {
-      const response = await axios.get(`${API}/search/channels?query=${encodeURIComponent(searchQuery)}&max_results=10`);
+      const response = await axios.get(`${API}/search/channels?query=${encodeURIComponent(searchQuery)}`);
       setSearchResults(response.data.results || []);
     } catch (error) {
-      setMessage({ type: "error", text: error.response?.data?.detail || "Search failed" });
+      setMessage({ type: "error", text: "Search failed" });
     } finally {
       setSearching(false);
     }
@@ -1000,88 +1078,92 @@ const AdminDashboard = () => {
 
   const handleAddChannel = async (channelId) => {
     if (!selectedCountry) {
-      setMessage({ type: "error", text: "Please select a country first" });
+      setMessage({ type: "error", text: "Select a country first" });
       return;
     }
-    setAddingChannel(true);
     try {
-      const response = await axios.post(`${API}/channels`, {
-        channel_id: channelId,
-        country_code: selectedCountry
-      });
-      setMessage({ type: "success", text: `Added: ${response.data.channel.title}` });
+      await axios.post(`${API}/channels`, { channel_id: channelId, country_code: selectedCountry });
+      setMessage({ type: "success", text: "Channel added!" });
       setSearchResults([]);
-      setSearchQuery("");
       fetchData();
     } catch (error) {
-      setMessage({ type: "error", text: error.response?.data?.detail || "Failed to add channel" });
-    } finally {
-      setAddingChannel(false);
+      setMessage({ type: "error", text: error.response?.data?.detail || "Failed to add" });
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="spinner"></div>
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" data-testid="admin-page">
-      <div className="container py-8">
-        <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+    <div className="py-8" data-testid="admin-page">
+      <div className="max-w-6xl mx-auto px-4">
+        <h1 className="text-3xl font-bold text-white mb-8">Admin Dashboard</h1>
 
-        {/* Message */}
         {message && (
-          <div className={`mb-6 p-4 rounded-lg flex items-center justify-between ${message.type === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-500' : 'bg-red-500/10 border border-red-500/20 text-red-500'}`}>
-            <span>{message.text}</span>
+          <div className={`mb-6 p-4 rounded-lg flex items-center justify-between ${message.type === 'success' ? 'bg-green-900/30 border border-green-800 text-green-400' : 'bg-red-900/30 border border-red-800 text-red-400'}`}>
+            {message.text}
             <button onClick={() => setMessage(null)}><X className="w-4 h-4" /></button>
           </div>
         )}
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard label="Countries" value={stats?.total_countries || 0} icon={Globe} />
-          <StatCard label="Channels" value={stats?.total_channels || 0} icon={Users} />
-          <StatCard label="Data Points" value={formatNumber(stats?.total_stats_records || 0)} icon={BarChart3} />
-          <StatCard label="Last Update" value={stats?.last_update ? formatDate(stats.last_update) : "Never"} icon={RefreshCw} />
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-white">{stats?.total_countries || 0}</div>
+            <div className="text-gray-500 text-sm">Countries</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-white">{stats?.total_channels || 0}</div>
+            <div className="text-gray-500 text-sm">Channels</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-white">{formatNumber(stats?.total_stats_records || 0)}</div>
+            <div className="text-gray-500 text-sm">Data Points</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-white">{stats?.last_update !== "Never" ? formatShortDate(stats?.last_update) : "Never"}</div>
+            <div className="text-gray-500 text-sm">Last Update</div>
+          </div>
         </div>
 
         {/* Actions */}
-        <div className="card p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
-          <div className="flex gap-4">
-            <button 
-              onClick={handleSeed} 
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-bold text-white mb-4">Quick Actions</h2>
+          <div className="flex flex-wrap gap-4">
+            <button
+              onClick={handleSeed}
               disabled={seeding}
-              className="btn-primary flex items-center gap-2"
+              className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 flex items-center gap-2"
               data-testid="seed-btn"
             >
-              {seeding ? <div className="spinner w-4 h-4"></div> : null}
+              {seeding && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
               Seed Initial Data
             </button>
-            <button 
-              onClick={handleRefreshAll} 
+            <button
+              onClick={handleRefresh}
               disabled={refreshing}
-              className="btn-secondary flex items-center gap-2"
-              data-testid="refresh-all-btn"
+              className="bg-[#222] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#333] disabled:opacity-50 flex items-center gap-2"
+              data-testid="refresh-btn"
             >
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-              Refresh All Channels
+              Refresh All
             </button>
           </div>
         </div>
 
         {/* Add Channel */}
-        <div className="card p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">Add Channel</h2>
-          <div className="flex gap-4 mb-4">
-            <select 
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-bold text-white mb-4">Add Channel</h2>
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <select
               value={selectedCountry}
               onChange={(e) => setSelectedCountry(e.target.value)}
-              className="input max-w-xs"
+              className="bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white"
               data-testid="country-select"
             >
               <option value="">Select Country</option>
@@ -1090,45 +1172,39 @@ const AdminDashboard = () => {
               ))}
             </select>
             <div className="flex-1 flex gap-2">
-              <input 
+              <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search YouTube channels..."
-                className="input"
+                className="flex-1 bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white"
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 data-testid="search-input"
               />
-              <button 
+              <button
                 onClick={handleSearch}
                 disabled={searching}
-                className="btn-primary"
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
                 data-testid="search-btn"
               >
-                <Search className="w-4 h-4" />
+                <Search className="w-5 h-5" />
               </button>
             </div>
           </div>
 
-          {/* Search Results */}
           {searchResults.length > 0 && (
-            <div className="border border-[var(--border)] rounded-lg divide-y divide-[var(--border)]">
+            <div className="border border-[#222] rounded-lg divide-y divide-[#222]">
               {searchResults.map(result => (
                 <div key={result.channel_id} className="p-4 flex items-center gap-4">
-                  <img 
-                    src={result.thumbnail_url} 
-                    alt="" 
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <div className="flex-1">
-                    <div className="font-medium">{result.title}</div>
-                    <div className="text-xs text-[#71717a] line-clamp-1">{result.description}</div>
+                  <img src={result.thumbnail_url} alt="" className="w-10 h-10 rounded-full" />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-white truncate">{result.title}</div>
+                    <div className="text-xs text-gray-500 truncate">{result.description}</div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => handleAddChannel(result.channel_id)}
-                    disabled={addingChannel}
-                    className="btn-secondary text-sm"
-                    data-testid={`add-channel-${result.channel_id}`}
+                    className="bg-[#222] text-white px-3 py-1 rounded text-sm hover:bg-[#333]"
+                    data-testid={`add-${result.channel_id}`}
                   >
                     Add
                   </button>
@@ -1138,31 +1214,26 @@ const AdminDashboard = () => {
           )}
         </div>
 
-        {/* Countries Overview */}
-        <div className="card">
-          <div className="p-4 border-b border-[var(--border)]">
-            <h2 className="text-xl font-bold">Countries Overview</h2>
+        {/* Countries Table */}
+        <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+          <div className="px-4 py-3 border-b border-[#222]">
+            <h2 className="font-bold text-white">Countries Overview</h2>
           </div>
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-[#0d0d0d]">
                 <tr>
-                  <th>Country</th>
-                  <th>Channels</th>
-                  <th>Top Channel</th>
-                  <th>Top Subscribers</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Country</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Channels</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Top Channel</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-[#222]">
                 {countries.map(country => (
-                  <tr key={country.code} data-testid={`country-row-${country.code}`}>
-                    <td>
-                      <span className="mr-2">{country.flag_emoji}</span>
-                      {country.name}
-                    </td>
-                    <td className="font-mono">{country.channel_count}</td>
-                    <td>{country.top_channel?.title || "-"}</td>
-                    <td className="font-mono">{country.top_channel ? formatNumber(country.top_channel.subscriber_count) : "-"}</td>
+                  <tr key={country.code} data-testid={`admin-country-${country.code}`}>
+                    <td className="px-4 py-3 text-white">{country.flag_emoji} {country.name}</td>
+                    <td className="px-4 py-3 text-gray-400">{country.channel_count}</td>
+                    <td className="px-4 py-3 text-gray-400">{country.top_channel?.title || "-"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -1177,16 +1248,21 @@ const AdminDashboard = () => {
 // Main App
 function App() {
   return (
-    <div className="App">
+    <div className="App bg-[#0a0a0a] min-h-screen">
       <BrowserRouter>
         <Header />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/leaderboard" element={<GlobalLeaderboard />} />
-          <Route path="/country/:countryCode" element={<CountryPage />} />
-          <Route path="/channel/:channelId" element={<ChannelPage />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-        </Routes>
+        <main className="min-h-[calc(100vh-200px)]">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/leaderboard" element={<LeaderboardPage />} />
+            <Route path="/countries" element={<CountriesPage />} />
+            <Route path="/country/:countryCode" element={<CountryPage />} />
+            <Route path="/channel/:channelId" element={<ChannelPage />} />
+            <Route path="/trending" element={<TrendingPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+          </Routes>
+        </main>
+        <Footer />
       </BrowserRouter>
     </div>
   );
