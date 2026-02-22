@@ -657,6 +657,167 @@ async def seed_initial_data(background_tasks: BackgroundTasks):
     }
 
 
+@api_router.post("/admin/populate-empty-countries")
+async def populate_empty_countries(background_tasks: BackgroundTasks):
+    """Find and add top YouTube channels for countries with 0 channels"""
+    
+    # Get all countries with 0 channels
+    pipeline = [
+        {
+            "$lookup": {
+                "from": "channels",
+                "localField": "code",
+                "foreignField": "country_code",
+                "as": "channels"
+            }
+        },
+        {
+            "$match": {
+                "channels": {"$size": 0}
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "code": 1,
+                "name": 1
+            }
+        }
+    ]
+    
+    empty_countries = await db.countries.aggregate(pipeline).to_list(200)
+    logger.info(f"Found {len(empty_countries)} countries with 0 channels")
+    
+    # Known popular channels by country/region
+    known_channels = {
+        "ID": ["UCkXmLjEr95LVtGuIm3l2dPg"],  # Atta Halilintar (Indonesia)
+        "TR": ["UCnWmBiSpQP3_V8jH3aF9mVg"],  # Enes Batur (Turkey)
+        "IT": ["UCHvC-fsLmdB9MzYJ2p1PO7A"],  # Me contro Te (Italy)
+        "KE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Kenya
+        "AT": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt (German speaking)
+        "CH": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt (German speaking)
+        "PL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Poland
+        "NL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Netherlands
+        "SE": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie (Sweden native)
+        "NO": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Norway
+        "DK": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Denmark
+        "FI": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Finland
+        "CZ": ["UCt25G9HSEXgmFsOp7fLkqpA"],  # Ládění (Czech)
+        "HU": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "RO": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "BG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "GR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "HR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "SK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "SI": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "RS": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "UA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "BY": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular globally
+        "EE": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Baltics
+        "LV": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Baltics
+        "LT": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular in Baltics
+        "IE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in Ireland
+        "PT": ["UCam8T03EOFBsNdR0thrFHdQ"],  # elrubiusOMG (Portuguese/Spanish)
+        "BE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in Belgium
+        "NZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in NZ
+        "SG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in Singapore
+        "MY": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Malaysia
+        "AE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in UAE
+        "SA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Saudi
+        "EG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Egypt
+        "NG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series popular in Nigeria
+        "ZA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast popular in South Africa
+        "CL": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun popular in Chile
+        "PE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun popular in Peru
+        "VE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun popular in Venezuela
+        "EC": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun popular in Ecuador
+    }
+    
+    channels_added = 0
+    countries_processed = 0
+    
+    for country in empty_countries:
+        country_code = country["code"]
+        country_name = country["name"]
+        
+        try:
+            channel_ids = known_channels.get(country_code, [])
+            
+            # If no known channel, try to find one via search
+            if not channel_ids:
+                # Search for popular channels in this country
+                search_results = await youtube_service.search_channels(
+                    query=f"popular {country_name}",
+                    region_code=country_code,
+                    max_results=1
+                )
+                if search_results:
+                    channel_ids = [search_results[0]["channel_id"]]
+            
+            # Add channels for this country
+            for channel_id in channel_ids[:1]:  # Just add 1 per country
+                # Check if channel already exists
+                existing = await db.channels.find_one({"channel_id": channel_id})
+                if existing:
+                    # Update country code if different
+                    if existing.get("country_code") != country_code:
+                        await db.channels.update_one(
+                            {"channel_id": channel_id},
+                            {"$set": {"country_code": country_code}}
+                        )
+                    continue
+                
+                # Fetch channel data
+                yt_data = await youtube_service.get_channel_stats(channel_id)
+                if not yt_data:
+                    continue
+                
+                # Create channel document
+                channel_doc = {
+                    "channel_id": channel_id,
+                    "title": yt_data.get("title", ""),
+                    "description": yt_data.get("description", ""),
+                    "thumbnail_url": yt_data.get("thumbnail_url", ""),
+                    "country_code": country_code,
+                    "subscriber_count": yt_data.get("subscriber_count", 0),
+                    "view_count": yt_data.get("view_count", 0),
+                    "video_count": yt_data.get("video_count", 0),
+                    "published_at": yt_data.get("published_at", ""),
+                    "current_rank": 0,
+                    "previous_rank": 0,
+                    "daily_subscriber_gain": 0,
+                    "daily_growth_percent": 0,
+                    "weekly_growth_percent": 0,
+                    "monthly_growth_percent": 0,
+                    "viral_label": "Stable",
+                    "viral_score": 0,
+                    "is_active": True,
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }
+                
+                await db.channels.insert_one(channel_doc)
+                await store_channel_stats(channel_id, yt_data)
+                channels_added += 1
+                logger.info(f"Added channel {yt_data.get('title')} for {country_name}")
+            
+            countries_processed += 1
+            
+        except Exception as e:
+            logger.error(f"Error processing {country_name}: {e}")
+            continue
+    
+    # Update rankings in background
+    background_tasks.add_task(ranking_service.update_all_rankings)
+    
+    return {
+        "message": "Population complete",
+        "countries_processed": countries_processed,
+        "channels_added": channels_added,
+        "empty_countries_found": len(empty_countries)
+    }
+
+
 # ==================== CONTACT FORM ====================
 
 import resend
