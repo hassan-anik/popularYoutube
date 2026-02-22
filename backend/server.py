@@ -298,7 +298,7 @@ async def add_channel(channel_data: ChannelCreate, background_tasks: BackgroundT
 # ==================== LEADERBOARDS ====================
 
 @api_router.get("/leaderboard/global")
-async def get_global_leaderboard(limit: int = Query(default=100, le=500)):
+async def get_global_leaderboard(limit: int = Query(default=200, le=1000)):
     """Get global top channels leaderboard"""
     channels = await ranking_service.get_global_top_100()
     return {"channels": channels[:limit], "total": len(channels)}
