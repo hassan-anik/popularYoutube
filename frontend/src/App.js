@@ -1933,6 +1933,10 @@ function App() {
             <Route path="/country/:countryCode" element={<CountryPage />} />
             <Route path="/channel/:channelId" element={<ChannelPage />} />
             <Route path="/trending" element={<TrendingPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </main>
         <Footer />
