@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -36,12 +36,20 @@ import {
   ArrowDown,
   X,
   Menu,
-  ExternalLink
+  ExternalLink,
+  Share2,
+  Twitter,
+  Facebook,
+  Linkedin,
+  Mail,
+  Send,
+  MessageCircle
 } from "lucide-react";
 import "@/App.css";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+const API_URL = API;
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
