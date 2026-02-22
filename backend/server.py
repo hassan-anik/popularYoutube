@@ -1071,7 +1071,7 @@ async def submit_contact_form(form: ContactFormRequest):
 @api_router.get("/sitemap.xml", response_class=PlainTextResponse)
 async def get_sitemap():
     """Generate dynamic XML sitemap for SEO"""
-    base_url = os.environ.get('SITE_URL', 'https://toptubeworldpro.com')
+    base_url = os.environ.get('SITE_URL', 'https://channel-leaderboard.preview.emergentagent.com')
     
     # Start XML
     xml_parts = [
@@ -1085,6 +1085,9 @@ async def get_sitemap():
         ('/leaderboard', '0.9', 'hourly'),
         ('/countries', '0.8', 'daily'),
         ('/trending', '0.9', 'hourly'),
+        ('/compare', '0.7', 'daily'),
+        ('/favorites', '0.5', 'weekly'),
+        ('/blog', '0.8', 'daily'),
         ('/about', '0.3', 'monthly'),
         ('/privacy', '0.2', 'monthly'),
         ('/terms', '0.2', 'monthly'),
