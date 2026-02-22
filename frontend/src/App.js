@@ -1390,13 +1390,24 @@ const HomePage = () => {
 const LeaderboardPage = () => {
   const navigate = useNavigate();
   const [channels, setChannels] = useState([]);
+  const [filteredChannels, setFilteredChannels] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('subscribers');
+  const [filterCountry, setFilterCountry] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [countries, setCountries] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API}/leaderboard/global?limit=500`);
-        setChannels(response.data.channels || []);
+        const [channelsRes, countriesRes] = await Promise.all([
+          axios.get(`${API}/leaderboard/global?limit=500`),
+          axios.get(`${API}/countries`)
+        ]);
+        setChannels(channelsRes.data.channels || []);
+        setFilteredChannels(channelsRes.data.channels || []);
+        setCountries(countriesRes.data || []);
       } catch (error) {
         console.error("Error:", error);
       } finally {
@@ -1405,6 +1416,47 @@ const LeaderboardPage = () => {
     };
     fetchData();
   }, []);
+
+  // Filter and sort logic
+  useEffect(() => {
+    let result = [...channels];
+    
+    // Search filter
+    if (searchQuery) {
+      result = result.filter(c => 
+        c.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.country_name?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    // Country filter
+    if (filterCountry !== 'all') {
+      result = result.filter(c => c.country_code === filterCountry);
+    }
+    
+    // Status filter
+    if (filterStatus !== 'all') {
+      result = result.filter(c => c.viral_label === filterStatus);
+    }
+    
+    // Sort
+    result.sort((a, b) => {
+      switch (sortBy) {
+        case 'subscribers':
+          return (b.subscriber_count || 0) - (a.subscriber_count || 0);
+        case 'growth':
+          return (b.daily_growth_percent || 0) - (a.daily_growth_percent || 0);
+        case 'gains':
+          return (b.daily_subscriber_gain || 0) - (a.daily_subscriber_gain || 0);
+        case 'name':
+          return (a.title || '').localeCompare(b.title || '');
+        default:
+          return 0;
+      }
+    });
+    
+    setFilteredChannels(result);
+  }, [channels, searchQuery, sortBy, filterCountry, filterStatus]);
 
   if (loading) {
     return (
@@ -1421,6 +1473,68 @@ const LeaderboardPage = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Global Leaderboard</h1>
           <p className="text-gray-500">All tracked YouTube channels worldwide, ranked by subscribers</p>
+        </div>
+        
+        {/* Search and Filter Bar */}
+        <div className="bg-[#111] border border-[#222] rounded-lg p-4 mb-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* Search */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search channels..."
+                className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg pl-10 pr-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                data-testid="search-input"
+              />
+            </div>
+            
+            {/* Sort */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+              data-testid="sort-select"
+            >
+              <option value="subscribers">Sort: Subscribers</option>
+              <option value="growth">Sort: Growth %</option>
+              <option value="gains">Sort: 24h Gains</option>
+              <option value="name">Sort: Name</option>
+            </select>
+            
+            {/* Country Filter */}
+            <select
+              value={filterCountry}
+              onChange={(e) => setFilterCountry(e.target.value)}
+              className="bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+              data-testid="country-filter"
+            >
+              <option value="all">All Countries</option>
+              {countries.filter(c => c.channel_count > 0).map(c => (
+                <option key={c.code} value={c.code}>{c.flag_emoji} {c.name}</option>
+              ))}
+            </select>
+            
+            {/* Status Filter */}
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+              data-testid="status-filter"
+            >
+              <option value="all">All Status</option>
+              <option value="Exploding">🔥 Exploding</option>
+              <option value="Rising Fast">📈 Rising Fast</option>
+              <option value="Stable">➡️ Stable</option>
+              <option value="Slowing">📉 Slowing</option>
+            </select>
+          </div>
+          
+          <div className="mt-3 text-sm text-gray-500">
+            Showing {filteredChannels.length} of {channels.length} channels
+          </div>
         </div>
 
         {/* Desktop Table */}
