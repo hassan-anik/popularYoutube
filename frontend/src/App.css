@@ -1,36 +1,3 @@
-/* TopTube World Pro - Component Styles */
-
 .App {
   min-height: 100vh;
-  background-color: #0A0A0A;
-}
-
-/* Override default link styles */
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* Line clamp utility */
-.line-clamp-1 {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Make react-simple-maps responsive */
-.rsm-geography {
-  outline: none;
-}
-
-.rsm-geography:focus {
-  outline: none;
 }
