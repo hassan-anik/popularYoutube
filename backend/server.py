@@ -895,17 +895,6 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
                     logger.warning(f"No cached data for {channel_id}, skipping {country_name}")
             
             countries_processed += 1
-                    "is_active": True,
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "updated_at": datetime.now(timezone.utc).isoformat()
-                }
-                
-                await db.channels.insert_one(channel_doc)
-                await store_channel_stats(channel_id, yt_data)
-                channels_added += 1
-                logger.info(f"Added channel {yt_data.get('title')} for {country_name}")
-            
-            countries_processed += 1
             
         except Exception as e:
             logger.error(f"Error processing {country_name}: {e}")
