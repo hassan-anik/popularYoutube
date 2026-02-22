@@ -49,8 +49,17 @@ class SchedulerService:
             replace_existing=True
         )
         
+        # Job 4: Record stats snapshot every 4 hours (for growth tracking)
+        self.scheduler.add_job(
+            self.record_stats_snapshot,
+            trigger=IntervalTrigger(hours=4),
+            id='record_stats',
+            name='Record stats snapshot for growth tracking',
+            replace_existing=True
+        )
+        
         self.scheduler.start()
-        logger.info("Background scheduler started with jobs: refresh_channels (6h), update_rankings (10m), calculate_growth (1h)")
+        logger.info("Background scheduler started with jobs: refresh_channels (6h), update_rankings (10m), calculate_growth (1h), record_stats (4h)")
         
     def stop(self):
         """Stop the background scheduler"""
