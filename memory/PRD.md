@@ -88,6 +88,13 @@
 - Header: Home, Leaderboard, Countries, Trending, Compare, Blog, Favorites
 - Footer: Updated with all new pages and links
 
+### 11. Dark/Light Mode Toggle ✓ (Feb 22, 2026)
+- Theme toggle button in header (Sun/Moon icons)
+- Persists preference in localStorage
+- Respects system preference on first visit
+- Smooth CSS transitions between themes
+- Full support across all pages and components
+
 ## Implementation Details
 
 ### New Pages Added
