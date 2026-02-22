@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://global-leaderboard.preview.emergentagent.com/api/sitemap.xml
+Sitemap: https://channel-leaderboard.preview.emergentagent.com/api/sitemap.xml
 
 # Crawl-delay for polite bots
 Crawl-delay: 1
