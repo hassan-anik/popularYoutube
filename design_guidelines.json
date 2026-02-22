@@ -1,0 +1,126 @@
+{
+  "brand_identity": {
+    "name": "TopTube World Pro",
+    "archetype": "Electric & Neon (Grounded)",
+    "emotional_tone": "High-Velocity, Precision, Insider, Kinetic",
+    "description": "A production-ready SaaS tracking global YouTube dominance in real-time.",
+    "theme_mode": "dark"
+  },
+  "typography": {
+    "headings": {
+      "family": "Manrope, sans-serif",
+      "weights": ["600", "800"],
+      "usage": "Page titles, section headers, big metrics",
+      "tracking": "tight"
+    },
+    "body": {
+      "family": "Inter, sans-serif",
+      "weights": ["400", "500"],
+      "usage": "General text, labels, descriptions"
+    },
+    "mono": {
+      "family": "JetBrains Mono, monospace",
+      "weights": ["400", "700"],
+      "usage": "All numbers, statistics, rankings, dates, growth percentages"
+    },
+    "forbidden_fonts": ["Space Grotesk", "Roboto", "Open Sans"]
+  },
+  "colors": {
+    "palette": {
+      "background": "#0A0A0A",
+      "foreground": "#EDEDED",
+      "primary": "#FF3B30",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#007AFF",
+      "accent": "#32D74B",
+      "muted": "#1C1C1E",
+      "border": "#27272A",
+      "card": "#121212"
+    },
+    "chart_colors": {
+      "growth": "#32D74B",
+      "decline": "#FF453A",
+      "stable": "#BF5AF2",
+      "viral": "#FFD60A",
+      "chart_1": "#007AFF",
+      "chart_2": "#FF3B30",
+      "chart_3": "#32D74B",
+      "chart_4": "#BF5AF2",
+      "chart_5": "#FFD60A"
+    },
+    "gradients": {
+      "hero_glow": "radial-gradient(circle at 50% 0%, rgba(255, 59, 48, 0.15) 0%, transparent 70%)",
+      "card_surface": "linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%)"
+    },
+    "forbidden_colors": ["#7351B7", "#1B93A4"]
+  },
+  "layout_strategies": {
+    "dashboard_grid": {
+      "type": "Bento Grid Mode B (High Density)",
+      "columns": "grid-cols-1 md:grid-cols-12",
+      "gap": "gap-4",
+      "usage": "Main dashboard view. World map takes 8 cols, Top Lists take 4 cols."
+    },
+    "country_detail": {
+      "header_style": "Hero Banner with blurred flag background + Overlay Stats",
+      "list_style": "Dense tabular data with sparkline charts"
+    },
+    "spacing": {
+      "container_padding": "p-6 md:p-8",
+      "section_gap": "gap-8"
+    }
+  },
+  "components": {
+    "world_map": {
+      "library": "react-simple-maps",
+      "style": "Dark minimalistic, neon stroke for borders, hover glow effect",
+      "interaction": "Click to navigate to /country/:code"
+    },
+    "charts": {
+      "library": "recharts",
+      "style": "Minimal axes, tooltip with glassmorphism, gradient filled areas",
+      "types": ["AreaChart (Growth)", "BarChart (Comparison)"]
+    },
+    "tables": {
+      "component": "Shadcn Table",
+      "style": "Compact, sticky header, hover rows, mono-font numbers",
+      "features": ["Sorting", "Filtering", "Pagination"]
+    },
+    "cards": {
+      "style": "Flat background (#121212), 1px border (#27272A), no shadow, hover lift"
+    },
+    "prediction_badges": {
+      "styles": {
+        "Exploding": "bg-red-500/10 text-red-500 border-red-500/20",
+        "Rising": "bg-green-500/10 text-green-500 border-green-500/20",
+        "Stable": "bg-blue-500/10 text-blue-500 border-blue-500/20",
+        "Slowing": "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
+      }
+    }
+  },
+  "assets": {
+    "icons": "lucide-react",
+    "image_urls": {
+      "textures": [
+        "https://images.unsplash.com/photo-1770954098595-ca7be160cc58?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "https://images.unsplash.com/photo-1770444929860-b58c01aa0132?crop=entropy&cs=srgb&fm=jpg&q=85"
+      ],
+      "avatars": [
+        "https://images.unsplash.com/photo-1631064094188-7762262a8cb0?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "https://images.unsplash.com/photo-1762274673430-f6ca404104d1?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "https://images.unsplash.com/photo-1617988849967-2e1334f3c1a6?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "https://images.pexels.com/photos/28332700/pexels-photo-28332700.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      ]
+    }
+  },
+  "universal_guidelines": [
+    "Dark Mode Default: The app is dark mode only. Do not implement light mode toggles unless critical.",
+    "No Gradients on Text: Keep text solid white or grey for readability.",
+    "Data Density: Avoid excessive padding in data tables. Use 'compact' mode.",
+    "Real-time Feel: Use pulsing dots or 'Live' badges to indicate real-time data.",
+    "Testing: All interactive elements must have data-testid attributes.",
+    "No Emoji Icons: Use Lucide React icons instead of emojis.",
+    "Glassmorphism: Use backdrop-blur-xl for sticky headers and tooltips."
+  ],
+  "instructions_to_main_agent": "Implement the Dashboard with a Bento Grid layout. The World Map is the hero. Use 'react-simple-maps' for the map. Fetch data from the backend (mock if needed initially). Use Shadcn components for all UI elements but override styles to match the 'Electric & Neon' theme. Ensure all numbers use JetBrains Mono."
+}
