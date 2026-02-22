@@ -315,6 +315,427 @@ const TrendingSEO = () => {
   return null;
 };
 
+// ==================== STATIC PAGES FOR ADSENSE ====================
+
+// About Page
+const AboutPage = () => {
+  useSEO({
+    title: "About TopTube World Pro - YouTube Channel Rankings Platform",
+    description: "Learn about TopTube World Pro, the leading platform for tracking and analyzing YouTube channel rankings across 197 countries worldwide.",
+    keywords: "about TopTube World Pro, YouTube analytics platform, YouTube rankings website",
+    canonical: `${SITE_URL}/about`
+  });
+
+  return (
+    <div className="py-12" data-testid="about-page">
+      <div className="max-w-4xl mx-auto px-4">
+        <h1 className="text-4xl font-bold text-white mb-8">About TopTube World Pro</h1>
+        
+        <div className="bg-[#111] border border-[#222] rounded-lg p-8 space-y-6">
+          <section>
+            <h2 className="text-2xl font-semibold text-white mb-4">Our Mission</h2>
+            <p className="text-gray-300 leading-relaxed">
+              TopTube World Pro is dedicated to providing the most comprehensive and accurate YouTube channel 
+              analytics platform. We track, rank, and predict the growth of the most subscribed YouTube channels 
+              across 197 countries in real-time.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-white mb-4">What We Offer</h2>
+            <ul className="text-gray-300 space-y-3">
+              <li className="flex items-start gap-3">
+                <Globe className="w-5 h-5 text-red-500 mt-1 flex-shrink-0" />
+                <span><strong>Global Coverage:</strong> Track YouTube channels from every country in the world with localized rankings and insights.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <TrendingUp className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
+                <span><strong>Real-time Analytics:</strong> Get up-to-date subscriber counts, view statistics, and growth metrics refreshed automatically.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Zap className="w-5 h-5 text-yellow-500 mt-1 flex-shrink-0" />
+                <span><strong>Viral Predictions:</strong> Our algorithm identifies channels that are "Exploding", "Rising Fast", "Stable", or "Slowing".</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <BarChart3 className="w-5 h-5 text-blue-500 mt-1 flex-shrink-0" />
+                <span><strong>Historical Data:</strong> View growth charts and track how channels have performed over time.</span>
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-white mb-4">Data Sources</h2>
+            <p className="text-gray-300 leading-relaxed">
+              All channel data is sourced directly from the official YouTube Data API v3, ensuring accuracy 
+              and reliability. Our systems automatically refresh data every 6 hours and update rankings every 
+              10 minutes to provide you with the most current information.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-white mb-4">Who Uses TopTube World Pro?</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-[#0d0d0d] rounded-lg p-4">
+                <h3 className="font-semibold text-white mb-2">Content Creators</h3>
+                <p className="text-gray-400 text-sm">Track competitors and identify trends in your niche.</p>
+              </div>
+              <div className="bg-[#0d0d0d] rounded-lg p-4">
+                <h3 className="font-semibold text-white mb-2">Marketing Professionals</h3>
+                <p className="text-gray-400 text-sm">Find influencers by country for targeted campaigns.</p>
+              </div>
+              <div className="bg-[#0d0d0d] rounded-lg p-4">
+                <h3 className="font-semibold text-white mb-2">Data Analysts</h3>
+                <p className="text-gray-400 text-sm">Research YouTube trends and growth patterns.</p>
+              </div>
+              <div className="bg-[#0d0d0d] rounded-lg p-4">
+                <h3 className="font-semibold text-white mb-2">YouTube Enthusiasts</h3>
+                <p className="text-gray-400 text-sm">Stay updated on your favorite creators' growth.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Privacy Policy Page
+const PrivacyPage = () => {
+  useSEO({
+    title: "Privacy Policy - TopTube World Pro",
+    description: "Read our privacy policy to understand how TopTube World Pro collects, uses, and protects your data.",
+    keywords: "privacy policy, data protection, TopTube World Pro privacy",
+    canonical: `${SITE_URL}/privacy`
+  });
+
+  return (
+    <div className="py-12" data-testid="privacy-page">
+      <div className="max-w-4xl mx-auto px-4">
+        <h1 className="text-4xl font-bold text-white mb-8">Privacy Policy</h1>
+        <p className="text-gray-400 mb-8">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+        
+        <div className="bg-[#111] border border-[#222] rounded-lg p-8 space-y-8">
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">1. Information We Collect</h2>
+            <p className="text-gray-300 leading-relaxed mb-4">
+              TopTube World Pro collects minimal information to provide our services:
+            </p>
+            <ul className="text-gray-300 list-disc list-inside space-y-2">
+              <li><strong>Usage Data:</strong> We collect anonymous usage statistics such as pages visited, time spent on site, and general location (country level).</li>
+              <li><strong>Cookies:</strong> We use essential cookies to ensure the website functions properly and analytics cookies to improve our services.</li>
+              <li><strong>YouTube Data:</strong> All YouTube channel data displayed is publicly available information obtained through the official YouTube Data API.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">2. How We Use Your Information</h2>
+            <ul className="text-gray-300 list-disc list-inside space-y-2">
+              <li>To provide and maintain our service</li>
+              <li>To analyze usage patterns and improve user experience</li>
+              <li>To detect and prevent technical issues</li>
+              <li>To comply with legal obligations</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">3. Data Sharing</h2>
+            <p className="text-gray-300 leading-relaxed">
+              We do not sell, trade, or rent your personal information to third parties. We may share 
+              anonymous, aggregated statistics with partners for analytical purposes. We use Google 
+              Analytics to understand how visitors use our site.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">4. Third-Party Services</h2>
+            <p className="text-gray-300 leading-relaxed">
+              Our service integrates with third-party services including:
+            </p>
+            <ul className="text-gray-300 list-disc list-inside space-y-2 mt-2">
+              <li><strong>YouTube Data API:</strong> To fetch publicly available channel statistics</li>
+              <li><strong>Google Analytics:</strong> To analyze website traffic and usage patterns</li>
+              <li><strong>Google AdSense:</strong> To display relevant advertisements</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">5. Cookies</h2>
+            <p className="text-gray-300 leading-relaxed">
+              We use cookies and similar tracking technologies to track activity on our website. You can 
+              instruct your browser to refuse all cookies or indicate when a cookie is being sent.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">6. Data Security</h2>
+            <p className="text-gray-300 leading-relaxed">
+              We implement appropriate security measures to protect against unauthorized access, alteration, 
+              disclosure, or destruction of data. However, no method of transmission over the Internet is 
+              100% secure.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">7. Your Rights</h2>
+            <p className="text-gray-300 leading-relaxed">
+              You have the right to access, correct, or delete any personal data we hold about you. 
+              Contact us at privacy@toptubeworldpro.com for any privacy-related requests.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">8. Changes to This Policy</h2>
+            <p className="text-gray-300 leading-relaxed">
+              We may update our Privacy Policy from time to time. We will notify you of any changes by 
+              posting the new Privacy Policy on this page and updating the "Last updated" date.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Terms of Service Page
+const TermsPage = () => {
+  useSEO({
+    title: "Terms of Service - TopTube World Pro",
+    description: "Read the terms and conditions for using TopTube World Pro's YouTube channel analytics platform.",
+    keywords: "terms of service, terms and conditions, TopTube World Pro terms",
+    canonical: `${SITE_URL}/terms`
+  });
+
+  return (
+    <div className="py-12" data-testid="terms-page">
+      <div className="max-w-4xl mx-auto px-4">
+        <h1 className="text-4xl font-bold text-white mb-8">Terms of Service</h1>
+        <p className="text-gray-400 mb-8">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+        
+        <div className="bg-[#111] border border-[#222] rounded-lg p-8 space-y-8">
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">1. Acceptance of Terms</h2>
+            <p className="text-gray-300 leading-relaxed">
+              By accessing and using TopTube World Pro, you accept and agree to be bound by these Terms of 
+              Service. If you do not agree to these terms, please do not use our service.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">2. Description of Service</h2>
+            <p className="text-gray-300 leading-relaxed">
+              TopTube World Pro provides YouTube channel analytics, rankings, and growth predictions. 
+              Our service aggregates publicly available data from YouTube to provide insights about 
+              channel performance across different countries.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">3. Use of Service</h2>
+            <p className="text-gray-300 leading-relaxed mb-4">You agree to use our service only for lawful purposes. You may not:</p>
+            <ul className="text-gray-300 list-disc list-inside space-y-2">
+              <li>Use automated systems to scrape or extract data without permission</li>
+              <li>Attempt to interfere with or disrupt the service</li>
+              <li>Use the service for any illegal or unauthorized purpose</li>
+              <li>Misrepresent your identity or affiliation</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">4. Intellectual Property</h2>
+            <p className="text-gray-300 leading-relaxed">
+              The TopTube World Pro name, logo, and all related content are protected by intellectual 
+              property laws. YouTube channel data and thumbnails remain the property of their respective 
+              owners and YouTube.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">5. Disclaimer of Warranties</h2>
+            <p className="text-gray-300 leading-relaxed">
+              Our service is provided "as is" without warranties of any kind. We do not guarantee the 
+              accuracy, completeness, or timeliness of the data displayed. YouTube channel statistics 
+              may vary from official YouTube figures due to API limitations and refresh timing.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">6. Limitation of Liability</h2>
+            <p className="text-gray-300 leading-relaxed">
+              TopTube World Pro shall not be liable for any indirect, incidental, special, consequential, 
+              or punitive damages resulting from your use of or inability to use the service.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">7. Third-Party Links</h2>
+            <p className="text-gray-300 leading-relaxed">
+              Our service contains links to YouTube and other third-party websites. We are not responsible 
+              for the content or practices of these external sites.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">8. Changes to Terms</h2>
+            <p className="text-gray-300 leading-relaxed">
+              We reserve the right to modify these terms at any time. Continued use of the service after 
+              changes constitutes acceptance of the new terms.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">9. Contact</h2>
+            <p className="text-gray-300 leading-relaxed">
+              For questions about these Terms of Service, please contact us at legal@toptubeworldpro.com.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Contact Page
+const ContactPage = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
+
+  useSEO({
+    title: "Contact Us - TopTube World Pro",
+    description: "Get in touch with TopTube World Pro. Contact us for support, feedback, or business inquiries.",
+    keywords: "contact TopTube World Pro, support, feedback, business inquiries",
+    canonical: `${SITE_URL}/contact`
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // In production, this would send to a backend API
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="py-12" data-testid="contact-page">
+      <div className="max-w-4xl mx-auto px-4">
+        <h1 className="text-4xl font-bold text-white mb-8">Contact Us</h1>
+        
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Contact Form */}
+          <div className="bg-[#111] border border-[#222] rounded-lg p-8">
+            <h2 className="text-xl font-semibold text-white mb-6">Send us a message</h2>
+            
+            {submitted ? (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="w-8 h-8 text-green-500" />
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">Message Sent!</h3>
+                <p className="text-gray-400">Thank you for reaching out. We'll get back to you soon.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-3 text-white focus:border-red-500 focus:outline-none"
+                    placeholder="Your name"
+                    data-testid="contact-name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Email</label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-3 text-white focus:border-red-500 focus:outline-none"
+                    placeholder="your@email.com"
+                    data-testid="contact-email"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Subject</label>
+                  <select
+                    required
+                    value={formData.subject}
+                    onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                    className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-3 text-white focus:border-red-500 focus:outline-none"
+                    data-testid="contact-subject"
+                  >
+                    <option value="">Select a subject</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="support">Technical Support</option>
+                    <option value="feedback">Feedback</option>
+                    <option value="business">Business Inquiry</option>
+                    <option value="data">Data Correction Request</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Message</label>
+                  <textarea
+                    required
+                    value={formData.message}
+                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    rows={5}
+                    className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-3 text-white focus:border-red-500 focus:outline-none resize-none"
+                    placeholder="How can we help you?"
+                    data-testid="contact-message"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                  data-testid="contact-submit"
+                >
+                  Send Message
+                </button>
+              </form>
+            )}
+          </div>
+
+          {/* Contact Info */}
+          <div className="space-y-6">
+            <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+              <h3 className="font-semibold text-white mb-4">General Inquiries</h3>
+              <p className="text-gray-400 text-sm mb-2">For general questions and information:</p>
+              <a href="mailto:info@toptubeworldpro.com" className="text-red-500 hover:text-red-400">
+                info@toptubeworldpro.com
+              </a>
+            </div>
+
+            <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+              <h3 className="font-semibold text-white mb-4">Technical Support</h3>
+              <p className="text-gray-400 text-sm mb-2">Need help with the platform?</p>
+              <a href="mailto:support@toptubeworldpro.com" className="text-red-500 hover:text-red-400">
+                support@toptubeworldpro.com
+              </a>
+            </div>
+
+            <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+              <h3 className="font-semibold text-white mb-4">Business & Partnerships</h3>
+              <p className="text-gray-400 text-sm mb-2">For business opportunities:</p>
+              <a href="mailto:business@toptubeworldpro.com" className="text-red-500 hover:text-red-400">
+                business@toptubeworldpro.com
+              </a>
+            </div>
+
+            <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+              <h3 className="font-semibold text-white mb-4">Response Time</h3>
+              <p className="text-gray-400 text-sm">
+                We typically respond to all inquiries within 24-48 business hours. For urgent matters, 
+                please include "URGENT" in your subject line.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Header Component
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
