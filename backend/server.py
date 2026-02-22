@@ -651,6 +651,98 @@ async def seed_initial_data(background_tasks: BackgroundTasks):
     }
 
 
+# ==================== SITEMAP ====================
+
+@api_router.get("/sitemap.xml", response_class=PlainTextResponse)
+async def get_sitemap():
+    """Generate dynamic XML sitemap for SEO"""
+    base_url = os.environ.get('SITE_URL', 'https://toptubeworldpro.com')
+    
+    # Start XML
+    xml_parts = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    
+    # Static pages
+    static_pages = [
+        ('/', '1.0', 'daily'),
+        ('/leaderboard', '0.9', 'hourly'),
+        ('/countries', '0.8', 'daily'),
+        ('/trending', '0.9', 'hourly'),
+        ('/about', '0.3', 'monthly'),
+        ('/privacy', '0.2', 'monthly'),
+        ('/terms', '0.2', 'monthly'),
+        ('/contact', '0.3', 'monthly'),
+    ]
+    
+    for path, priority, freq in static_pages:
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}{path}</loc>
+    <changefreq>{freq}</changefreq>
+    <priority>{priority}</priority>
+  </url>''')
+    
+    # Country pages (197 countries)
+    countries = await db.countries.find({}, {"code": 1}).to_list(300)
+    for country in countries:
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}/country/{country["code"]}</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>''')
+    
+    # Channel pages
+    channels = await db.channels.find(
+        {"is_active": True}, 
+        {"channel_id": 1, "updated_at": 1}
+    ).to_list(1000)
+    
+    for channel in channels:
+        lastmod = channel.get("updated_at", datetime.now(timezone.utc).isoformat())
+        if isinstance(lastmod, str):
+            lastmod = lastmod[:10]  # Get just the date part
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}/channel/{channel["channel_id"]}</loc>
+    <lastmod>{lastmod}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>''')
+    
+    xml_parts.append('</urlset>')
+    
+    return Response(
+        content='\n'.join(xml_parts),
+        media_type='application/xml'
+    )
+
+
+# ==================== SCHEDULER STATUS ====================
+
+@api_router.get("/scheduler/status")
+async def get_scheduler_status():
+    """Get background scheduler status"""
+    if scheduler_service is None:
+        return {"status": "not_initialized"}
+    return await scheduler_service.get_scheduler_status()
+
+@api_router.post("/scheduler/trigger-refresh")
+async def trigger_manual_refresh(background_tasks: BackgroundTasks):
+    """Manually trigger a channel refresh (admin)"""
+    if scheduler_service is None:
+        raise HTTPException(status_code=500, detail="Scheduler not initialized")
+    background_tasks.add_task(scheduler_service.refresh_all_channels)
+    return {"message": "Channel refresh triggered"}
+
+@api_router.post("/scheduler/trigger-ranking")
+async def trigger_manual_ranking(background_tasks: BackgroundTasks):
+    """Manually trigger ranking update (admin)"""
+    if scheduler_service is None:
+        raise HTTPException(status_code=500, detail="Scheduler not initialized")
+    background_tasks.add_task(scheduler_service.update_all_rankings)
+    return {"message": "Ranking update triggered"}
+
+
 # ==================== APP SETUP ====================
 
 # Include the router in the main app
@@ -666,6 +758,8 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup():
+    global scheduler_service
+    
     # Create indexes for better query performance
     await db.channels.create_index("channel_id", unique=True)
     await db.channels.create_index("country_code")
@@ -676,8 +770,17 @@ async def startup():
     await db.channel_stats.create_index([("timestamp", -1)])
     await db.rank_history.create_index("channel_id")
     await db.rank_history.create_index([("timestamp", -1)])
-    logger.info("TopTube World Pro API started - Indexes created")
+    await db.system_status.create_index("_id")
+    
+    # Initialize and start the background scheduler
+    scheduler_service = get_scheduler_service(db, youtube_service, ranking_service, growth_analyzer)
+    scheduler_service.start()
+    
+    logger.info("TopTube World Pro API started - Indexes created, Scheduler running")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
+    global scheduler_service
+    if scheduler_service:
+        scheduler_service.stop()
     client.close()
