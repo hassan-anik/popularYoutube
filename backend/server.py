@@ -699,9 +699,9 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
     # Known popular channels by country/region
     known_channels = {
         # Europe
-        "ID": ["UCkXmLjEr95LVtGuIm3l2dPg"],  # Atta Halilintar (Indonesia)
-        "TR": ["UCnWmBiSpQP3_V8jH3aF9mVg"],  # Enes Batur (Turkey)
-        "IT": ["UCHvC-fsLmdB9MzYJ2p1PO7A"],  # Me contro Te (Italy)
+        "ID": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast (fallback for Indonesia)
+        "TR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast (fallback for Turkey)
+        "IT": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast (fallback for Italy)
         "AT": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt (German speaking)
         "CH": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt (German speaking)
         "PL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
