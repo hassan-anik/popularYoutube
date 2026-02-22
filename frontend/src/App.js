@@ -246,6 +246,15 @@ const LeaderboardSEO = ({ totalChannels }) => {
   const description = `Complete ranking of the world's most subscribed YouTube channels. Live subscriber counts, daily growth, and viral status for ${totalChannels || 100}+ channels. Updated in real-time.`;
   const pageUrl = `${SITE_URL}/leaderboard`;
   
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Global YouTube Channel Leaderboard",
+    "description": description,
+    "url": pageUrl,
+    "numberOfItems": totalChannels || 100
+  };
+  
   return (
     <Helmet>
       <title>{title}</title>
@@ -266,16 +275,7 @@ const LeaderboardSEO = ({ totalChannels }) => {
       <meta name="twitter:description" content={description} />
       
       {/* Schema.org structured data */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          "name": "Global YouTube Channel Leaderboard",
-          "description": description,
-          "url": pageUrl,
-          "numberOfItems": totalChannels || 100
-        })}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(schemaData)}</script>
     </Helmet>
   );
 };
