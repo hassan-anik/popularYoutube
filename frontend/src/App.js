@@ -87,7 +87,7 @@ const Header = () => {
               Home
             </Link>
             <Link to="/leaderboard" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-leaderboard">
-              Top 100
+              Leaderboard
             </Link>
             <Link to="/countries" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-countries">
               Countries
