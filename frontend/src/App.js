@@ -2060,13 +2060,18 @@ const CountryPage = () => {
   const { countryCode } = useParams();
   const navigate = useNavigate();
   const [country, setCountry] = useState(null);
+  const [neighbors, setNeighbors] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API}/countries/${countryCode}`);
-        setCountry(response.data);
+        const [countryRes, neighborsRes] = await Promise.all([
+          axios.get(`${API}/countries/${countryCode}`),
+          axios.get(`${API}/countries/${countryCode}/neighbors?limit=8`).catch(() => ({ data: { neighbors: [] } }))
+        ]);
+        setCountry(countryRes.data);
+        setNeighbors(neighborsRes.data.neighbors || []);
       } catch (error) {
         console.error("Error:", error);
       } finally {
