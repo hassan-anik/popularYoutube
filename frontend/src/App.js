@@ -3790,7 +3790,7 @@ function AppContent() {
   }, []);
 
   return (
-    <div className="App min-h-screen pb-16 md:pb-0">
+    <div className="App min-h-screen">
       <BrowserRouter>
         <Header />
         <main className="min-h-[calc(100vh-200px)]">
