@@ -220,14 +220,6 @@ const InFeedAd = ({ index }) => {
   return null;
 };
 
-// Sticky Mobile Ad Banner
-const StickyMobileAd = () => (
-  <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#0a0a0a] border-t border-[#222] p-1 z-40" data-testid="sticky-mobile-ad">
-    <div className="text-center text-xs text-gray-500">Ad</div>
-    <AdBanner format="horizontal" style={{ height: '50px' }} />
-  </div>
-);
-
 // ==================== FAVORITES SYSTEM ====================
 
 const FAVORITES_KEY = 'toptube_favorites';
