@@ -2457,32 +2457,85 @@ const ChannelPage = () => {
         {/* Embed Widget */}
         <EmbedWidget type="channel" data={channel} />
         
-        {/* Internal Links Section */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mt-8">
-          <h2 className="text-xl font-bold text-white mb-4">Explore More</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <h3 className="font-semibold text-gray-400 mb-2">More from {channel.country_name}</h3>
-              <Link to={`/country/${channel.country_code}`} className="text-red-500 hover:text-red-400 text-sm">
-                View all {channel.country_name} channels →
-              </Link>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-400 mb-2">Rankings</h3>
-              <div className="space-y-1">
-                <Link to="/leaderboard" className="block text-red-500 hover:text-red-400 text-sm">Global Leaderboard →</Link>
-                <Link to="/trending" className="block text-red-500 hover:text-red-400 text-sm">Fastest Growing →</Link>
+        {/* Internal Links Section - SEO Optimized */}
+        <nav className="mt-8 space-y-6" aria-label="Related content">
+          {/* Related Channels from Same Country */}
+          {relatedChannels.length > 0 && (
+            <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="related-channels">
+              <h2 className="text-xl font-bold text-white mb-4">
+                Other Popular YouTubers from {channel.country_name}
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {relatedChannels.map((related) => (
+                  <Link
+                    key={related.channel_id}
+                    to={`/channel/${related.channel_id}`}
+                    className="group text-center p-3 rounded-lg hover:bg-[#1a1a1a] transition-colors"
+                    title={`${related.title} YouTube channel statistics - ${formatNumber(related.subscriber_count)} subscribers`}
+                  >
+                    <img 
+                      src={related.thumbnail_url || "https://via.placeholder.com/56"} 
+                      alt={`${related.title} profile`}
+                      className="w-14 h-14 rounded-full mx-auto mb-2 border-2 border-[#222] group-hover:border-red-600/50 transition-colors"
+                      loading="lazy"
+                    />
+                    <div className="text-sm text-white group-hover:text-red-400 truncate transition-colors">{related.title}</div>
+                    <div className="text-xs text-gray-500">{formatNumber(related.subscriber_count)} subs</div>
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-4 pt-4 border-t border-[#222]">
+                <Link 
+                  to={`/country/${channel.country_code}`} 
+                  className="inline-flex items-center gap-2 text-red-500 hover:text-red-400 text-sm font-medium"
+                >
+                  View all {channel.country_name} YouTube channels <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </section>
+          )}
+
+          {/* Site Navigation */}
+          <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="channel-navigation">
+            <h2 className="text-lg font-bold text-white mb-4">Explore More</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 mb-2">Country Rankings</h3>
+                <div className="space-y-1">
+                  <Link to={`/country/${channel.country_code}`} className="block text-sm text-gray-300 hover:text-red-400">
+                    Top channels in {channel.country_name}
+                  </Link>
+                  <Link to="/countries" className="block text-sm text-gray-300 hover:text-red-400">
+                    Browse all 197 countries
+                  </Link>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 mb-2">Global Rankings</h3>
+                <div className="space-y-1">
+                  <Link to="/leaderboard" className="block text-sm text-gray-300 hover:text-red-400">Global Subscriber Leaderboard</Link>
+                  <Link to="/trending" className="block text-sm text-gray-300 hover:text-red-400">Fastest Growing Channels</Link>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 mb-2">Tools</h3>
+                <div className="space-y-1">
+                  <Link to={`/compare?ids=${channel.channel_id}`} className="block text-sm text-gray-300 hover:text-red-400">
+                    Compare {channel.title?.split(' ')[0]} with others
+                  </Link>
+                  <Link to="/search" className="block text-sm text-gray-300 hover:text-red-400">Search YouTube Channels</Link>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 mb-2">Resources</h3>
+                <div className="space-y-1">
+                  <Link to="/blog" className="block text-sm text-gray-300 hover:text-red-400">YouTube Insights Blog</Link>
+                  <Link to="/about" className="block text-sm text-gray-300 hover:text-red-400">About TopTube World</Link>
+                </div>
               </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-gray-400 mb-2">Tools</h3>
-              <div className="space-y-1">
-                <Link to={`/compare?ids=${channel.channel_id}`} className="block text-red-500 hover:text-red-400 text-sm">Compare Channels →</Link>
-                <Link to="/blog" className="block text-red-500 hover:text-red-400 text-sm">YouTube Insights Blog →</Link>
-              </div>
-            </div>
-          </div>
-        </div>
+          </section>
+        </nav>
         </div>
           
           {/* Sidebar with Ads */}
