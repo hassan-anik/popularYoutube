@@ -2276,14 +2276,19 @@ const ChannelPage = () => {
   const { channelId } = useParams();
   const navigate = useNavigate();
   const [channel, setChannel] = useState(null);
+  const [relatedChannels, setRelatedChannels] = useState([]);
   const [loading, setLoading] = useState(true);
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API}/channels/${channelId}`);
-        setChannel(response.data);
+        const [channelRes, relatedRes] = await Promise.all([
+          axios.get(`${API}/channels/${channelId}`),
+          axios.get(`${API}/channels/${channelId}/related?limit=6`).catch(() => ({ data: { related_channels: [] } }))
+        ]);
+        setChannel(channelRes.data);
+        setRelatedChannels(relatedRes.data.related_channels || []);
       } catch (error) {
         console.error("Error:", error);
       } finally {
