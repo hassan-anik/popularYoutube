@@ -3813,7 +3813,6 @@ function AppContent() {
           </Routes>
         </main>
         <Footer />
-        <StickyMobileAd />
       </BrowserRouter>
     </div>
   );
