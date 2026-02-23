@@ -188,9 +188,9 @@ const AdBanner = ({ slot = "auto", format = "auto", style = {} }) => {
   );
 };
 
-// Horizontal Banner Ad (for between sections)
+// Horizontal Banner Ad (for between sections) - Hidden on mobile
 const HorizontalAd = () => (
-  <div className="w-full bg-[#0d0d0d] border border-[#222] rounded-lg p-2 my-6">
+  <div className="hidden md:block w-full bg-[#0d0d0d] border border-[#222] rounded-lg p-2 my-6">
     <div className="text-center text-xs text-gray-500 mb-1">Advertisement</div>
     <AdBanner format="horizontal" style={{ minHeight: '90px' }} />
   </div>
