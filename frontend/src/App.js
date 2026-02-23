@@ -2165,25 +2165,107 @@ const CountryPage = () => {
           </div>
         </div>
         
-        {/* Internal Links - Related Countries */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Explore More Countries</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-            <Link to="/country/US" className="text-gray-400 hover:text-white text-sm">🇺🇸 United States</Link>
-            <Link to="/country/IN" className="text-gray-400 hover:text-white text-sm">🇮🇳 India</Link>
-            <Link to="/country/BR" className="text-gray-400 hover:text-white text-sm">🇧🇷 Brazil</Link>
-            <Link to="/country/KR" className="text-gray-400 hover:text-white text-sm">🇰🇷 South Korea</Link>
-            <Link to="/country/JP" className="text-gray-400 hover:text-white text-sm">🇯🇵 Japan</Link>
-            <Link to="/country/MX" className="text-gray-400 hover:text-white text-sm">🇲🇽 Mexico</Link>
-            <Link to="/country/GB" className="text-gray-400 hover:text-white text-sm">🇬🇧 United Kingdom</Link>
-            <Link to="/country/ID" className="text-gray-400 hover:text-white text-sm">🇮🇩 Indonesia</Link>
-          </div>
-          <div className="flex flex-wrap gap-4 pt-4 border-t border-[#222]">
-            <Link to="/countries" className="text-red-500 hover:text-red-400 text-sm">View all 197 countries →</Link>
-            <Link to="/leaderboard" className="text-red-500 hover:text-red-400 text-sm">Global Leaderboard →</Link>
-            <Link to="/trending" className="text-red-500 hover:text-red-400 text-sm">Trending Channels →</Link>
-          </div>
-        </div>
+        {/* Internal Links - SEO Optimized */}
+        <nav className="mt-8 space-y-6" aria-label="Related content">
+          {/* Neighboring Countries - Same Region */}
+          {neighbors.length > 0 && (
+            <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="neighboring-countries">
+              <h2 className="text-xl font-bold text-white mb-4">
+                Top YouTube Channels in {country.region}
+              </h2>
+              <p className="text-gray-400 text-sm mb-4">
+                Explore YouTube statistics from other countries in {country.region}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {neighbors.map((neighbor) => (
+                  <Link
+                    key={neighbor.code}
+                    to={`/country/${neighbor.code}`}
+                    className="group bg-[#0a0a0a] border border-[#222] rounded-lg p-4 hover:border-red-600/50 transition-colors"
+                    title={`View top YouTube channels in ${neighbor.name}`}
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-2xl">{neighbor.flag_emoji}</span>
+                      <span className="font-medium text-white group-hover:text-red-400 transition-colors">{neighbor.name}</span>
+                    </div>
+                    {neighbor.top_channel && (
+                      <div className="text-xs text-gray-500">
+                        Top: {neighbor.top_channel.title?.slice(0, 20)}{neighbor.top_channel.title?.length > 20 ? '...' : ''} ({formatNumber(neighbor.top_channel.subscriber_count)})
+                      </div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Popular Channels from This Country */}
+          {country.channels?.length > 3 && (
+            <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="more-channels">
+              <h2 className="text-xl font-bold text-white mb-4">
+                More YouTubers from {country.name}
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                {country.channels.slice(3, 9).map((channel) => (
+                  <Link
+                    key={channel.channel_id}
+                    to={`/channel/${channel.channel_id}`}
+                    className="group text-center p-3 rounded-lg hover:bg-[#1a1a1a] transition-colors"
+                    title={`${channel.title} YouTube channel statistics`}
+                  >
+                    <img 
+                      src={channel.thumbnail_url || "https://via.placeholder.com/48"} 
+                      alt={`${channel.title} profile`}
+                      className="w-12 h-12 rounded-full mx-auto mb-2"
+                      loading="lazy"
+                    />
+                    <div className="text-sm text-white group-hover:text-red-400 truncate">{channel.title}</div>
+                    <div className="text-xs text-gray-500">{formatNumber(channel.subscriber_count)}</div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Site Navigation Links */}
+          <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="site-navigation">
+            <h2 className="text-lg font-bold text-white mb-4">Discover More</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 mb-2">Popular Countries</h3>
+                <div className="space-y-1">
+                  <Link to="/country/US" className="block text-sm text-gray-300 hover:text-red-400">🇺🇸 United States Channels</Link>
+                  <Link to="/country/IN" className="block text-sm text-gray-300 hover:text-red-400">🇮🇳 India Channels</Link>
+                  <Link to="/country/BR" className="block text-sm text-gray-300 hover:text-red-400">🇧🇷 Brazil Channels</Link>
+                  <Link to="/country/JP" className="block text-sm text-gray-300 hover:text-red-400">🇯🇵 Japan Channels</Link>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 mb-2">Rankings</h3>
+                <div className="space-y-1">
+                  <Link to="/leaderboard" className="block text-sm text-gray-300 hover:text-red-400">Global Subscriber Leaderboard</Link>
+                  <Link to="/trending" className="block text-sm text-gray-300 hover:text-red-400">Fastest Growing Channels</Link>
+                  <Link to="/countries" className="block text-sm text-gray-300 hover:text-red-400">All 197 Countries</Link>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 mb-2">Tools</h3>
+                <div className="space-y-1">
+                  <Link to="/compare" className="block text-sm text-gray-300 hover:text-red-400">Compare YouTube Channels</Link>
+                  <Link to="/search" className="block text-sm text-gray-300 hover:text-red-400">Search Channels</Link>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 mb-2">Resources</h3>
+                <div className="space-y-1">
+                  <Link to="/blog" className="block text-sm text-gray-300 hover:text-red-400">YouTube Insights Blog</Link>
+                  <Link to="/about" className="block text-sm text-gray-300 hover:text-red-400">About TopTube World</Link>
+                  <Link to="/contact" className="block text-sm text-gray-300 hover:text-red-400">Contact Us</Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        </nav>
       </div>
     </div>
   );
