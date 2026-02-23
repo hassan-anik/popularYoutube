@@ -2159,6 +2159,26 @@ const CountryPage = () => {
             ))}
           </div>
         </div>
+        
+        {/* Internal Links - Related Countries */}
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">Explore More Countries</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <Link to="/country/US" className="text-gray-400 hover:text-white text-sm">🇺🇸 United States</Link>
+            <Link to="/country/IN" className="text-gray-400 hover:text-white text-sm">🇮🇳 India</Link>
+            <Link to="/country/BR" className="text-gray-400 hover:text-white text-sm">🇧🇷 Brazil</Link>
+            <Link to="/country/KR" className="text-gray-400 hover:text-white text-sm">🇰🇷 South Korea</Link>
+            <Link to="/country/JP" className="text-gray-400 hover:text-white text-sm">🇯🇵 Japan</Link>
+            <Link to="/country/MX" className="text-gray-400 hover:text-white text-sm">🇲🇽 Mexico</Link>
+            <Link to="/country/GB" className="text-gray-400 hover:text-white text-sm">🇬🇧 United Kingdom</Link>
+            <Link to="/country/ID" className="text-gray-400 hover:text-white text-sm">🇮🇩 Indonesia</Link>
+          </div>
+          <div className="flex flex-wrap gap-4 pt-4 border-t border-[#222]">
+            <Link to="/countries" className="text-red-500 hover:text-red-400 text-sm">View all 197 countries →</Link>
+            <Link to="/leaderboard" className="text-red-500 hover:text-red-400 text-sm">Global Leaderboard →</Link>
+            <Link to="/trending" className="text-red-500 hover:text-red-400 text-sm">Trending Channels →</Link>
+          </div>
+        </div>
       </div>
     </div>
   );
