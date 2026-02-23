@@ -1415,7 +1415,7 @@ async def root_sitemap():
 @app.get("/robots.txt", response_class=PlainTextResponse)
 async def root_robots():
     """Serve robots.txt at root level"""
-    base_url = os.environ.get('SITE_URL', 'https://channel-leaderboard.preview.emergentagent.com')
+    base_url = os.environ.get('SITE_URL', 'https://global-yt-stats.preview.emergentagent.com')
     return f"""User-agent: *
 Allow: /
 
