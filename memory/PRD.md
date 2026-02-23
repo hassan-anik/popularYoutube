@@ -95,6 +95,18 @@
 - Smooth CSS transitions between themes
 - Full support across all pages and components
 
+### 12. SEO Internal Linking ✓ (Feb 23, 2026)
+- **CountryPage:** "Top YouTube Channels in [Region]" with 8 neighboring countries
+- **CountryPage:** "More YouTubers from [Country]" with channel thumbnails (when >3 channels)
+- **CountryPage:** "Discover More" navigation with Popular Countries, Rankings, Tools, Resources
+- **ChannelPage:** "Other Popular YouTubers from [Country]" with related channel cards
+- **ChannelPage:** "Explore More" navigation with context-aware links
+- Semantic HTML: `<nav>`, `<section>` elements with ARIA labels
+- Descriptive anchor text instead of "click here"
+- Title attributes for SEO
+- Lazy loading images for performance
+- New APIs: `/api/channels/{id}/related`, `/api/countries/{code}/neighbors`
+
 ## Implementation Details
 
 ### New Pages Added
@@ -138,8 +150,10 @@
 ### Public
 - `GET /api/countries` - List all countries
 - `GET /api/countries/{code}` - Country details
+- `GET /api/countries/{code}/neighbors` - Neighboring countries from same region
 - `GET /api/channels` - List channels (with ?search= param)
 - `GET /api/channels/{id}` - Channel details
+- `GET /api/channels/{id}/related` - Related channels from same country
 - `GET /api/leaderboard/global` - Global leaderboard
 - `GET /api/leaderboard/fastest-growing` - Trending
 - `GET /api/sitemap.xml` - XML sitemap
@@ -173,7 +187,8 @@
 - Growth charts require historical data collection over time
 
 ## Test Reports
-- `/app/test_reports/iteration_6.json` - Latest (100% pass rate)
+- `/app/test_reports/iteration_7.json` - Latest (100% pass rate, internal linking)
+- `/app/test_reports/iteration_6.json` - Previous iteration
 
 ## Next Steps / Backlog (P2)
 - [ ] Connect blog to real CMS or database
