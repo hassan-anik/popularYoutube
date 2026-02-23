@@ -2344,6 +2344,33 @@ const ChannelPage = () => {
         
         {/* Embed Widget */}
         <EmbedWidget type="channel" data={channel} />
+        
+        {/* Internal Links Section */}
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mt-8">
+          <h2 className="text-xl font-bold text-white mb-4">Explore More</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <h3 className="font-semibold text-gray-400 mb-2">More from {channel.country_name}</h3>
+              <Link to={`/country/${channel.country_code}`} className="text-red-500 hover:text-red-400 text-sm">
+                View all {channel.country_name} channels →
+              </Link>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-400 mb-2">Rankings</h3>
+              <div className="space-y-1">
+                <Link to="/leaderboard" className="block text-red-500 hover:text-red-400 text-sm">Global Leaderboard →</Link>
+                <Link to="/trending" className="block text-red-500 hover:text-red-400 text-sm">Fastest Growing →</Link>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-400 mb-2">Tools</h3>
+              <div className="space-y-1">
+                <Link to={`/compare?ids=${channel.channel_id}`} className="block text-red-500 hover:text-red-400 text-sm">Compare Channels →</Link>
+                <Link to="/blog" className="block text-red-500 hover:text-red-400 text-sm">YouTube Insights Blog →</Link>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
           
           {/* Sidebar with Ads */}
