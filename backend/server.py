@@ -250,6 +250,59 @@ async def get_channel(channel_id: str):
         "viral_prediction": viral_info
     }
 
+
+@api_router.get("/channels/{channel_id}/related")
+async def get_related_channels(channel_id: str, limit: int = Query(default=6, le=20)):
+    """Get related channels from the same country for internal linking"""
+    channel = await db.channels.find_one({"channel_id": channel_id}, {"_id": 0})
+    if not channel:
+        raise HTTPException(status_code=404, detail="Channel not found")
+    
+    # Get other channels from the same country, excluding current channel
+    related = await db.channels.find(
+        {
+            "country_code": channel["country_code"],
+            "channel_id": {"$ne": channel_id},
+            "is_active": True
+        },
+        {"_id": 0, "channel_id": 1, "title": 1, "thumbnail_url": 1, "subscriber_count": 1, "country_code": 1, "country_name": 1}
+    ).sort("subscriber_count", -1).limit(limit).to_list(limit)
+    
+    return {"related_channels": related, "country_code": channel["country_code"], "country_name": channel.get("country_name", "")}
+
+
+@api_router.get("/countries/{country_code}/neighbors")
+async def get_neighboring_countries(country_code: str, limit: int = Query(default=8, le=20)):
+    """Get neighboring countries from the same region for internal linking"""
+    country = await db.countries.find_one({"code": country_code.upper()}, {"_id": 0})
+    if not country:
+        raise HTTPException(status_code=404, detail="Country not found")
+    
+    # Get countries from the same region, excluding current country
+    neighbors = await db.countries.find(
+        {
+            "region": country.get("region", ""),
+            "code": {"$ne": country_code.upper()}
+        },
+        {"_id": 0}
+    ).to_list(limit)
+    
+    # For each neighbor, get top channel info
+    for neighbor in neighbors:
+        top_channel = await db.channels.find_one(
+            {"country_code": neighbor["code"], "is_active": True},
+            {"_id": 0, "title": 1, "subscriber_count": 1, "thumbnail_url": 1},
+            sort=[("subscriber_count", -1)]
+        )
+        neighbor["top_channel"] = top_channel
+    
+    return {
+        "neighbors": neighbors,
+        "current_region": country.get("region", ""),
+        "current_country": country["name"]
+    }
+
+
 @api_router.post("/channels")
 async def add_channel(channel_data: ChannelCreate, background_tasks: BackgroundTasks):
     """Add a new channel to track (Admin)"""
