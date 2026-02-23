@@ -204,11 +204,12 @@ const SidebarAd = () => (
   </div>
 );
 
-// In-Feed Ad (for between rows)
+// In-Feed Ad (for between rows) - Desktop only, every 20 rows
 const InFeedAd = ({ index }) => {
-  if (index > 0 && index % 10 === 0) {
+  // Only show on desktop and every 20 rows
+  if (index > 0 && index % 20 === 0) {
     return (
-      <tr className="bg-[#0a0a0a]">
+      <tr className="bg-[#0a0a0a] hidden md:table-row">
         <td colSpan="6" className="px-4 py-3">
           <div className="text-center text-xs text-gray-500 mb-1">Sponsored</div>
           <AdBanner format="fluid" style={{ minHeight: '60px' }} />
