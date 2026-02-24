@@ -2547,7 +2547,29 @@ const CountryPage = () => {
           </div>
         </div>
 
-        {/* Top 3 Podium */}
+        {/* No Data Message */}
+        {(!country.channels || country.channels.length === 0) && (
+          <div className="bg-[#111] border border-[#222] rounded-lg p-12 text-center mb-8" data-testid="no-data-message">
+            <div className="text-6xl mb-4">📊</div>
+            <h2 className="text-2xl font-bold text-white mb-2">No Data Available</h2>
+            <p className="text-gray-400 max-w-md mx-auto">
+              We don't have any YouTube channel data for {country.name} yet. 
+              This could be because there are no major YouTube creators from this country in our database, 
+              or data collection is still in progress.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <Link to="/countries" className="bg-[#222] text-white px-4 py-2 rounded-lg hover:bg-[#333] transition-colors text-sm">
+                Browse Other Countries
+              </Link>
+              <Link to="/leaderboard" className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm">
+                View Global Leaderboard
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Top 3 Podium - Only show if channels exist */}
+        {topThree.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           {topThree.map((channel, idx) => (
             <div
