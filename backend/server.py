@@ -1429,13 +1429,24 @@ async def get_sitemap():
   </url>''')
     
     # Country pages (197 countries)
-    countries = await db.countries.find({}, {"code": 1}).to_list(300)
+    countries = await db.countries.find({}, {"code": 1, "name": 1}).to_list(300)
     for country in countries:
         xml_parts.append(f'''  <url>
     <loc>{base_url}/country/{country["code"]}</loc>
     <lastmod>{today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+  </url>''')
+    
+    # Auto-generated country blog posts (197 posts)
+    year = datetime.now(timezone.utc).year
+    for country in countries:
+        country_slug = country["name"].lower().replace(" ", "-")
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}/blog/country/{country["code"]}</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
   </url>''')
     
     # Channel pages - only include active channels with valid IDs
