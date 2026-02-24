@@ -2622,6 +2622,9 @@ const CountryPage = () => {
           </div>
         </div>
         
+        </div>
+        )}
+
         {/* Internal Links - SEO Optimized */}
         <nav className="mt-8 space-y-6" aria-label="Related content">
           {/* Neighboring Countries - Same Region */}
