@@ -2584,6 +2584,11 @@ const CountryPage = () => {
             </section>
           )}
 
+          {/* FAQ Section */}
+          {countryFaqs.length > 0 && (
+            <FAQSection faqs={countryFaqs} title={`FAQs: YouTube in ${country.name}`} />
+          )}
+
           {/* Site Navigation Links */}
           <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="site-navigation">
             <h2 className="text-lg font-bold text-white mb-4">Discover More</h2>
