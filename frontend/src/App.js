@@ -4821,6 +4821,8 @@ function AppContent() {
   return (
     <div className="App min-h-screen">
       <BrowserRouter>
+        {/* Hreflang tags for international SEO */}
+        <HreflangTags />
         <Header />
         <main className="min-h-[calc(100vh-200px)]">
           <Routes>
@@ -4841,6 +4843,8 @@ function AppContent() {
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            {/* SEO-friendly country slug redirects */}
+            <Route path="/:slug" element={<CountrySlugRedirect />} />
           </Routes>
         </main>
         <Footer />
