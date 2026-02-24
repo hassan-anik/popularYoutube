@@ -837,67 +837,33 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
 
 
 @api_router.delete("/admin/remove-placeholder-channels")
-        "NG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "ZA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "MA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "DZ": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "TN": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "LY": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "GH": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "CI": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "SN": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "CM": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "TZ": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "UG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "ET": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "SD": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "AO": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "MZ": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "ZM": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "ZW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "BW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "NA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "RW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "MU": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "MW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "IQ": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "SY": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "JO": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "LB": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "KW": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "QA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "BH": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "OM": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "YE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "IL": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "IR": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        
-        # Asia & Oceania
-        "NZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "SG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "MY": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "NP": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "LK": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "MM": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "KH": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "LA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "MN": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "KZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "UZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "TJ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "KG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "TM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "AZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "AM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "GE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "AF": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "BT": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "MV": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "BN": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "TW": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "HK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "MO": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "TL": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+async def remove_placeholder_channels():
+    """Remove all placeholder/fake channel data (channels with _ in channel_id)"""
+    
+    # Remove channels that are copies (have original_channel_id or _ in channel_id)
+    result = await db.channels.delete_many({
+        "$or": [
+            {"original_channel_id": {"$exists": True}},
+            {"channel_id": {"$regex": "_"}}
+        ]
+    })
+    
+    logger.info(f"Removed {result.deleted_count} placeholder channels")
+    
+    return {
+        "message": "Placeholder channels removed",
+        "deleted_count": result.deleted_count
+    }
+
+
+# ==================== CONTACT FORM ====================
+
+import resend
+import asyncio
+
+# Initialize Resend
+resend.api_key = os.environ.get('RESEND_API_KEY', '')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
         "PG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
         "FJ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
         "SB": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
