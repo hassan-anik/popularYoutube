@@ -3684,6 +3684,270 @@ const BlogPostPage = () => {
   );
 };
 
+// ==================== COUNTRY BLOG POST PAGE (Auto-Generated) ====================
+
+const CountryBlogSEO = ({ post }) => {
+  const title = post?.title || "Top YouTubers by Country";
+  const description = post?.excerpt || "Discover the most subscribed YouTube channels by country.";
+  const pageUrl = post ? `${SITE_URL}/blog/country/${post.country_code}` : SITE_URL;
+  
+  useSEO({
+    title,
+    description,
+    keywords: `top YouTubers ${post?.country_name}, most subscribed YouTube channels ${post?.country_name}, ${post?.country_name} YouTubers ${new Date().getFullYear()}, popular YouTubers in ${post?.country_name}`,
+    canonical: pageUrl
+  });
+
+  if (!post) return null;
+
+  // Schema.org Article structured data
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.title,
+    "description": post.excerpt,
+    "url": pageUrl,
+    "datePublished": post.generated_at,
+    "dateModified": post.generated_at,
+    "author": {
+      "@type": "Organization",
+      "name": "TopTube World Pro"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "TopTube World Pro",
+      "url": SITE_URL
+    },
+    "mainEntityOfPage": pageUrl
+  };
+
+  // FAQ Schema for common questions
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": `Who is the most subscribed YouTuber in ${post.country_name}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": post.channels?.[0] ? `${post.channels[0].title} is the most subscribed YouTuber in ${post.country_name} with ${formatNumber(post.channels[0].subscriber_count)} subscribers.` : `Visit our rankings to find out.`
+        }
+      },
+      {
+        "@type": "Question",
+        "name": `How many top YouTubers are from ${post.country_name}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `We track ${post.total_channels} top YouTube channels from ${post.country_name}. Our rankings are updated daily with the latest subscriber counts.`
+        }
+      }
+    ]
+  };
+
+  return (
+    <>
+      <JsonLd data={articleSchema} />
+      <JsonLd data={faqSchema} />
+    </>
+  );
+};
+
+const CountryBlogPostPage = () => {
+  const { countryCode } = useParams();
+  const navigate = useNavigate();
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(`${API}/blog/country/${countryCode}`);
+        setPost(response.data);
+      } catch (error) {
+        console.error("Error fetching country blog:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPost();
+  }, [countryCode]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        <div className="text-center">
+          <FileText className="w-16 h-16 mx-auto mb-4 opacity-50" />
+          <h2 className="text-xl font-semibold text-white mb-2">Country not found</h2>
+          <Link to="/blog" className="text-red-500 hover:text-red-400">← Back to Blog</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="country-blog-page">
+      <CountryBlogSEO post={post} />
+      <article className="max-w-4xl mx-auto px-4">
+        {/* Breadcrumb */}
+        <Breadcrumb items={[
+          { label: "Home", href: "/" },
+          { label: "Blog", href: "/blog" },
+          { label: `${post.country_name} YouTubers` }
+        ]} />
+
+        <header className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-xs font-medium">{post.category}</span>
+            <span className="text-gray-500 text-sm">{post.read_time}</span>
+            <span className="text-gray-500 text-sm">• Updated {new Date(post.generated_at).toLocaleDateString()}</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            {post.flag_emoji} {post.title}
+          </h1>
+          <p className="text-xl text-gray-400">{post.excerpt}</p>
+        </header>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-white">{post.total_channels}</div>
+            <div className="text-gray-500 text-sm">Channels Tracked</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-white">
+              {formatNumber(post.channels?.reduce((sum, c) => sum + (c.subscriber_count || 0), 0) || 0)}
+            </div>
+            <div className="text-gray-500 text-sm">Total Subscribers</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-green-400">
+              +{formatNumber(post.channels?.reduce((sum, c) => sum + (c.daily_subscriber_gain || 0), 0) || 0)}
+            </div>
+            <div className="text-gray-500 text-sm">24h Growth</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-white">{post.region}</div>
+            <div className="text-gray-500 text-sm">Region</div>
+          </div>
+        </div>
+
+        {/* Top 10 Channels */}
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold text-white mb-6">
+            The Top {post.channels?.length || 10} YouTubers in {post.country_name}
+          </h2>
+          <div className="space-y-4">
+            {post.channels?.map((channel, idx) => (
+              <div 
+                key={channel.channel_id}
+                className="bg-[#111] border border-[#222] rounded-lg p-5 hover:border-[#333] transition-colors cursor-pointer"
+                onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                data-testid={`blog-channel-${idx}`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${
+                    idx === 0 ? 'bg-yellow-500 text-black' :
+                    idx === 1 ? 'bg-gray-400 text-black' :
+                    idx === 2 ? 'bg-orange-600 text-white' :
+                    'bg-[#222] text-gray-400'
+                  }`}>
+                    {idx + 1}
+                  </div>
+                  <img 
+                    src={channel.thumbnail_url || "https://via.placeholder.com/56"} 
+                    alt={channel.title}
+                    className="w-14 h-14 rounded-full"
+                    loading="lazy"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-white text-lg mb-1">{channel.title}</h3>
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-400">
+                      <span><strong className="text-white">{formatNumber(channel.subscriber_count)}</strong> subscribers</span>
+                      <span><strong className="text-white">{formatNumber(channel.view_count)}</strong> views</span>
+                      <span><strong className="text-white">{channel.video_count}</strong> videos</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className={`text-sm ${(channel.daily_subscriber_gain || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {channel.daily_subscriber_gain >= 0 ? '+' : ''}{formatNumber(channel.daily_subscriber_gain || 0)} today
+                      </span>
+                      <ViralBadge label={channel.viral_label} />
+                    </div>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="bg-gradient-to-r from-red-900/20 to-red-600/10 border border-red-600/30 rounded-lg p-6 mb-8">
+          <h3 className="text-xl font-bold text-white mb-2">Want to explore more?</h3>
+          <p className="text-gray-400 mb-4">
+            View detailed statistics, compare channels, or explore other countries.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link 
+              to={`/country/${post.country_code}`}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+            >
+              View All {post.country_name} Channels
+            </Link>
+            <Link 
+              to="/compare"
+              className="bg-[#222] text-white px-4 py-2 rounded-lg hover:bg-[#333] transition-colors text-sm font-medium"
+            >
+              Compare Channels
+            </Link>
+            <Link 
+              to="/countries"
+              className="bg-[#222] text-white px-4 py-2 rounded-lg hover:bg-[#333] transition-colors text-sm font-medium"
+            >
+              Browse All Countries
+            </Link>
+          </div>
+        </section>
+
+        {/* Related Countries */}
+        <section className="mb-8">
+          <h3 className="text-lg font-bold text-white mb-4">Explore Other Countries</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {['US', 'IN', 'BR', 'JP', 'KR', 'MX', 'GB', 'ID']
+              .filter(code => code !== post.country_code)
+              .slice(0, 4)
+              .map(code => {
+                const names = { US: '🇺🇸 United States', IN: '🇮🇳 India', BR: '🇧🇷 Brazil', JP: '🇯🇵 Japan', KR: '🇰🇷 South Korea', MX: '🇲🇽 Mexico', GB: '🇬🇧 United Kingdom', ID: '🇮🇩 Indonesia' };
+                return (
+                  <Link 
+                    key={code}
+                    to={`/blog/country/${code}`}
+                    className="bg-[#111] border border-[#222] rounded-lg p-3 text-center hover:border-red-600/50 transition-colors"
+                  >
+                    <span className="text-white text-sm">{names[code]} YouTubers</span>
+                  </Link>
+                );
+              })}
+          </div>
+        </section>
+
+        {/* Social Share */}
+        <footer className="pt-8 border-t border-[#222]">
+          <SocialShareButtons url={`${SITE_URL}/blog/country/${post.country_code}`} title={post.title} />
+        </footer>
+      </article>
+    </div>
+  );
+};
+
 // ==================== BLOG ADMIN PAGE ====================
 
 const BLOG_CATEGORIES = ['Trending', 'Guide', 'Analysis', 'Case Study', 'Strategy', 'Gaming', 'News', 'Tips'];
