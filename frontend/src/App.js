@@ -953,6 +953,81 @@ const FAQSection = ({ faqs, title = "Frequently Asked Questions" }) => {
   );
 };
 
+// ==================== SEO-FRIENDLY COUNTRY SLUG REDIRECT ====================
+// Maps slugs like "india-youtubers" to country codes like "IN"
+const COUNTRY_SLUGS = {
+  'united-states-youtubers': 'US', 'india-youtubers': 'IN', 'brazil-youtubers': 'BR',
+  'mexico-youtubers': 'MX', 'russia-youtubers': 'RU', 'japan-youtubers': 'JP',
+  'south-korea-youtubers': 'KR', 'united-kingdom-youtubers': 'GB', 'germany-youtubers': 'DE',
+  'france-youtubers': 'FR', 'indonesia-youtubers': 'ID', 'philippines-youtubers': 'PH',
+  'spain-youtubers': 'ES', 'italy-youtubers': 'IT', 'canada-youtubers': 'CA',
+  'australia-youtubers': 'AU', 'argentina-youtubers': 'AR', 'colombia-youtubers': 'CO',
+  'thailand-youtubers': 'TH', 'vietnam-youtubers': 'VN', 'turkey-youtubers': 'TR',
+  'poland-youtubers': 'PL', 'netherlands-youtubers': 'NL', 'pakistan-youtubers': 'PK',
+  'egypt-youtubers': 'EG', 'saudi-arabia-youtubers': 'SA', 'bangladesh-youtubers': 'BD',
+  'china-youtubers': 'CN', 'taiwan-youtubers': 'TW', 'malaysia-youtubers': 'MY',
+  'singapore-youtubers': 'SG', 'sweden-youtubers': 'SE', 'norway-youtubers': 'NO',
+  'denmark-youtubers': 'DK', 'finland-youtubers': 'FI', 'portugal-youtubers': 'PT',
+  'chile-youtubers': 'CL', 'peru-youtubers': 'PE', 'ukraine-youtubers': 'UA',
+  'czech-republic-youtubers': 'CZ', 'romania-youtubers': 'RO', 'greece-youtubers': 'GR',
+  'hungary-youtubers': 'HU', 'israel-youtubers': 'IL', 'uae-youtubers': 'AE',
+  'south-africa-youtubers': 'ZA', 'nigeria-youtubers': 'NG', 'kenya-youtubers': 'KE',
+  'morocco-youtubers': 'MA', 'new-zealand-youtubers': 'NZ', 'ireland-youtubers': 'IE',
+  'austria-youtubers': 'AT', 'belgium-youtubers': 'BE', 'switzerland-youtubers': 'CH'
+};
+
+const CountrySlugRedirect = () => {
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const countryCode = COUNTRY_SLUGS[slug?.toLowerCase()];
+    if (countryCode) {
+      navigate(`/country/${countryCode}`, { replace: true });
+    } else {
+      navigate('/countries', { replace: true });
+    }
+  }, [slug, navigate]);
+  
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+};
+
+// ==================== HREFLANG COMPONENT ====================
+// Adds hreflang tags for international SEO
+const HreflangTags = () => {
+  useEffect(() => {
+    // Add hreflang tags to head
+    const head = document.head;
+    const existingHreflangs = head.querySelectorAll('link[hreflang]');
+    existingHreflangs.forEach(el => el.remove());
+    
+    // Default language is English
+    const hreflangs = [
+      { lang: 'x-default', href: SITE_URL },
+      { lang: 'en', href: SITE_URL },
+    ];
+    
+    hreflangs.forEach(({ lang, href }) => {
+      const link = document.createElement('link');
+      link.rel = 'alternate';
+      link.hreflang = lang;
+      link.href = href;
+      head.appendChild(link);
+    });
+    
+    return () => {
+      const tags = head.querySelectorAll('link[hreflang]');
+      tags.forEach(el => el.remove());
+    };
+  }, []);
+  
+  return null;
+};
+
 // ==================== STATIC PAGES FOR ADSENSE ====================
 
 // About Page
