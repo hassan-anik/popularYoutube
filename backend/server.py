@@ -834,60 +834,9 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
         "countries_skipped": countries_skipped,
         "empty_countries_found": len(empty_countries)
     }
-    ]
-    
-    # Known popular channels by country/region
-    known_channels = {
-        # Europe
-        "ID": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast (fallback for Indonesia)
-        "TR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast (fallback for Turkey)
-        "IT": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast (fallback for Italy)
-        "AT": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt (German speaking)
-        "CH": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt (German speaking)
-        "PL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
-        "NL": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
-        "SE": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie (Sweden)
-        "NO": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
-        "DK": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
-        "FI": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie popular
-        "CZ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "HU": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "RO": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "BG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "GR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "HR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "SK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "SI": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "RS": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "UA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "BY": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "EE": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie
-        "LV": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie
-        "LT": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie
-        "IE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "PT": ["UCam8T03EOFBsNdR0thrFHdQ"],  # elrubiusOMG
-        "BE": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "AL": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "AD": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "BA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "XK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "ME": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "MK": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "LI": ["UCyNtlmLB73-7gtlBz00XOQQ"],  # Kurzgesagt
-        "LU": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "MT": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "MC": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "SM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "VA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "MD": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "IS": ["UC-lHJZR3Gqxm24_Vd_AJ5Yw"],  # PewDiePie
-        "CY": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        
-        # Middle East & Africa
-        "KE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "AE": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "SA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
-        "EG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
+
+
+@api_router.delete("/admin/remove-placeholder-channels")
         "NG": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
         "ZA": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
         "MA": ["UCq-Fj5jknLsUf-MWSy4_brA"],  # T-Series
