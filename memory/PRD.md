@@ -159,8 +159,12 @@
 - Schema.org JSON-LD structured data
 - Open Graph and Twitter Card tags
 - Canonical URLs
-- Sitemap.xml with 405 URLs
+- Sitemap.xml with 600+ URLs (including 197 country blog posts)
 - Robots.txt with sitemap reference
+- Top 100 Page with FAQ schema
+- Breadcrumb navigation with BreadcrumbList schema
+- FAQ schema markup on Country and Channel pages
+- Auto-generated 197 country blog posts ("/blog/country/{CODE}")
 
 ## API Endpoints
 
