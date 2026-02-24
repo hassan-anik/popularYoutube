@@ -47,6 +47,24 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+# ==================== MIDDLEWARE FOR SEO HEADERS ====================
+
+@app.middleware("http")
+async def add_seo_headers(request, call_next):
+    """Add Last-Modified and Cache-Control headers for SEO"""
+    response = await call_next(request)
+    
+    # Add Last-Modified header for API responses
+    if request.url.path.startswith("/api/") and response.status_code == 200:
+        # Use current time as last modified (data is live)
+        last_modified = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
+        response.headers["Last-Modified"] = last_modified
+        # Allow caching for 5 minutes for better performance
+        response.headers["Cache-Control"] = "public, max-age=300"
+    
+    return response
+
+
 # ==================== MODELS ====================
 
 class CountryCreate(BaseModel):
