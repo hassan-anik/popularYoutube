@@ -383,18 +383,22 @@ async def add_channel(channel_data: ChannelCreate, background_tasks: BackgroundT
 # ==================== LEADERBOARDS ====================
 
 @api_router.get("/leaderboard/global")
-async def get_global_leaderboard(limit: int = Query(default=200, le=1000)):
+async def get_global_leaderboard(response: Response, limit: int = Query(default=200, le=1000)):
     """Get global top channels leaderboard"""
     channels = await ranking_service.get_global_top_100()
+    # Add SEO headers
+    response.headers["Last-Modified"] = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
+    response.headers["Cache-Control"] = "public, max-age=300"
     return {"channels": channels[:limit], "total": len(channels)}
 
 @api_router.get("/leaderboard/country/{country_code}")
-async def get_country_leaderboard(country_code: str, limit: int = Query(default=50, le=100)):
+async def get_country_leaderboard(response: Response, country_code: str, limit: int = Query(default=50, le=100)):
     """Get country-specific leaderboard"""
     channels = await ranking_service.get_country_leaderboard(country_code.upper(), limit)
-    
     country = await db.countries.find_one({"code": country_code.upper()}, {"_id": 0})
-    
+    # Add SEO headers
+    response.headers["Last-Modified"] = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
+    response.headers["Cache-Control"] = "public, max-age=300"
     return {
         "country": country,
         "channels": channels,
@@ -402,15 +406,17 @@ async def get_country_leaderboard(country_code: str, limit: int = Query(default=
     }
 
 @api_router.get("/leaderboard/fastest-growing")
-async def get_fastest_growing(limit: int = Query(default=20, le=100)):
+async def get_fastest_growing(response: Response, limit: int = Query(default=20, le=100)):
     """Get fastest growing channels by daily growth percentage"""
     channels = await ranking_service.get_fastest_growing(limit)
+    response.headers["Last-Modified"] = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
     return {"channels": channels}
 
 @api_router.get("/leaderboard/biggest-gainers")
-async def get_biggest_gainers(limit: int = Query(default=20, le=100)):
+async def get_biggest_gainers(response: Response, limit: int = Query(default=20, le=100)):
     """Get channels with biggest subscriber gain in 24h"""
     channels = await ranking_service.get_biggest_gainers_24h(limit)
+    response.headers["Last-Modified"] = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
     return {"channels": channels}
 
 
