@@ -2841,6 +2841,11 @@ const ChannelPage = () => {
         
         {/* Embed Widget */}
         <EmbedWidget type="channel" data={channel} />
+
+        {/* FAQ Section */}
+        <div className="mt-8">
+          <FAQSection faqs={channelFaqs} title={`FAQs: ${channel.title}`} />
+        </div>
         
         {/* Internal Links Section - SEO Optimized */}
         <nav className="mt-8 space-y-6" aria-label="Related content">
