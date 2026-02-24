@@ -752,12 +752,88 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
     empty_countries = await db.countries.aggregate(pipeline).to_list(200)
     logger.info(f"Found {len(empty_countries)} countries with 0 channels")
     
-    # Global channels to use as fallbacks (most subscribed globally)
-    GLOBAL_CHANNELS = [
-        "UCX6OQ3DkcsbYNE6H8uQQuVA",  # MrBeast
-        "UC-lHJZR3Gqxm24_Vd_AJ5Yw",  # PewDiePie
-        "UCq-Fj5jknLsUf-MWSy4_brA",  # T-Series
-        "UCvjgEDvShRsADqghFPPCZgQ",  # Cocomelon
+    channels_added = 0
+    countries_processed = 0
+    countries_skipped = 0
+    
+    for country in empty_countries:
+        country_code = country["code"]
+        country_name = country["name"]
+        
+        try:
+            # Search for real YouTube channels from this specific country using YouTube API
+            search_results = await youtube_service.search_channels(
+                query=f"popular YouTuber",
+                region_code=country_code,
+                max_results=3
+            )
+            
+            if not search_results:
+                logger.info(f"No YouTube channels found for {country_name} ({country_code}), skipping")
+                countries_skipped += 1
+                continue
+            
+            # Add found channels
+            for result in search_results:
+                channel_id = result.get("channel_id")
+                if not channel_id:
+                    continue
+                
+                # Check if channel already exists
+                existing = await db.channels.find_one({"channel_id": channel_id})
+                if existing:
+                    continue
+                
+                # Fetch full channel data from YouTube
+                try:
+                    channel_data = await youtube_service.get_channel_stats(channel_id)
+                    if not channel_data:
+                        continue
+                    
+                    # Create channel document
+                    channel_doc = {
+                        "channel_id": channel_id,
+                        "title": channel_data.get("title", "Unknown"),
+                        "description": channel_data.get("description", ""),
+                        "thumbnail_url": channel_data.get("thumbnail_url", ""),
+                        "subscriber_count": channel_data.get("subscriber_count", 0),
+                        "view_count": channel_data.get("view_count", 0),
+                        "video_count": channel_data.get("video_count", 0),
+                        "country_code": country_code,
+                        "country_name": country_name,
+                        "created_at": datetime.now(timezone.utc).isoformat(),
+                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                        "is_active": True
+                    }
+                    
+                    await db.channels.insert_one(channel_doc)
+                    channels_added += 1
+                    logger.info(f"Added {channel_doc['title']} for {country_name}")
+                    
+                except Exception as e:
+                    logger.error(f"Error fetching channel {channel_id}: {e}")
+                    continue
+            
+            countries_processed += 1
+            
+            # Rate limiting - wait between countries to avoid quota issues
+            await asyncio.sleep(0.5)
+            
+        except Exception as e:
+            logger.error(f"Error processing {country_name}: {e}")
+            countries_skipped += 1
+            continue
+    
+    # Update rankings in background
+    background_tasks.add_task(ranking_service.update_all_rankings)
+    
+    return {
+        "message": "Population complete - only real YouTube data added",
+        "countries_processed": countries_processed,
+        "channels_added": channels_added,
+        "countries_skipped": countries_skipped,
+        "empty_countries_found": len(empty_countries)
+    }
     ]
     
     # Known popular channels by country/region
