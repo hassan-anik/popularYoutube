@@ -61,7 +61,11 @@ import {
   Bookmark,
   Download,
   Sun,
-  Moon
+  Moon,
+  Home,
+  ChevronDown,
+  Trophy,
+  HelpCircle
 } from "lucide-react";
 import "@/App.css";
 
