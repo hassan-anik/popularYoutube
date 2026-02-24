@@ -878,36 +878,6 @@ async def subscribe_newsletter(data: NewsletterSubscribe):
     email = data.email.lower().strip()
     
     # Validate email format
-        "CL": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "PE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "VE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "EC": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "BO": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "PY": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "UY": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "CR": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "PA": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "HN": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "SV": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "GT": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "NI": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "CU": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "DO": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "PR": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "HT": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
-        "JM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "TT": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "BS": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-
-class NewsletterSubscribe(BaseModel):
-    email: str
-
-@api_router.post("/newsletter/subscribe")
-async def subscribe_newsletter(data: NewsletterSubscribe):
-    """Subscribe to newsletter"""
-    email = data.email.lower().strip()
-    
-    # Validate email format
     if not email or '@' not in email:
         raise HTTPException(status_code=400, detail="Invalid email address")
     
