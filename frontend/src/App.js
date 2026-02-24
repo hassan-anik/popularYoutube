@@ -3067,11 +3067,46 @@ const ComparePage = () => {
   const channelIds = searchParams.get('ids')?.split(',').filter(Boolean) || [];
 
   useSEO({
-    title: "Compare YouTube Channels - TopTube World Pro",
-    description: "Compare multiple YouTube channels side by side. Analyze subscriber counts, growth rates, and performance metrics.",
-    keywords: "compare YouTube channels, YouTube comparison tool, channel analytics comparison",
+    title: "Compare YouTube Channels - Side by Side Analysis | TopTube World Pro",
+    description: "Compare up to 4 YouTube channels side by side. Analyze subscriber counts, growth rates, view counts, and performance metrics with our free comparison tool.",
+    keywords: "compare YouTube channels, YouTube comparison tool, channel analytics comparison, YouTuber comparison, subscriber comparison",
     canonical: `${SITE_URL}/compare`
   });
+
+  // How-To Schema for SEO
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Compare YouTube Channels",
+    "description": "Learn how to compare YouTube channels side by side using TopTube World Pro's free comparison tool.",
+    "totalTime": "PT2M",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": "Search for channels",
+        "text": "Use the search box to find YouTube channels you want to compare. Type the channel name and select from results."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": "Add channels to compare",
+        "text": "Click on channels from search results to add them to your comparison. You can compare up to 4 channels at once."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": "Analyze the comparison",
+        "text": "View side-by-side statistics including subscriber counts, view counts, video counts, and growth metrics."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 4,
+        "name": "Share your comparison",
+        "text": "Copy the share link to save or share your channel comparison with others."
+      }
+    ]
+  };
 
   useEffect(() => {
     const fetchAllChannels = async () => {
