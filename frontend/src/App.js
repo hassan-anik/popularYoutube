@@ -2431,10 +2431,35 @@ const CountryPage = () => {
 
   const topThree = country.channels?.slice(0, 3) || [];
 
+  // Generate country-specific FAQs
+  const countryFaqs = country && country.channels?.length > 0 ? [
+    {
+      question: `Who is the most subscribed YouTuber in ${country.name}?`,
+      answer: `${country.channels[0]?.title} is the most subscribed YouTube channel in ${country.name} with ${formatNumber(country.channels[0]?.subscriber_count)} subscribers${country.channels[1] ? `, followed by ${country.channels[1]?.title} with ${formatNumber(country.channels[1]?.subscriber_count)} subscribers` : ''}.`
+    },
+    {
+      question: `How many YouTube channels are tracked in ${country.name}?`,
+      answer: `We currently track ${country.channels?.length || 0} of the top YouTube channels from ${country.name}. Our database is updated every 6 hours with the latest subscriber counts and growth data.`
+    },
+    {
+      question: `Which ${country.name} YouTuber is growing the fastest?`,
+      answer: country.channels?.find(c => c.daily_growth_percent > 0) 
+        ? `Among tracked channels, those with "Exploding" or "Rising" status are growing fastest. Check the individual channel pages for detailed growth analytics.`
+        : `Visit individual channel pages to see detailed growth metrics including daily, weekly, and monthly subscriber gains.`
+    }
+  ] : [];
+
   return (
     <div className="py-8" data-testid="country-detail-page">
       <CountrySEO country={country} channels={country.channels} />
       <div className="max-w-6xl mx-auto px-4">
+        {/* Breadcrumb */}
+        <Breadcrumb items={[
+          { label: "Home", href: "/" },
+          { label: "Countries", href: "/countries" },
+          { label: country.name }
+        ]} />
+
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-2">
