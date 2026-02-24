@@ -180,9 +180,17 @@
 - `GET /api/channels/{id}/related` - Related channels from same country
 - `GET /api/leaderboard/global` - Global leaderboard
 - `GET /api/leaderboard/fastest-growing` - Trending
+- `GET /api/blog/country/{code}` - Auto-generated country blog post
+- `GET /api/blog/countries` - List all 197 country blog posts
 - `GET /api/sitemap.xml` - XML sitemap
 - `POST /api/contact` - Contact form
 - `POST /api/newsletter/subscribe` - Newsletter signup
+- `DELETE /api/admin/remove-placeholder-channels` - Remove fake data
+
+## Data Quality
+- Removed 108 placeholder/fake channel entries (MrBeast was used as placeholder for 70+ countries)
+- Countries without real data now show "No Data Available" message
+- Only authentic, verified YouTube channel data is displayed
 
 ## Files Structure
 ```
