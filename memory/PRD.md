@@ -204,7 +204,8 @@
 - Growth charts require historical data collection over time
 
 ## Test Reports
-- `/app/test_reports/iteration_7.json` - Latest (100% pass rate, internal linking)
+- `/app/test_reports/iteration_8.json` - Latest (100% pass rate, SEO features)
+- `/app/test_reports/iteration_7.json` - Internal linking
 - `/app/test_reports/iteration_6.json` - Previous iteration
 
 ## Next Steps / Backlog (P2)
