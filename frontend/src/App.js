@@ -3601,6 +3601,64 @@ const BlogPage = () => {
           </div>
         )}
 
+        {/* Country Rankings Blog Posts Section */}
+        {featuredCountryPosts.length > 0 && (
+          <section className="mt-12" data-testid="country-blog-section">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <Globe className="w-6 h-6 text-red-500" />
+                  Top YouTubers by Country
+                </h2>
+                <p className="text-gray-500 mt-1">Explore the most subscribed YouTube channels in each country</p>
+              </div>
+              <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-xs font-medium">
+                {countryPosts.length} Countries
+              </span>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {featuredCountryPosts.map((post) => (
+                <Link
+                  key={post.country_code}
+                  to={post.url}
+                  className="group bg-[#111] border border-[#222] rounded-lg p-4 hover:border-red-600/50 transition-all hover:scale-[1.02]"
+                  data-testid={`country-blog-${post.country_code}`}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-3xl">{post.flag_emoji}</span>
+                    <span className="font-medium text-white group-hover:text-red-400 transition-colors">{post.country_name}</span>
+                  </div>
+                  <p className="text-gray-500 text-xs line-clamp-2">
+                    Top 10 Most Subscribed YouTubers in {post.country_name}
+                  </p>
+                </Link>
+              ))}
+            </div>
+            
+            {/* View All Countries Link */}
+            <div className="mt-6 text-center">
+              <details className="inline-block">
+                <summary className="cursor-pointer text-red-500 hover:text-red-400 font-medium">
+                  View all {countryPosts.length} countries →
+                </summary>
+                <div className="mt-4 grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 max-h-64 overflow-y-auto p-4 bg-[#0a0a0a] border border-[#222] rounded-lg">
+                  {countryPosts.map((post) => (
+                    <Link
+                      key={post.country_code}
+                      to={post.url}
+                      className="text-gray-400 hover:text-white text-xs p-2 rounded hover:bg-[#1a1a1a] transition-colors"
+                      title={post.country_name}
+                    >
+                      {post.flag_emoji} {post.country_name.slice(0, 12)}{post.country_name.length > 12 ? '...' : ''}
+                    </Link>
+                  ))}
+                </div>
+              </details>
+            </div>
+          </section>
+        )}
+
         <div className="mt-12">
           <NewsletterSignup />
         </div>
