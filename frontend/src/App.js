@@ -3202,10 +3202,20 @@ const ComparePage = () => {
 
   return (
     <div className="py-8" data-testid="compare-page">
+      {/* How-To Schema for SEO */}
+      <JsonLd data={howToSchema} />
+      
       <div className="max-w-6xl mx-auto px-4">
+        {/* Breadcrumb */}
+        <Breadcrumb items={[
+          { label: "Home", href: "/" },
+          { label: "Tools", href: null },
+          { label: "Compare Channels" }
+        ]} />
+        
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Compare Channels</h1>
-          <p className="text-gray-500">Compare up to 4 YouTube channels side by side</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Compare YouTube Channels</h1>
+          <p className="text-gray-500">Compare up to 4 YouTube channels side by side - subscribers, views, growth & more</p>
         </div>
 
         {/* Channel Search/Add */}
