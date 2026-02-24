@@ -821,6 +821,138 @@ const TrendingSEO = () => {
   return null;
 };
 
+// Top 100 Page SEO
+const Top100SEO = ({ channels }) => {
+  const year = new Date().getFullYear();
+  const title = `Top 100 Most Subscribed YouTube Channels ${year} - Global Rankings`;
+  const description = `Complete list of the top 100 most subscribed YouTube channels in ${year}. ${channels?.[0]?.title || 'MrBeast'} leads with ${formatNumber(channels?.[0]?.subscriber_count || 0)} subscribers. Live rankings updated daily.`;
+  
+  useSEO({
+    title,
+    description,
+    keywords: "top 100 YouTube channels, most subscribed YouTube channels, top 100 YouTubers, biggest YouTube channels, YouTube subscriber rankings, top YouTubers list",
+    canonical: `${SITE_URL}/top-100`
+  });
+  
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": `Top 100 Most Subscribed YouTube Channels ${year}`,
+    "description": description,
+    "url": `${SITE_URL}/top-100`,
+    "numberOfItems": 100,
+    "itemListElement": channels?.slice(0, 100).map((channel, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "item": {
+        "@type": "Organization",
+        "name": channel.title,
+        "url": `https://youtube.com/channel/${channel.channel_id}`,
+        "description": `#${idx + 1} most subscribed YouTube channel with ${formatNumber(channel.subscriber_count)} subscribers`,
+        "image": channel.thumbnail_url
+      }
+    })) || []
+  };
+  
+  return <JsonLd data={schemaData} />;
+};
+
+// ==================== BREADCRUMB COMPONENT ====================
+
+const Breadcrumb = ({ items }) => {
+  // Generate JSON-LD schema for breadcrumbs
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": item.label,
+      "item": item.href ? `${SITE_URL}${item.href}` : undefined
+    }))
+  };
+
+  return (
+    <>
+      <JsonLd data={schemaData} />
+      <nav aria-label="Breadcrumb" className="mb-4">
+        <ol className="flex items-center gap-2 text-sm text-gray-400">
+          {items.map((item, idx) => (
+            <li key={idx} className="flex items-center gap-2">
+              {idx > 0 && <ChevronRight className="w-3 h-3" />}
+              {item.href ? (
+                <Link 
+                  to={item.href} 
+                  className="hover:text-white transition-colors"
+                  title={item.label}
+                >
+                  {idx === 0 && <Home className="w-4 h-4 inline mr-1" />}
+                  {item.label}
+                </Link>
+              ) : (
+                <span className="text-gray-300">{item.label}</span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </>
+  );
+};
+
+// ==================== FAQ SCHEMA COMPONENT ====================
+
+const FAQSchema = ({ faqs }) => {
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
+  return <JsonLd data={schemaData} />;
+};
+
+// FAQ Section UI Component
+const FAQSection = ({ faqs, title = "Frequently Asked Questions" }) => {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  return (
+    <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="faq-section">
+      <FAQSchema faqs={faqs} />
+      <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <HelpCircle className="w-5 h-5 text-red-500" />
+        {title}
+      </h2>
+      <div className="space-y-3">
+        {faqs.map((faq, idx) => (
+          <div key={idx} className="border border-[#222] rounded-lg overflow-hidden">
+            <button
+              onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+              className="w-full flex items-center justify-between p-4 text-left hover:bg-[#1a1a1a] transition-colors"
+              aria-expanded={openIndex === idx}
+            >
+              <span className="font-medium text-white pr-4">{faq.question}</span>
+              <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openIndex === idx ? 'rotate-180' : ''}`} />
+            </button>
+            {openIndex === idx && (
+              <div className="px-4 pb-4 text-gray-400 text-sm leading-relaxed">
+                {faq.answer}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
 // ==================== STATIC PAGES FOR ADSENSE ====================
 
 // About Page
