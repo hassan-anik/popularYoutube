@@ -1612,7 +1612,7 @@ async def seed_historical_data_if_needed():
                 for channel in channels:
                     try:
                         await growth_analyzer.update_channel_growth_metrics(channel["channel_id"])
-                    except Exception as e:
+                    except Exception:
                         pass  # Silently continue on individual channel errors
                 logger.info("Growth metrics calculation complete")
         else:
