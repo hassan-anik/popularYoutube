@@ -1300,6 +1300,7 @@ async def get_sitemap():
     # Static pages (no trailing slash for consistency)
     static_pages = [
         ('', '1.0', 'daily'),  # Homepage - empty string = no trailing slash after base_url
+        ('/top-100', '0.95', 'daily'),  # High-traffic SEO page
         ('/leaderboard', '0.9', 'hourly'),
         ('/countries', '0.8', 'daily'),
         ('/trending', '0.9', 'hourly'),
