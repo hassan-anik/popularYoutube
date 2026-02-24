@@ -1552,6 +1552,7 @@ const Footer = () => (
         <div>
           <h4 className="font-semibold text-white mb-4">Rankings</h4>
           <ul className="space-y-2 text-sm">
+            <li><Link to="/top-100" className="text-gray-400 hover:text-white">Top 100 YouTubers</Link></li>
             <li><Link to="/leaderboard" className="text-gray-400 hover:text-white">Global Leaderboard</Link></li>
             <li><Link to="/trending" className="text-gray-400 hover:text-white">Fastest Growing</Link></li>
             <li><Link to="/countries" className="text-gray-400 hover:text-white">By Country</Link></li>
