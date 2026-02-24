@@ -4372,6 +4372,7 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
+            <Route path="/top-100" element={<Top100Page />} />
             <Route path="/countries" element={<CountriesPage />} />
             <Route path="/country/:countryCode" element={<CountryPage />} />
             <Route path="/channel/:channelId" element={<ChannelPage />} />
