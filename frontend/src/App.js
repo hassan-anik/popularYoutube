@@ -2591,8 +2591,10 @@ const CountryPage = () => {
             </div>
           ))}
         </div>
+        )}
 
-        {/* All Rankings */}
+        {/* All Rankings - Only show if channels exist */}
+        {country.channels && country.channels.length > 0 && (
         <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
           <div className="px-4 py-3 border-b border-[#222]">
             <h2 className="font-bold text-white">All Rankings</h2>
