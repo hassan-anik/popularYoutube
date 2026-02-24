@@ -1584,6 +1584,21 @@ async def root_sitemap():
     <priority>0.8</priority>
   </url>''')
     
+    # SEO-friendly country slug URLs
+    seo_slugs = {
+        'US': 'united-states-youtubers', 'IN': 'india-youtubers', 'BR': 'brazil-youtubers',
+        'MX': 'mexico-youtubers', 'RU': 'russia-youtubers', 'JP': 'japan-youtubers',
+        'KR': 'south-korea-youtubers', 'GB': 'united-kingdom-youtubers', 'DE': 'germany-youtubers',
+        'FR': 'france-youtubers', 'ID': 'indonesia-youtubers', 'PH': 'philippines-youtubers'
+    }
+    for code, slug in seo_slugs.items():
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}/{slug}</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>''')
+    
     # Auto-generated country blog posts
     for country in countries:
         xml_parts.append(f'''  <url>
