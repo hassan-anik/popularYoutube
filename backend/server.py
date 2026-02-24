@@ -1190,6 +1190,126 @@ async def get_blog_post(slug: str):
         raise HTTPException(status_code=404, detail="Post not found")
     return post
 
+
+# ==================== AUTO-GENERATED COUNTRY BLOG POSTS ====================
+
+@api_router.get("/blog/country/{country_code}")
+async def get_country_blog_post(country_code: str):
+    """Get auto-generated blog post for a country with top YouTubers"""
+    country = await db.countries.find_one({"code": country_code.upper()}, {"_id": 0})
+    if not country:
+        raise HTTPException(status_code=404, detail="Country not found")
+    
+    # Get top 10 channels for this country
+    channels = await db.channels.find(
+        {"country_code": country_code.upper(), "is_active": True},
+        {"_id": 0}
+    ).sort("subscriber_count", -1).limit(10).to_list(10)
+    
+    year = datetime.now(timezone.utc).year
+    country_name = country.get("name", country_code)
+    flag = country.get("flag_emoji", "")
+    region = country.get("region", "")
+    
+    # Generate SEO-optimized content
+    title = f"Top 10 Most Subscribed YouTubers in {country_name} {flag} ({year})"
+    slug = f"top-youtubers-{country_name.lower().replace(' ', '-')}-{year}"
+    
+    # Build the article content
+    intro = f"""Discover the most popular YouTube channels from {country_name}! This comprehensive guide ranks the top 10 most subscribed YouTubers from {country_name} in {year}, complete with subscriber counts, growth statistics, and what makes each channel special.
+
+{country_name}, located in {region}, has a thriving YouTube community. {"The #1 YouTuber is " + channels[0]['title'] + " with " + format_number_simple(channels[0]['subscriber_count']) + " subscribers." if channels else ""}"""
+
+    # Generate channel sections
+    channel_sections = []
+    for idx, channel in enumerate(channels):
+        rank = idx + 1
+        section = f"""
+### #{rank}. {channel.get('title', 'Unknown')}
+
+**Subscribers:** {format_number_simple(channel.get('subscriber_count', 0))}
+**Total Views:** {format_number_simple(channel.get('view_count', 0))}
+**Videos:** {channel.get('video_count', 0)}
+**24h Growth:** +{format_number_simple(channel.get('daily_subscriber_gain', 0))} subscribers
+
+{channel.get('title', 'This channel')} ranks #{rank} in {country_name} with an impressive {format_number_simple(channel.get('subscriber_count', 0))} subscribers. {"Currently showing " + channel.get('viral_label', 'stable') + " growth patterns." if channel.get('viral_label') else ""}
+
+[View detailed statistics →](/channel/{channel.get('channel_id', '')})
+"""
+        channel_sections.append(section)
+    
+    content = intro + "\n\n## The Top 10 YouTubers in " + country_name + " " + str(year) + "\n" + "\n".join(channel_sections)
+    
+    # Add conclusion
+    content += f"""
+
+## Conclusion
+
+These are the top 10 most subscribed YouTube channels from {country_name} as of {year}. The YouTube landscape is constantly evolving, with new creators rising and established channels continuing to grow.
+
+**Want to explore more?**
+- [View all {country_name} channels](/country/{country_code.upper()})
+- [Compare these channels](/compare)
+- [See global rankings](/leaderboard)
+
+*Data updated regularly from YouTube API. Last update: {datetime.now(timezone.utc).strftime('%B %d, %Y')}*
+"""
+    
+    # Calculate read time (roughly 200 words per minute)
+    word_count = len(content.split())
+    read_time = max(3, word_count // 200)
+    
+    return {
+        "title": title,
+        "slug": slug,
+        "country_code": country_code.upper(),
+        "country_name": country_name,
+        "flag_emoji": flag,
+        "region": region,
+        "excerpt": f"Discover the top 10 most subscribed YouTube channels from {country_name} in {year}. See who's #1 and track their growth statistics.",
+        "content": content,
+        "category": "Country Rankings",
+        "channels": channels,
+        "total_channels": len(channels),
+        "read_time": f"{read_time} min read",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "is_auto_generated": True
+    }
+
+
+@api_router.get("/blog/countries")
+async def get_all_country_blog_posts():
+    """Get list of all auto-generated country blog posts for sitemap/index"""
+    countries = await db.countries.find({}, {"_id": 0, "code": 1, "name": 1, "flag_emoji": 1, "region": 1}).to_list(300)
+    year = datetime.now(timezone.utc).year
+    
+    posts = []
+    for country in countries:
+        posts.append({
+            "country_code": country["code"],
+            "country_name": country["name"],
+            "flag_emoji": country.get("flag_emoji", ""),
+            "slug": f"top-youtubers-{country['name'].lower().replace(' ', '-')}-{year}",
+            "title": f"Top 10 Most Subscribed YouTubers in {country['name']} ({year})",
+            "url": f"/blog/country/{country['code']}"
+        })
+    
+    return {"posts": posts, "total": len(posts), "year": year}
+
+
+def format_number_simple(num):
+    """Simple number formatter for blog content"""
+    if not num:
+        return "0"
+    if num >= 1000000000:
+        return f"{num / 1000000000:.2f}B"
+    if num >= 1000000:
+        return f"{num / 1000000:.2f}M"
+    if num >= 1000:
+        return f"{num / 1000:.1f}K"
+    return str(num)
+
+
 @api_router.get("/admin/blog/posts")
 async def admin_get_all_posts(admin_key: str = Query(...)):
     """Admin: Get all posts including drafts"""
