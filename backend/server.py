@@ -1439,9 +1439,7 @@ async def get_sitemap():
   </url>''')
     
     # Auto-generated country blog posts (197 posts)
-    year = datetime.now(timezone.utc).year
     for country in countries:
-        country_slug = country["name"].lower().replace(" ", "-")
         xml_parts.append(f'''  <url>
     <loc>{base_url}/blog/country/{country["code"]}</loc>
     <lastmod>{today}</lastmod>
