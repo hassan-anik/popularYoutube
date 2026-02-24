@@ -4125,6 +4125,7 @@ const CountryBlogPostPage = () => {
             ))}
           </div>
         </section>
+        )}
 
         {/* CTA Section */}
         <section className="bg-gradient-to-r from-red-900/20 to-red-600/10 border border-red-600/30 rounded-lg p-6 mb-8">
