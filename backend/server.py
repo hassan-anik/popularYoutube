@@ -975,6 +975,26 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
     }
 
 
+@api_router.delete("/admin/remove-placeholder-channels")
+async def remove_placeholder_channels():
+    """Remove all placeholder/fake channel data (channels with _ in channel_id)"""
+    
+    # Remove channels that are copies (have original_channel_id or _ in channel_id)
+    result = await db.channels.delete_many({
+        "$or": [
+            {"original_channel_id": {"$exists": True}},
+            {"channel_id": {"$regex": "_"}}
+        ]
+    })
+    
+    logger.info(f"Removed {result.deleted_count} placeholder channels")
+    
+    return {
+        "message": "Placeholder channels removed",
+        "deleted_count": result.deleted_count
+    }
+
+
 # ==================== CONTACT FORM ====================
 
 import resend
