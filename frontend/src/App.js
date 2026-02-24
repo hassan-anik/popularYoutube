@@ -4056,7 +4056,28 @@ const CountryBlogPostPage = () => {
           </div>
         </div>
 
-        {/* Top 10 Channels */}
+        {/* No Data Message */}
+        {(!post.channels || post.channels.length === 0) && (
+          <section className="bg-[#111] border border-[#222] rounded-lg p-12 text-center mb-8" data-testid="no-data-message">
+            <div className="text-6xl mb-4">📊</div>
+            <h2 className="text-2xl font-bold text-white mb-2">No Data Available</h2>
+            <p className="text-gray-400 max-w-md mx-auto mb-6">
+              We don't have any YouTube channel data for {post.country_name} yet. 
+              This could be because there are no major YouTube creators from this country in our database.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link to="/countries" className="bg-[#222] text-white px-4 py-2 rounded-lg hover:bg-[#333] transition-colors text-sm">
+                Browse Other Countries
+              </Link>
+              <Link to="/leaderboard" className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm">
+                View Global Leaderboard
+              </Link>
+            </div>
+          </section>
+        )}
+
+        {/* Top 10 Channels - Only show if channels exist */}
+        {post.channels && post.channels.length > 0 && (
         <section className="mb-8">
           <h2 className="text-2xl font-bold text-white mb-6">
             The Top {post.channels?.length || 10} YouTubers in {post.country_name}
