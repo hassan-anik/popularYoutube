@@ -3474,24 +3474,31 @@ const defaultBlogPosts = [
 
 const BlogPage = () => {
   const [posts, setPosts] = useState([]);
+  const [countryPosts, setCountryPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useSEO({
     title: "Blog - YouTube Trends & Analysis | TopTube World Pro",
-    description: "Read the latest articles about YouTube trends, channel growth strategies, and platform analytics.",
-    keywords: "YouTube blog, YouTube trends, YouTube growth tips, YouTuber analysis",
+    description: "Read the latest articles about YouTube trends, channel growth strategies, and platform analytics. Explore top YouTubers by country.",
+    keywords: "YouTube blog, YouTube trends, YouTube growth tips, YouTuber analysis, top YouTubers by country",
     canonical: `${SITE_URL}/blog`
   });
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${API}/blog/posts?status=published`);
-        if (response.data.posts && response.data.posts.length > 0) {
-          setPosts(response.data.posts);
+        const [blogRes, countryRes] = await Promise.all([
+          axios.get(`${API}/blog/posts?status=published`).catch(() => ({ data: { posts: [] } })),
+          axios.get(`${API}/blog/countries`).catch(() => ({ data: { posts: [] } }))
+        ]);
+        
+        if (blogRes.data.posts && blogRes.data.posts.length > 0) {
+          setPosts(blogRes.data.posts);
         } else {
           setPosts(defaultBlogPosts);
         }
+        
+        setCountryPosts(countryRes.data.posts || []);
       } catch (error) {
         console.error("Error fetching blog posts:", error);
         setPosts(defaultBlogPosts);
@@ -3512,6 +3519,10 @@ const BlogPage = () => {
 
   const featuredPost = posts[0];
   const otherPosts = posts.slice(1);
+  
+  // Popular countries to highlight
+  const popularCountries = ['US', 'IN', 'BR', 'JP', 'KR', 'MX', 'GB', 'ID', 'PH', 'DE', 'FR', 'RU'];
+  const featuredCountryPosts = countryPosts.filter(p => popularCountries.includes(p.country_code));
 
   return (
     <div className="py-8" data-testid="blog-page">
