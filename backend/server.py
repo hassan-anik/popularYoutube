@@ -864,20 +864,20 @@ import asyncio
 # Initialize Resend
 resend.api_key = os.environ.get('RESEND_API_KEY', '')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
-        "PG": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "FJ": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "SB": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "VU": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "WS": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "TO": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "KI": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "FM": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "MH": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "PW": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "NR": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        "TV": ["UCX6OQ3DkcsbYNE6H8uQQuVA"],  # MrBeast
-        
-        # Americas
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@toptubeworldpro.com')
+
+
+# ==================== NEWSLETTER ====================
+
+class NewsletterSubscribe(BaseModel):
+    email: str
+
+@api_router.post("/newsletter/subscribe")
+async def subscribe_newsletter(data: NewsletterSubscribe):
+    """Subscribe to newsletter"""
+    email = data.email.lower().strip()
+    
+    # Validate email format
         "CL": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
         "PE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
         "VE": ["UCYiGq8XF7YQD00x7wAd62Zg"],  # Badabun
