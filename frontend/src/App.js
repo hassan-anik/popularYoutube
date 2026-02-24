@@ -2676,10 +2676,33 @@ const ChannelPage = () => {
     );
   }
 
+  // Generate channel-specific FAQs
+  const channelFaqs = [
+    {
+      question: `How many subscribers does ${channel.title} have?`,
+      answer: `${channel.title} currently has ${formatNumber(channel.subscriber_count)} subscribers on YouTube, making them ${channel.current_rank ? `#${channel.current_rank} in ${channel.country_name}` : `one of the top channels from ${channel.country_name}`}. They have uploaded ${channel.video_count} videos with a total of ${formatNumber(channel.view_count)} views.`
+    },
+    {
+      question: `Is ${channel.title} growing?`,
+      answer: `${channel.title} gained ${channel.daily_subscriber_gain >= 0 ? '+' : ''}${formatNumber(channel.daily_subscriber_gain || 0)} subscribers in the last 24 hours (${channel.daily_growth_percent >= 0 ? '+' : ''}${(channel.daily_growth_percent || 0).toFixed(4)}% growth). Their viral status is "${channel.viral_label || 'Stable'}".`
+    },
+    {
+      question: `What country is ${channel.title} from?`,
+      answer: `${channel.title} is a YouTube channel from ${channel.country_name}. You can explore more top YouTube channels from ${channel.country_name} on our country page.`
+    }
+  ];
+
   return (
     <div className="py-8" data-testid="channel-detail-page">
       <ChannelSEO channel={channel} />
       <div className="max-w-7xl mx-auto px-4">
+        {/* Breadcrumb */}
+        <Breadcrumb items={[
+          { label: "Home", href: "/" },
+          { label: channel.country_name, href: `/country/${channel.country_code}` },
+          { label: channel.title }
+        ]} />
+
         <div className="flex gap-6">
           {/* Main Content */}
           <div className="flex-1">
