@@ -763,7 +763,7 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
         try:
             # Search for real YouTube channels from this specific country using YouTube API
             search_results = await youtube_service.search_channels(
-                query=f"popular YouTuber",
+                query="popular YouTuber",
                 region_code=country_code,
                 max_results=3
             )
