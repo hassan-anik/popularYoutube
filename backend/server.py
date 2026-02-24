@@ -1562,13 +1562,22 @@ async def root_sitemap():
     <priority>{priority}</priority>
   </url>''')
     
-    countries = await db.countries.find({}, {"code": 1}).to_list(300)
+    countries = await db.countries.find({}, {"code": 1, "name": 1}).to_list(300)
     for country in countries:
         xml_parts.append(f'''  <url>
     <loc>{base_url}/country/{country["code"]}</loc>
     <lastmod>{today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+  </url>''')
+    
+    # Auto-generated country blog posts
+    for country in countries:
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}/blog/country/{country["code"]}</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
   </url>''')
     
     channels = await db.channels.find(
