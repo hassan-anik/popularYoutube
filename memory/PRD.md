@@ -238,7 +238,7 @@
 ```
 
 ## Known Limitations
-- ~70 countries use placeholder channels due to YouTube API quota limits
+- ~91 countries have no channel data yet (showing "No Data Available")
 - Blog posts are mock/static data (not connected to CMS)
 - Growth charts require historical data collection over time
 
@@ -247,10 +247,24 @@
 - `/app/test_reports/iteration_9.json` - Auto-generated blog posts
 - `/app/test_reports/iteration_8.json` - Top 100, FAQ, Breadcrumbs
 
-## Next Steps / Backlog (P2)
+## Completed This Session (Feb 25, 2026)
+- [x] Frontend code refactoring - Created modular structure with utils/, hooks/, context/, components/
+- [x] Backlink Strategy document created (`/app/BACKLINK_STRATEGY.md`)
+- [x] Data policy confirmed - Only real YouTube data, no placeholder population
+
+## Next Steps / Backlog
+### P1 - High Priority
+- [ ] Continue refactoring App.js - Move page components to /pages folder
+- [ ] Implement data-driven growth charts (Recharts)
+
+### P2 - Medium Priority
 - [ ] Connect blog to real CMS or database
 - [ ] Add Redis caching layer for API responses
+- [ ] Build Viral Prediction Engine with "Viral Score" algorithm
+- [ ] Automatic sitemap regeneration via cron job
+
+### P3 - Low Priority
 - [ ] Implement Sentry error tracking
 - [ ] Add push notifications for ranking changes
 - [ ] Premium tier with API access
-- [ ] Refactor App.js into smaller component files
+- [ ] Fix Last-Modified headers for SEO
