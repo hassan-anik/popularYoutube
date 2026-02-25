@@ -836,6 +836,56 @@ async def populate_empty_countries(background_tasks: BackgroundTasks):
     }
 
 
+@api_router.post("/admin/fix-channel-countries")
+async def fix_channel_countries():
+    """Fix country codes for well-known channels that were misattributed"""
+    
+    # Map of channel_id -> correct country_code
+    # These are well-known channels with verified countries
+    corrections = {
+        # MrBeast - United States
+        "UCX6OQ3DkcsbYNE6H8uQQuVA": {"country_code": "US", "country_name": "United States"},
+        # YouTube Movies - United States
+        "UClgRkhTL3_hImCAmdLfDE4g": {"country_code": "US", "country_name": "United States"},
+        # Music (YouTube) - United States
+        "UC-9-kyTW8ZkZNDHQJ6FgpwQ": {"country_code": "US", "country_name": "United States"},
+        # Dude Perfect - United States  
+        "UCRijo3ddMTht_IHyNSNXpNQ": {"country_code": "US", "country_name": "United States"},
+        # Marshmello - United States
+        "UCEdvpU2pFRCVqU6yIPyTpMQ": {"country_code": "US", "country_name": "United States"},
+        # XXXTENTACION - United States
+        "UCM9r1xn6s30OnlJWb-jc3Sw": {"country_code": "US", "country_name": "United States"},
+        # The Weeknd - Canada
+        "UC0WP5P-ufpRfjbNrmOWwLBQ": {"country_code": "CA", "country_name": "Canada"},
+        # Michael Jackson - United States
+        "UC5OrDvL9DscpcAstz7JnQGA": {"country_code": "US", "country_name": "United States"},
+        # James Charles - United States
+        "UCucot-Zp428OwkyRm2I7v2Q": {"country_code": "US", "country_name": "United States"},
+        # JuegaGerman - Chile
+        "UCYiGq8XF7YQD00x7wAd62Zg": {"country_code": "CL", "country_name": "Chile"},
+        # elrubiusOMG - Spain
+        "UCXazgXDIYyWH-yXLAkcrFxw": {"country_code": "ES", "country_name": "Spain"},
+        # VEGETTA777 - Spain
+        "UCam8T03EOFBsNdR0thrFHdQ": {"country_code": "ES", "country_name": "Spain"},
+    }
+    
+    updated_count = 0
+    for channel_id, correction in corrections.items():
+        result = await db.channels.update_one(
+            {"channel_id": channel_id},
+            {"$set": correction}
+        )
+        if result.modified_count > 0:
+            updated_count += 1
+            logger.info(f"Fixed country for channel {channel_id} to {correction['country_code']}")
+    
+    return {
+        "message": "Channel countries fixed",
+        "updated_count": updated_count,
+        "total_corrections_attempted": len(corrections)
+    }
+
+
 @api_router.delete("/admin/remove-placeholder-channels")
 async def remove_placeholder_channels():
     """Remove all placeholder/fake channel data (channels with _ in channel_id)"""
