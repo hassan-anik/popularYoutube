@@ -11,11 +11,29 @@
 - **Database:** MongoDB
 - **External API:** YouTube Data API v3
 
-## Current Stats (Feb 22, 2026)
-- **197 Countries** - All world countries with channels
-- **200+ Channels** - Top YouTube channels tracked
-- **405 URLs** - In sitemap for SEO
+## Current Stats (Feb 25, 2026)
+- **197 Countries** - All world countries supported
+- **155 Channels** - Top YouTube channels tracked (real data only)
+- **529 Data Points** - Historical tracking records
 - **3 Background Jobs** - Auto-refresh, ranking, growth metrics
+
+## Code Architecture (Refactored Feb 25, 2026)
+```
+/app/frontend/src/
+├── utils/           # Constants, formatting utilities
+│   ├── constants.js # API URLs, site config, country slugs
+│   └── format.js    # Number/date formatting
+├── hooks/           # Custom React hooks
+│   ├── useFavorites.js
+│   └── useSEO.js
+├── context/         # React contexts
+│   └── ThemeContext.jsx
+├── components/
+│   ├── common/      # Header, Footer, Badges, Indicators
+│   ├── ads/         # AdSense components
+│   └── seo/         # Breadcrumb, FAQ, SEO helpers
+└── App.js           # Main app with all page components
+```
 
 ## Core Requirements - ALL COMPLETE ✓
 - [x] Global leaderboard with real-time subscriber counts
