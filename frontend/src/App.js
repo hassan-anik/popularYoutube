@@ -161,8 +161,6 @@ const InFeedAd = ({ index }) => {
 
 // ==================== FAVORITES SYSTEM ====================
 
-const FAVORITES_KEY = 'toptube_favorites';
-
 const getFavorites = () => {
   try {
     const stored = localStorage.getItem(FAVORITES_KEY);
