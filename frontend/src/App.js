@@ -73,52 +73,8 @@ import "@/App.css";
 import { API, API_URL, BACKEND_URL, SITE_NAME, SITE_URL, geoUrl, COUNTRY_SLUGS, BLOG_CATEGORIES, FAVORITES_KEY, THEME_KEY } from './utils/constants';
 import { formatNumber, formatDate, formatShortDate } from './utils/format';
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
-
-// ==================== THEME SYSTEM ====================
-
-const ThemeContext = React.createContext();
-
-const THEME_KEY = 'toptube_theme';
-
-const getInitialTheme = () => {
-  try {
-    const stored = localStorage.getItem(THEME_KEY);
-    if (stored) return stored;
-    // Check system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return 'light';
-    }
-  } catch (e) {}
-  return 'dark';
-};
-
-const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(getInitialTheme);
-
-  useEffect(() => {
-    localStorage.setItem(THEME_KEY, theme);
-    document.documentElement.setAttribute('data-theme', theme);
-    
-    // Update meta theme color
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    if (metaTheme) {
-      metaTheme.setAttribute('content', theme === 'dark' ? '#0a0a0a' : '#ffffff');
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-
-const useTheme = () => React.useContext(ThemeContext);
+// Import theme context
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 // Theme Toggle Button Component
 const ThemeToggle = () => {
