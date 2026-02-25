@@ -883,27 +883,6 @@ const FAQSection = ({ faqs, title = "Frequently Asked Questions" }) => {
 };
 
 // ==================== SEO-FRIENDLY COUNTRY SLUG REDIRECT ====================
-// Maps slugs like "india-youtubers" to country codes like "IN"
-const COUNTRY_SLUGS = {
-  'united-states-youtubers': 'US', 'india-youtubers': 'IN', 'brazil-youtubers': 'BR',
-  'mexico-youtubers': 'MX', 'russia-youtubers': 'RU', 'japan-youtubers': 'JP',
-  'south-korea-youtubers': 'KR', 'united-kingdom-youtubers': 'GB', 'germany-youtubers': 'DE',
-  'france-youtubers': 'FR', 'indonesia-youtubers': 'ID', 'philippines-youtubers': 'PH',
-  'spain-youtubers': 'ES', 'italy-youtubers': 'IT', 'canada-youtubers': 'CA',
-  'australia-youtubers': 'AU', 'argentina-youtubers': 'AR', 'colombia-youtubers': 'CO',
-  'thailand-youtubers': 'TH', 'vietnam-youtubers': 'VN', 'turkey-youtubers': 'TR',
-  'poland-youtubers': 'PL', 'netherlands-youtubers': 'NL', 'pakistan-youtubers': 'PK',
-  'egypt-youtubers': 'EG', 'saudi-arabia-youtubers': 'SA', 'bangladesh-youtubers': 'BD',
-  'china-youtubers': 'CN', 'taiwan-youtubers': 'TW', 'malaysia-youtubers': 'MY',
-  'singapore-youtubers': 'SG', 'sweden-youtubers': 'SE', 'norway-youtubers': 'NO',
-  'denmark-youtubers': 'DK', 'finland-youtubers': 'FI', 'portugal-youtubers': 'PT',
-  'chile-youtubers': 'CL', 'peru-youtubers': 'PE', 'ukraine-youtubers': 'UA',
-  'czech-republic-youtubers': 'CZ', 'romania-youtubers': 'RO', 'greece-youtubers': 'GR',
-  'hungary-youtubers': 'HU', 'israel-youtubers': 'IL', 'uae-youtubers': 'AE',
-  'south-africa-youtubers': 'ZA', 'nigeria-youtubers': 'NG', 'kenya-youtubers': 'KE',
-  'morocco-youtubers': 'MA', 'new-zealand-youtubers': 'NZ', 'ireland-youtubers': 'IE',
-  'austria-youtubers': 'AT', 'belgium-youtubers': 'BE', 'switzerland-youtubers': 'CH'
-};
 
 const CountrySlugRedirect = () => {
   const { slug } = useParams();
