@@ -96,27 +96,6 @@ const ThemeToggle = () => {
   );
 };
 
-// Utility functions
-const formatNumber = (num) => {
-  if (!num) return "0";
-  if (num >= 1000000000) return (num / 1000000000).toFixed(2) + "B";
-  if (num >= 1000000) return (num / 1000000).toFixed(2) + "M";
-  if (num >= 1000) return (num / 1000).toFixed(1) + "K";
-  return num.toString();
-};
-
-const formatDate = (dateStr) => {
-  if (!dateStr) return "";
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-};
-
-const formatShortDate = (dateStr) => {
-  if (!dateStr) return "";
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-};
-
 // ==================== AD COMPONENTS ====================
 
 // AdSense Display Ad Component
