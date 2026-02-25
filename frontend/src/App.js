@@ -4094,8 +4094,6 @@ const CountryBlogPostPage = () => {
 
 // ==================== BLOG ADMIN PAGE ====================
 
-const BLOG_CATEGORIES = ['Trending', 'Guide', 'Analysis', 'Case Study', 'Strategy', 'Gaming', 'News', 'Tips'];
-
 const BlogAdminPage = () => {
   const [searchParams] = useSearchParams();
   const adminKey = searchParams.get('key') || '';
