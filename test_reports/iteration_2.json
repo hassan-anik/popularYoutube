@@ -23,11 +23,11 @@
       "keywords": "Present - YouTube rankings, most subscribed YouTubers, etc.",
       "og_title": "Present",
       "og_description": "Present",
-      "og_url": "https://global-yt-stats.preview.emergentagent.com",
+      "og_url": "https://channel-leaderboard-1.preview.emergentagent.com",
       "og_type": "website",
       "og_site_name": "TopTube World Pro",
       "twitter_title": "Present",
-      "canonical": "https://global-yt-stats.preview.emergentagent.com",
+      "canonical": "https://channel-leaderboard-1.preview.emergentagent.com",
       "json_ld_type": "WebSite",
       "json_ld_valid": true
     },
@@ -40,7 +40,7 @@
       "meta_description_dynamic": true,
       "description_includes_channel_count": true,
       "description_includes_top_channel": true,
-      "canonical": "https://global-yt-stats.preview.emergentagent.com/country/IN",
+      "canonical": "https://channel-leaderboard-1.preview.emergentagent.com/country/IN",
       "json_ld_type": "ItemList",
       "json_ld_valid": true
     },
@@ -62,7 +62,7 @@
       "title_dynamic_channel_count": true,
       "meta_description": "Present",
       "keywords": "Present",
-      "canonical": "https://global-yt-stats.preview.emergentagent.com/leaderboard",
+      "canonical": "https://channel-leaderboard-1.preview.emergentagent.com/leaderboard",
       "json_ld_type": "ItemList",
       "json_ld_valid": true
     },
@@ -72,14 +72,14 @@
       "title_includes_country_count": true,
       "meta_description": "Present",
       "keywords": "Present",
-      "canonical": "https://global-yt-stats.preview.emergentagent.com/countries"
+      "canonical": "https://channel-leaderboard-1.preview.emergentagent.com/countries"
     },
     "trending_page": {
       "status": "PASS",
       "title": "Trending YouTube Channels - Fastest Growing YouTubers 2026",
       "meta_description": "Present",
       "keywords": "Present - trending YouTube channels, fastest growing YouTubers, etc.",
-      "canonical": "https://global-yt-stats.preview.emergentagent.com/trending"
+      "canonical": "https://channel-leaderboard-1.preview.emergentagent.com/trending"
     }
   },
   "seo_implementation_notes": {
