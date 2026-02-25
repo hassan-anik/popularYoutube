@@ -507,10 +507,6 @@ const NewsletterSignup = ({ compact = false }) => {
 
 // ==================== SEO COMPONENTS ====================
 
-// Base site info
-const SITE_NAME = "TopTube World Pro";
-const SITE_URL = process.env.REACT_APP_BACKEND_URL || "https://toptubeworldpro.com";
-
 // Helper component for JSON-LD structured data
 const JsonLd = ({ data }) => (
   <script
