@@ -69,9 +69,9 @@ import {
 } from "lucide-react";
 import "@/App.css";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
-const API_URL = API;
+// Import from modular structure
+import { API, API_URL, BACKEND_URL, SITE_NAME, SITE_URL, geoUrl, COUNTRY_SLUGS, BLOG_CATEGORIES, FAVORITES_KEY, THEME_KEY } from './utils/constants';
+import { formatNumber, formatDate, formatShortDate } from './utils/format';
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
