@@ -210,25 +210,31 @@
 - Countries without real data now show "No Data Available" message
 - Only authentic, verified YouTube channel data is displayed
 
-## Files Structure
+## Files Structure (Updated Feb 25, 2026)
 ```
 /app/
 ├── backend/
 │   ├── server.py              # Main FastAPI app
-│   ├── services/
-│   │   ├── youtube_service.py
-│   │   ├── ranking_service.py
-│   │   ├── growth_analyzer.py
-│   │   └── scheduler_service.py
 │   └── .env
-└── frontend/
-    ├── public/
-    │   ├── index.html         # GA4 + AdSense
-    │   ├── manifest.json      # PWA manifest
-    │   ├── sw.js              # Service worker
-    │   └── robots.txt
-    └── src/
-        └── App.js             # All pages (~3200 lines)
+├── frontend/
+│   ├── public/
+│   │   ├── index.html         # GA4 + AdSense
+│   │   ├── manifest.json      # PWA manifest
+│   │   ├── sw.js              # Service worker
+│   │   └── robots.txt
+│   └── src/
+│       ├── utils/             # NEW: Constants, formatting
+│       ├── hooks/             # NEW: useFavorites, useSEO
+│       ├── context/           # NEW: ThemeContext
+│       ├── components/
+│       │   ├── common/        # NEW: Header, Footer, etc.
+│       │   ├── ads/           # NEW: AdSense components
+│       │   ├── seo/           # NEW: Breadcrumb, FAQ
+│       │   └── ui/            # Shadcn components
+│       └── App.js             # Pages (~4800 lines)
+├── BACKLINK_STRATEGY.md       # NEW: SEO backlink guide
+└── memory/
+    └── PRD.md
 ```
 
 ## Known Limitations
