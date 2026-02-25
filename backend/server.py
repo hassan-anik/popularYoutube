@@ -886,6 +886,127 @@ async def fix_channel_countries():
     }
 
 
+@api_router.post("/admin/add-top-global-channels")
+async def add_top_global_channels(background_tasks: BackgroundTasks):
+    """Add the real top global YouTube channels by subscriber count"""
+    
+    # Real top YouTube channels with their verified data (as of 2024-2025)
+    # Channel IDs from actual YouTube
+    top_channels = [
+        # T-Series - India - 270M+
+        {"channel_id": "UCq-Fj5jknLsUf-MWSy4_brA", "country_code": "IN", "country_name": "India"},
+        # Cocomelon - US - 175M+
+        {"channel_id": "UCbCmjCuTUZos6Inko4u57UQ", "country_code": "US", "country_name": "United States"},
+        # Sony Entertainment Television India
+        {"channel_id": "UCpEhnqL0y41EpW2TvWAHD7Q", "country_code": "IN", "country_name": "India"},
+        # Kids Diana Show - US - 120M+
+        {"channel_id": "UCk8GzjMOrta8yxDcKfylJYw", "country_code": "US", "country_name": "United States"},
+        # PewDiePie - Sweden - 111M+
+        {"channel_id": "UC-lHJZR3Gqxm24_Vd_AJ5Yw", "country_code": "SE", "country_name": "Sweden"},
+        # Like Nastya - US - 115M+
+        {"channel_id": "UCJplp5SjeGSdVdwsfb9Q7lQ", "country_code": "US", "country_name": "United States"},
+        # Vlad and Niki - US - 115M+
+        {"channel_id": "UCvlE5gTbOvjiolFlEm-c_Ow", "country_code": "US", "country_name": "United States"},
+        # Zee Music Company - India - 105M+
+        {"channel_id": "UCFFbwnve3yF62-tVXkTyHqg", "country_code": "IN", "country_name": "India"},
+        # WWE - US - 100M+
+        {"channel_id": "UCJ5v_MCY6GNUBTO8-D3XoAg", "country_code": "US", "country_name": "United States"},
+        # BLACKPINK - South Korea - 95M+
+        {"channel_id": "UCOmHUn--16B90oW2L6FRR3A", "country_code": "KR", "country_name": "South Korea"},
+        # Goldmines - India - 95M+
+        {"channel_id": "UCyoXW-Dse7fURq30EWl_CUA", "country_code": "IN", "country_name": "India"},
+        # 5-Minute Crafts - Cyprus - 80M+
+        {"channel_id": "UC295-Dw_tDNtZXFeAPAQKEw", "country_code": "CY", "country_name": "Cyprus"},
+        # BANGTANTV (BTS) - South Korea - 75M+
+        {"channel_id": "UCLkAepWjdylmXSltofFvsYQ", "country_code": "KR", "country_name": "South Korea"},
+        # Justin Bieber - Canada - 73M+
+        {"channel_id": "UCHkj014U2CQ2Nv0UZeYpE_A", "country_code": "CA", "country_name": "Canada"},
+        # HYBE LABELS - South Korea - 75M+
+        {"channel_id": "UC3IZKseVpdzPSBaWxBxundA", "country_code": "KR", "country_name": "South Korea"},
+        # Shemaroo Filmi Gaane - India
+        {"channel_id": "UCF1JIbMUs6uqoZEY1Haw0GQ", "country_code": "IN", "country_name": "India"},
+        # Movieclips - US
+        {"channel_id": "UC3gNmTGu-TTbFPpfSs5kNkg", "country_code": "US", "country_name": "United States"},
+        # Sony SAB - India
+        {"channel_id": "UC6-F5tO8uklgE9Zy8IvbdFw", "country_code": "IN", "country_name": "India"},
+        # ChuChu TV - India
+        {"channel_id": "UCBnDOF4LK2a48kz3TQEX3Ag", "country_code": "IN", "country_name": "India"},
+        # Eminem - US
+        {"channel_id": "UCfM3zsQsOnfWNUppiycmBuw", "country_code": "US", "country_name": "United States"},
+    ]
+    
+    added_count = 0
+    updated_count = 0
+    failed_count = 0
+    
+    for channel_info in top_channels:
+        channel_id = channel_info["channel_id"]
+        
+        try:
+            # Check if channel already exists
+            existing = await db.channels.find_one({"channel_id": channel_id})
+            
+            # Fetch fresh data from YouTube API
+            yt_data = await youtube_service.get_channel_stats(channel_id)
+            
+            if not yt_data:
+                logger.warning(f"Could not fetch data for channel {channel_id}")
+                failed_count += 1
+                continue
+            
+            channel_doc = {
+                "channel_id": channel_id,
+                "title": yt_data.get("title", "Unknown"),
+                "description": yt_data.get("description", ""),
+                "custom_url": yt_data.get("custom_url", ""),
+                "thumbnail_url": yt_data.get("thumbnail_url", ""),
+                "subscriber_count": yt_data.get("subscriber_count", 0),
+                "view_count": yt_data.get("view_count", 0),
+                "video_count": yt_data.get("video_count", 0),
+                "country_code": channel_info["country_code"],
+                "country_name": channel_info["country_name"],
+                "published_at": yt_data.get("published_at", ""),
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+                "is_active": True,
+                "viral_label": "Stable",
+                "viral_score": 0.0,
+                "daily_subscriber_gain": 0,
+                "daily_growth_percent": 0.0,
+                "weekly_growth_percent": 0,
+                "monthly_growth_percent": 0,
+            }
+            
+            if existing:
+                await db.channels.update_one(
+                    {"channel_id": channel_id},
+                    {"$set": channel_doc}
+                )
+                updated_count += 1
+                logger.info(f"Updated channel: {channel_doc['title']}")
+            else:
+                channel_doc["created_at"] = datetime.now(timezone.utc).isoformat()
+                channel_doc["current_rank"] = 0
+                channel_doc["previous_rank"] = 0
+                await db.channels.insert_one(channel_doc)
+                added_count += 1
+                logger.info(f"Added channel: {channel_doc['title']}")
+                
+        except Exception as e:
+            logger.error(f"Error processing channel {channel_id}: {e}")
+            failed_count += 1
+            continue
+    
+    # Update all rankings
+    background_tasks.add_task(ranking_service.update_all_rankings)
+    
+    return {
+        "message": "Top global channels processed",
+        "added": added_count,
+        "updated": updated_count,
+        "failed": failed_count
+    }
+
+
 @api_router.delete("/admin/remove-placeholder-channels")
 async def remove_placeholder_channels():
     """Remove all placeholder/fake channel data (channels with _ in channel_id)"""
