@@ -916,20 +916,20 @@ async def remove_misattributed_channels():
         {"channel_id": "UCMHKlaUOwMvgZ339zcjEI2A", "wrong_country": "IT"},  # Stassiebaby (US)
         
         # Remove from Turkey - not Turkish
-        {"channel_id": "UC-YO7JkqlrBsgMGiAlqQ7Tg", "wrong_country": "TR"},  # Mo Vlogs (UAE)
-        {"channel_id": "UCq5ANZhwtJPLokKxP25MyuA", "wrong_country": "TR"},  # Ducky Bhai (Pakistan)
+        {"channel_id": "UC_hoQDD6zKcIqpIYLsFbBeA", "wrong_country": "TR"},  # Mo Vlogs (UAE)
+        {"channel_id": "UC_c-RTowPbIlzMkIa_O7s6Q", "wrong_country": "TR"},  # Ducky Bhai (Pakistan)
         
         # Remove from Vietnam - not Vietnamese  
-        {"channel_id": "UCnr9mXQGjCp6ZSLWt3E9ruQ", "wrong_country": "VN"},  # Stokes Twins (US)
+        {"channel_id": "UCbp9MyKCTEww4CxEzc_Tp0Q", "wrong_country": "VN"},  # Stokes Twins (US)
         
         # Remove from Argentina - not Argentine
-        {"channel_id": "UCvPRgjCz3nJrdPVHgPvRe0w", "wrong_country": "AR"},  # Ibai (Spanish)
+        {"channel_id": "UCaY_-ksFSQtTGk0y1HA_3YQ", "wrong_country": "AR"},  # Ibai (Spanish)
         
         # Remove from Kenya - not Kenyan
-        {"channel_id": "UCMtFAi84ehTSYSE9XoHefig", "wrong_country": "KE"},  # Mrwhosetheboss (UK)
+        {"channel_id": "UCMiJRAwDNSNzuYeN2uWa0pA", "wrong_country": "KE"},  # Mrwhosetheboss (UK)
         
         # Remove from South Africa - not South African
-        {"channel_id": "UCnUYZLuoy1rq1aVMwx4aTzw", "wrong_country": "ZA"},  # David Dobrik (US)
+        {"channel_id": "UCmh5gdwCx6lN7gEC20leNVA", "wrong_country": "ZA"},  # David Dobrik (US)
     ]
     
     removed_count = 0
