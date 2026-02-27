@@ -578,10 +578,11 @@ const useSEO = ({ title, description, keywords, canonical, ogType = "website", o
 
 // Home Page SEO
 const HomeSEO = () => {
+  const currentYear = new Date().getFullYear();
   useSEO({
-    title: "TopTube World Pro - Global YouTube Channel Rankings & Analytics",
-    description: "Track and analyze the most subscribed YouTube channels worldwide. Real-time rankings, growth predictions, and analytics for 197 countries. Discover top YouTubers by country.",
-    keywords: "YouTube rankings, most subscribed YouTubers, top YouTube channels, YouTube analytics, subscriber count, YouTube growth tracker, global YouTube statistics",
+    title: `Most Subscribed YouTube Channels ${currentYear} - Live Rankings & Stats`,
+    description: `#1 MrBeast (468M) vs T-Series (310M) - See the real-time most subscribed YouTube channels ${currentYear}. Updated live with subscriber counts, growth rates & rankings for 197 countries.`,
+    keywords: `most subscribed youtube channel ${currentYear}, most subscribed youtubers ${currentYear}, top youtube channels ${currentYear}, youtube rankings ${currentYear}, fastest growing youtube channels, mrbeast subscribers, t-series subscribers`,
     canonical: SITE_URL
   });
   
@@ -590,7 +591,7 @@ const HomeSEO = () => {
     "@type": "WebSite",
     "name": SITE_NAME,
     "url": SITE_URL,
-    "description": "Track and analyze the most subscribed YouTube channels worldwide with real-time rankings and growth predictions.",
+    "description": `Live rankings of the most subscribed YouTube channels in ${currentYear}. Track MrBeast, T-Series, Cocomelon and top YouTubers worldwide.`,
     "potentialAction": {
       "@type": "SearchAction",
       "target": `${SITE_URL}/countries`,
