@@ -1933,8 +1933,8 @@ async def trigger_daily_blog(background_tasks: BackgroundTasks):
 @api_router.get("/blog/posts/auto-generated")
 async def get_auto_generated_posts(limit: int = Query(10, ge=1, le=50)):
     """Get auto-generated blog posts"""
-    posts = await db.blogs.find(
-        {"is_auto_generated": True, "is_published": True},
+    posts = await db.blog_posts.find(
+        {"is_auto_generated": True, "status": "published"},
         {"_id": 0}
     ).sort("published_at", -1).limit(limit).to_list(limit)
     
