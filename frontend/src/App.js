@@ -796,15 +796,29 @@ const Top100SEO = ({ channels }) => {
 
 const Breadcrumb = ({ items }) => {
   // Generate JSON-LD schema for breadcrumbs
+  // Google requires "item" field for all items except the last (current page)
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": items.map((item, idx) => ({
-      "@type": "ListItem",
-      "position": idx + 1,
-      "name": item.label,
-      "item": item.href ? `${SITE_URL}${item.href}` : undefined
-    }))
+    "itemListElement": items.map((item, idx) => {
+      const isLastItem = idx === items.length - 1;
+      const listItem = {
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": item.label
+      };
+      
+      // Add "item" URL for all items except the last one (current page)
+      if (!isLastItem && item.href) {
+        listItem.item = `${SITE_URL}${item.href}`;
+      } else if (!isLastItem) {
+        // If no href but not last item, use SITE_URL as fallback
+        listItem.item = SITE_URL;
+      }
+      // Last item should NOT have "item" field per Google guidelines
+      
+      return listItem;
+    })
   };
 
   return (
