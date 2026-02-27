@@ -3366,7 +3366,6 @@ const ComparePage = () => {
         {/* Breadcrumb */}
         <Breadcrumb items={[
           { label: "Home", href: "/" },
-          { label: "Tools", href: null },
           { label: "Compare Channels" }
         ]} />
         
