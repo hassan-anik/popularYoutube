@@ -3942,10 +3942,52 @@ const BlogPostPage = () => {
         )}
 
         <div className="prose prose-invert prose-lg max-w-none">
-          <div 
-            className="text-gray-300 leading-relaxed whitespace-pre-wrap"
-            dangerouslySetInnerHTML={{ __html: post.content?.replace(/\n/g, '<br/>') || post.excerpt }}
-          />
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]}
+            className="text-gray-300 leading-relaxed markdown-content"
+            components={{
+              table: ({node, ...props}) => (
+                <div className="overflow-x-auto my-4">
+                  <table className="min-w-full border border-[#333] rounded-lg" {...props} />
+                </div>
+              ),
+              thead: ({node, ...props}) => (
+                <thead className="bg-[#1a1a1a]" {...props} />
+              ),
+              th: ({node, ...props}) => (
+                <th className="px-4 py-2 text-left text-white font-semibold border-b border-[#333]" {...props} />
+              ),
+              td: ({node, ...props}) => (
+                <td className="px-4 py-2 text-gray-300 border-b border-[#222]" {...props} />
+              ),
+              h2: ({node, ...props}) => (
+                <h2 className="text-2xl font-bold text-white mt-8 mb-4" {...props} />
+              ),
+              h3: ({node, ...props}) => (
+                <h3 className="text-xl font-semibold text-white mt-6 mb-3" {...props} />
+              ),
+              p: ({node, ...props}) => (
+                <p className="text-gray-300 mb-4" {...props} />
+              ),
+              ul: ({node, ...props}) => (
+                <ul className="list-disc list-inside text-gray-300 mb-4 space-y-1" {...props} />
+              ),
+              li: ({node, ...props}) => (
+                <li className="text-gray-300" {...props} />
+              ),
+              strong: ({node, ...props}) => (
+                <strong className="text-white font-semibold" {...props} />
+              ),
+              hr: ({node, ...props}) => (
+                <hr className="border-[#333] my-6" {...props} />
+              ),
+              em: ({node, ...props}) => (
+                <em className="text-gray-400 italic" {...props} />
+              ),
+            }}
+          >
+            {post.content || post.excerpt}
+          </ReactMarkdown>
         </div>
 
         <footer className="mt-12 pt-8 border-t border-[#222]">
