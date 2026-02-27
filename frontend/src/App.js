@@ -701,21 +701,22 @@ const ChannelSEO = ({ channel }) => {
 
 // Leaderboard Page SEO
 const LeaderboardSEO = ({ totalChannels }) => {
-  const title = `Global YouTube Leaderboard - Top ${totalChannels || 100} Most Subscribed Channels ${new Date().getFullYear()}`;
-  const description = `Complete ranking of the world's most subscribed YouTube channels. Live subscriber counts, daily growth, and viral status for ${totalChannels || 100}+ channels. Updated in real-time.`;
+  const currentYear = new Date().getFullYear();
+  const title = `YouTube Rankings ${currentYear} - Most Subscribed Channels Live Leaderboard`;
+  const description = `Live YouTube rankings ${currentYear}: MrBeast vs T-Series subscriber battle! Track ${totalChannels || 100}+ most subscribed YouTube channels with real-time counts, daily growth & viral status.`;
   const pageUrl = `${SITE_URL}/leaderboard`;
   
   useSEO({
     title,
     description,
-    keywords: "YouTube leaderboard, most subscribed YouTube channels, top YouTubers worldwide, global YouTube rankings, YouTube subscriber count, biggest YouTube channels",
+    keywords: `youtube ranking ${currentYear}, most subscribed youtube channels ${currentYear}, youtube leaderboard ${currentYear}, top youtubers worldwide, mrbeast subscribers, t-series subscribers, pewdiepie youtube stats`,
     canonical: pageUrl
   });
   
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Global YouTube Channel Leaderboard",
+    "name": `YouTube Channel Rankings ${currentYear}`,
     "description": description,
     "url": pageUrl,
     "numberOfItems": totalChannels || 100
@@ -726,8 +727,9 @@ const LeaderboardSEO = ({ totalChannels }) => {
 
 // Countries List Page SEO
 const CountriesListSEO = ({ totalCountries }) => {
-  const title = `YouTube Rankings by Country - Browse ${totalCountries || 197} Countries | TopTube World Pro`;
-  const description = `Explore YouTube channel rankings for ${totalCountries || 197} countries worldwide. Find the most subscribed YouTubers in any country. Real-time subscriber counts and growth analytics.`;
+  const currentYear = new Date().getFullYear();
+  const title = `YouTube Rankings by Country ${currentYear} - Top YouTubers in ${totalCountries || 197} Countries`;
+  const description = `Find top YouTubers in any country ${currentYear}. Browse YouTube channel rankings for ${totalCountries || 197} countries - India, USA, Brazil, Indonesia & more. Live subscriber counts.`;
   const pageUrl = `${SITE_URL}/countries`;
   
   useSEO({
