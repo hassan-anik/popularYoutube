@@ -69,7 +69,7 @@ class AutoBlogService:
                 "content": content,
                 "excerpt": f"Daily update on the most subscribed YouTube channels. See who's leading the global rankings and which channels are growing fastest on {date_str}.",
                 "category": "Daily Rankings",
-                "author": "TopTube Bot",
+                "author": "TopTube Editorial",
                 "status": "published",
                 "published_at": today.isoformat(),
                 "created_at": today.isoformat(),
