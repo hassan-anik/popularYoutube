@@ -1,0 +1,1381 @@
+[
+  {
+    "code": "US",
+    "name": "United States",
+    "flag_emoji": "\ud83c\uddfa\ud83c\uddf8",
+    "region": "North America",
+    "created_at": "2026-02-22T01:42:30.925548+00:00"
+  },
+  {
+    "code": "IN",
+    "name": "India",
+    "flag_emoji": "\ud83c\uddee\ud83c\uddf3",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:42:31.175958+00:00"
+  },
+  {
+    "code": "BR",
+    "name": "Brazil",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddf7",
+    "region": "South America",
+    "created_at": "2026-02-22T01:42:31.332719+00:00"
+  },
+  {
+    "code": "MX",
+    "name": "Mexico",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddfd",
+    "region": "North America",
+    "created_at": "2026-02-22T01:42:31.494890+00:00"
+  },
+  {
+    "code": "RU",
+    "name": "Russia",
+    "flag_emoji": "\ud83c\uddf7\ud83c\uddfa",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:42:31.531257+00:00"
+  },
+  {
+    "code": "JP",
+    "name": "Japan",
+    "flag_emoji": "\ud83c\uddef\ud83c\uddf5",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:42:31.567730+00:00"
+  },
+  {
+    "code": "KR",
+    "name": "South Korea",
+    "flag_emoji": "\ud83c\uddf0\ud83c\uddf7",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:42:31.568991+00:00"
+  },
+  {
+    "code": "GB",
+    "name": "United Kingdom",
+    "flag_emoji": "\ud83c\uddec\ud83c\udde7",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:42:31.603252+00:00"
+  },
+  {
+    "code": "DE",
+    "name": "Germany",
+    "flag_emoji": "\ud83c\udde9\ud83c\uddea",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:42:31.689527+00:00"
+  },
+  {
+    "code": "FR",
+    "name": "France",
+    "flag_emoji": "\ud83c\uddeb\ud83c\uddf7",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:42:31.725996+00:00"
+  },
+  {
+    "code": "ID",
+    "name": "Indonesia",
+    "flag_emoji": "\ud83c\uddee\ud83c\udde9",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:42:31.726830+00:00"
+  },
+  {
+    "code": "PH",
+    "name": "Philippines",
+    "flag_emoji": "\ud83c\uddf5\ud83c\udded",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:42:31.755191+00:00"
+  },
+  {
+    "code": "TH",
+    "name": "Thailand",
+    "flag_emoji": "\ud83c\uddf9\ud83c\udded",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:42:31.788491+00:00"
+  },
+  {
+    "code": "VN",
+    "name": "Vietnam",
+    "flag_emoji": "\ud83c\uddfb\ud83c\uddf3",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:42:31.789791+00:00"
+  },
+  {
+    "code": "ES",
+    "name": "Spain",
+    "flag_emoji": "\ud83c\uddea\ud83c\uddf8",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:42:31.790343+00:00"
+  },
+  {
+    "code": "AR",
+    "name": "Argentina",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddf7",
+    "region": "South America",
+    "created_at": "2026-02-22T01:42:31.873688+00:00"
+  },
+  {
+    "code": "CO",
+    "name": "Colombia",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddf4",
+    "region": "South America",
+    "created_at": "2026-02-22T01:42:31.874598+00:00"
+  },
+  {
+    "code": "PK",
+    "name": "Pakistan",
+    "flag_emoji": "\ud83c\uddf5\ud83c\uddf0",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:42:31.875256+00:00"
+  },
+  {
+    "code": "BD",
+    "name": "Bangladesh",
+    "flag_emoji": "\ud83c\udde7\ud83c\udde9",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:42:31.875874+00:00"
+  },
+  {
+    "code": "CA",
+    "name": "Canada",
+    "flag_emoji": "\ud83c\udde8\ud83c\udde6",
+    "region": "North America",
+    "created_at": "2026-02-22T01:42:31.876474+00:00"
+  },
+  {
+    "code": "DZ",
+    "name": "Algeria",
+    "flag_emoji": "\ud83c\udde9\ud83c\uddff",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.908530+00:00"
+  },
+  {
+    "code": "AO",
+    "name": "Angola",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddf4",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.909061+00:00"
+  },
+  {
+    "code": "BJ",
+    "name": "Benin",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddef",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.909503+00:00"
+  },
+  {
+    "code": "BW",
+    "name": "Botswana",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddfc",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.909864+00:00"
+  },
+  {
+    "code": "BF",
+    "name": "Burkina Faso",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddeb",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.910215+00:00"
+  },
+  {
+    "code": "BI",
+    "name": "Burundi",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddee",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.910555+00:00"
+  },
+  {
+    "code": "CV",
+    "name": "Cape Verde",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddfb",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.910866+00:00"
+  },
+  {
+    "code": "CM",
+    "name": "Cameroon",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddf2",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.911221+00:00"
+  },
+  {
+    "code": "CF",
+    "name": "Central African Republic",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddeb",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.911523+00:00"
+  },
+  {
+    "code": "TD",
+    "name": "Chad",
+    "flag_emoji": "\ud83c\uddf9\ud83c\udde9",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.911796+00:00"
+  },
+  {
+    "code": "KM",
+    "name": "Comoros",
+    "flag_emoji": "\ud83c\uddf0\ud83c\uddf2",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.912055+00:00"
+  },
+  {
+    "code": "CG",
+    "name": "Congo",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddec",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.912346+00:00"
+  },
+  {
+    "code": "CD",
+    "name": "DR Congo",
+    "flag_emoji": "\ud83c\udde8\ud83c\udde9",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.912607+00:00"
+  },
+  {
+    "code": "DJ",
+    "name": "Djibouti",
+    "flag_emoji": "\ud83c\udde9\ud83c\uddef",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.912854+00:00"
+  },
+  {
+    "code": "EG",
+    "name": "Egypt",
+    "flag_emoji": "\ud83c\uddea\ud83c\uddec",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.913111+00:00"
+  },
+  {
+    "code": "GQ",
+    "name": "Equatorial Guinea",
+    "flag_emoji": "\ud83c\uddec\ud83c\uddf6",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.913385+00:00"
+  },
+  {
+    "code": "ER",
+    "name": "Eritrea",
+    "flag_emoji": "\ud83c\uddea\ud83c\uddf7",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.913639+00:00"
+  },
+  {
+    "code": "SZ",
+    "name": "Eswatini",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddff",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.913899+00:00"
+  },
+  {
+    "code": "ET",
+    "name": "Ethiopia",
+    "flag_emoji": "\ud83c\uddea\ud83c\uddf9",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.914152+00:00"
+  },
+  {
+    "code": "GA",
+    "name": "Gabon",
+    "flag_emoji": "\ud83c\uddec\ud83c\udde6",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.914443+00:00"
+  },
+  {
+    "code": "GM",
+    "name": "Gambia",
+    "flag_emoji": "\ud83c\uddec\ud83c\uddf2",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.914705+00:00"
+  },
+  {
+    "code": "GH",
+    "name": "Ghana",
+    "flag_emoji": "\ud83c\uddec\ud83c\udded",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.914953+00:00"
+  },
+  {
+    "code": "GN",
+    "name": "Guinea",
+    "flag_emoji": "\ud83c\uddec\ud83c\uddf3",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.915218+00:00"
+  },
+  {
+    "code": "GW",
+    "name": "Guinea-Bissau",
+    "flag_emoji": "\ud83c\uddec\ud83c\uddfc",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.915544+00:00"
+  },
+  {
+    "code": "CI",
+    "name": "Ivory Coast",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddee",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.915903+00:00"
+  },
+  {
+    "code": "KE",
+    "name": "Kenya",
+    "flag_emoji": "\ud83c\uddf0\ud83c\uddea",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.916209+00:00"
+  },
+  {
+    "code": "LS",
+    "name": "Lesotho",
+    "flag_emoji": "\ud83c\uddf1\ud83c\uddf8",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.916566+00:00"
+  },
+  {
+    "code": "LR",
+    "name": "Liberia",
+    "flag_emoji": "\ud83c\uddf1\ud83c\uddf7",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.916888+00:00"
+  },
+  {
+    "code": "LY",
+    "name": "Libya",
+    "flag_emoji": "\ud83c\uddf1\ud83c\uddfe",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.917169+00:00"
+  },
+  {
+    "code": "MG",
+    "name": "Madagascar",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddec",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.917446+00:00"
+  },
+  {
+    "code": "MW",
+    "name": "Malawi",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddfc",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.917705+00:00"
+  },
+  {
+    "code": "ML",
+    "name": "Mali",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddf1",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.917955+00:00"
+  },
+  {
+    "code": "MR",
+    "name": "Mauritania",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddf7",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.918216+00:00"
+  },
+  {
+    "code": "MU",
+    "name": "Mauritius",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddfa",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.918482+00:00"
+  },
+  {
+    "code": "MA",
+    "name": "Morocco",
+    "flag_emoji": "\ud83c\uddf2\ud83c\udde6",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.918735+00:00"
+  },
+  {
+    "code": "MZ",
+    "name": "Mozambique",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddff",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.918980+00:00"
+  },
+  {
+    "code": "NA",
+    "name": "Namibia",
+    "flag_emoji": "\ud83c\uddf3\ud83c\udde6",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.919246+00:00"
+  },
+  {
+    "code": "NE",
+    "name": "Niger",
+    "flag_emoji": "\ud83c\uddf3\ud83c\uddea",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.919496+00:00"
+  },
+  {
+    "code": "NG",
+    "name": "Nigeria",
+    "flag_emoji": "\ud83c\uddf3\ud83c\uddec",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.919744+00:00"
+  },
+  {
+    "code": "RW",
+    "name": "Rwanda",
+    "flag_emoji": "\ud83c\uddf7\ud83c\uddfc",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.919986+00:00"
+  },
+  {
+    "code": "ST",
+    "name": "S\u00e3o Tom\u00e9 and Pr\u00edncipe",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddf9",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.920252+00:00"
+  },
+  {
+    "code": "SN",
+    "name": "Senegal",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddf3",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.920510+00:00"
+  },
+  {
+    "code": "SC",
+    "name": "Seychelles",
+    "flag_emoji": "\ud83c\uddf8\ud83c\udde8",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.920757+00:00"
+  },
+  {
+    "code": "SL",
+    "name": "Sierra Leone",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddf1",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.921002+00:00"
+  },
+  {
+    "code": "SO",
+    "name": "Somalia",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddf4",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.921273+00:00"
+  },
+  {
+    "code": "ZA",
+    "name": "South Africa",
+    "flag_emoji": "\ud83c\uddff\ud83c\udde6",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.921523+00:00"
+  },
+  {
+    "code": "SS",
+    "name": "South Sudan",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddf8",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.921769+00:00"
+  },
+  {
+    "code": "SD",
+    "name": "Sudan",
+    "flag_emoji": "\ud83c\uddf8\ud83c\udde9",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.922015+00:00"
+  },
+  {
+    "code": "TZ",
+    "name": "Tanzania",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddff",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.922287+00:00"
+  },
+  {
+    "code": "TG",
+    "name": "Togo",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddec",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.922541+00:00"
+  },
+  {
+    "code": "TN",
+    "name": "Tunisia",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddf3",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.922788+00:00"
+  },
+  {
+    "code": "UG",
+    "name": "Uganda",
+    "flag_emoji": "\ud83c\uddfa\ud83c\uddec",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.923032+00:00"
+  },
+  {
+    "code": "ZM",
+    "name": "Zambia",
+    "flag_emoji": "\ud83c\uddff\ud83c\uddf2",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.923305+00:00"
+  },
+  {
+    "code": "ZW",
+    "name": "Zimbabwe",
+    "flag_emoji": "\ud83c\uddff\ud83c\uddfc",
+    "region": "Africa",
+    "created_at": "2026-02-22T01:53:16.923552+00:00"
+  },
+  {
+    "code": "AF",
+    "name": "Afghanistan",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddeb",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.923794+00:00"
+  },
+  {
+    "code": "AM",
+    "name": "Armenia",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddf2",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.924038+00:00"
+  },
+  {
+    "code": "AZ",
+    "name": "Azerbaijan",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddff",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.924308+00:00"
+  },
+  {
+    "code": "BH",
+    "name": "Bahrain",
+    "flag_emoji": "\ud83c\udde7\ud83c\udded",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.924557+00:00"
+  },
+  {
+    "code": "BT",
+    "name": "Bhutan",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddf9",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.924804+00:00"
+  },
+  {
+    "code": "BN",
+    "name": "Brunei",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddf3",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.925046+00:00"
+  },
+  {
+    "code": "KH",
+    "name": "Cambodia",
+    "flag_emoji": "\ud83c\uddf0\ud83c\udded",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.925320+00:00"
+  },
+  {
+    "code": "CN",
+    "name": "China",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddf3",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.925571+00:00"
+  },
+  {
+    "code": "CY",
+    "name": "Cyprus",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddfe",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.925818+00:00"
+  },
+  {
+    "code": "GE",
+    "name": "Georgia",
+    "flag_emoji": "\ud83c\uddec\ud83c\uddea",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.926063+00:00"
+  },
+  {
+    "code": "IR",
+    "name": "Iran",
+    "flag_emoji": "\ud83c\uddee\ud83c\uddf7",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.926345+00:00"
+  },
+  {
+    "code": "IQ",
+    "name": "Iraq",
+    "flag_emoji": "\ud83c\uddee\ud83c\uddf6",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.926604+00:00"
+  },
+  {
+    "code": "IL",
+    "name": "Israel",
+    "flag_emoji": "\ud83c\uddee\ud83c\uddf1",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.926849+00:00"
+  },
+  {
+    "code": "JO",
+    "name": "Jordan",
+    "flag_emoji": "\ud83c\uddef\ud83c\uddf4",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.927095+00:00"
+  },
+  {
+    "code": "KZ",
+    "name": "Kazakhstan",
+    "flag_emoji": "\ud83c\uddf0\ud83c\uddff",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.927370+00:00"
+  },
+  {
+    "code": "KW",
+    "name": "Kuwait",
+    "flag_emoji": "\ud83c\uddf0\ud83c\uddfc",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.927621+00:00"
+  },
+  {
+    "code": "KG",
+    "name": "Kyrgyzstan",
+    "flag_emoji": "\ud83c\uddf0\ud83c\uddec",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.927866+00:00"
+  },
+  {
+    "code": "LA",
+    "name": "Laos",
+    "flag_emoji": "\ud83c\uddf1\ud83c\udde6",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.928104+00:00"
+  },
+  {
+    "code": "LB",
+    "name": "Lebanon",
+    "flag_emoji": "\ud83c\uddf1\ud83c\udde7",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.928364+00:00"
+  },
+  {
+    "code": "MY",
+    "name": "Malaysia",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddfe",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.928610+00:00"
+  },
+  {
+    "code": "MV",
+    "name": "Maldives",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddfb",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.928851+00:00"
+  },
+  {
+    "code": "MN",
+    "name": "Mongolia",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddf3",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.929093+00:00"
+  },
+  {
+    "code": "MM",
+    "name": "Myanmar",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddf2",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.929350+00:00"
+  },
+  {
+    "code": "NP",
+    "name": "Nepal",
+    "flag_emoji": "\ud83c\uddf3\ud83c\uddf5",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.929594+00:00"
+  },
+  {
+    "code": "KP",
+    "name": "North Korea",
+    "flag_emoji": "\ud83c\uddf0\ud83c\uddf5",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.929839+00:00"
+  },
+  {
+    "code": "OM",
+    "name": "Oman",
+    "flag_emoji": "\ud83c\uddf4\ud83c\uddf2",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.930082+00:00"
+  },
+  {
+    "code": "PS",
+    "name": "Palestine",
+    "flag_emoji": "\ud83c\uddf5\ud83c\uddf8",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.930336+00:00"
+  },
+  {
+    "code": "QA",
+    "name": "Qatar",
+    "flag_emoji": "\ud83c\uddf6\ud83c\udde6",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.930589+00:00"
+  },
+  {
+    "code": "SA",
+    "name": "Saudi Arabia",
+    "flag_emoji": "\ud83c\uddf8\ud83c\udde6",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.930835+00:00"
+  },
+  {
+    "code": "SG",
+    "name": "Singapore",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddec",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.931079+00:00"
+  },
+  {
+    "code": "LK",
+    "name": "Sri Lanka",
+    "flag_emoji": "\ud83c\uddf1\ud83c\uddf0",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.931334+00:00"
+  },
+  {
+    "code": "SY",
+    "name": "Syria",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddfe",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.931584+00:00"
+  },
+  {
+    "code": "TW",
+    "name": "Taiwan",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddfc",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.931828+00:00"
+  },
+  {
+    "code": "TJ",
+    "name": "Tajikistan",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddef",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.932072+00:00"
+  },
+  {
+    "code": "TL",
+    "name": "Timor-Leste",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddf1",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.932336+00:00"
+  },
+  {
+    "code": "TR",
+    "name": "Turkey",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddf7",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.932584+00:00"
+  },
+  {
+    "code": "TM",
+    "name": "Turkmenistan",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddf2",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.932829+00:00"
+  },
+  {
+    "code": "AE",
+    "name": "United Arab Emirates",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddea",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.933074+00:00"
+  },
+  {
+    "code": "UZ",
+    "name": "Uzbekistan",
+    "flag_emoji": "\ud83c\uddfa\ud83c\uddff",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.933343+00:00"
+  },
+  {
+    "code": "YE",
+    "name": "Yemen",
+    "flag_emoji": "\ud83c\uddfe\ud83c\uddea",
+    "region": "Asia",
+    "created_at": "2026-02-22T01:53:16.933593+00:00"
+  },
+  {
+    "code": "AL",
+    "name": "Albania",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddf1",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.933836+00:00"
+  },
+  {
+    "code": "AD",
+    "name": "Andorra",
+    "flag_emoji": "\ud83c\udde6\ud83c\udde9",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.934077+00:00"
+  },
+  {
+    "code": "AT",
+    "name": "Austria",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddf9",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.934331+00:00"
+  },
+  {
+    "code": "BY",
+    "name": "Belarus",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddfe",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.934582+00:00"
+  },
+  {
+    "code": "BE",
+    "name": "Belgium",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddea",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.934826+00:00"
+  },
+  {
+    "code": "BA",
+    "name": "Bosnia and Herzegovina",
+    "flag_emoji": "\ud83c\udde7\ud83c\udde6",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.935069+00:00"
+  },
+  {
+    "code": "BG",
+    "name": "Bulgaria",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddec",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.935343+00:00"
+  },
+  {
+    "code": "HR",
+    "name": "Croatia",
+    "flag_emoji": "\ud83c\udded\ud83c\uddf7",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.935589+00:00"
+  },
+  {
+    "code": "CZ",
+    "name": "Czech Republic",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddff",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.935835+00:00"
+  },
+  {
+    "code": "DK",
+    "name": "Denmark",
+    "flag_emoji": "\ud83c\udde9\ud83c\uddf0",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.936078+00:00"
+  },
+  {
+    "code": "EE",
+    "name": "Estonia",
+    "flag_emoji": "\ud83c\uddea\ud83c\uddea",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.936347+00:00"
+  },
+  {
+    "code": "FI",
+    "name": "Finland",
+    "flag_emoji": "\ud83c\uddeb\ud83c\uddee",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.936594+00:00"
+  },
+  {
+    "code": "GR",
+    "name": "Greece",
+    "flag_emoji": "\ud83c\uddec\ud83c\uddf7",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.936844+00:00"
+  },
+  {
+    "code": "HU",
+    "name": "Hungary",
+    "flag_emoji": "\ud83c\udded\ud83c\uddfa",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.937087+00:00"
+  },
+  {
+    "code": "IS",
+    "name": "Iceland",
+    "flag_emoji": "\ud83c\uddee\ud83c\uddf8",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.937341+00:00"
+  },
+  {
+    "code": "IE",
+    "name": "Ireland",
+    "flag_emoji": "\ud83c\uddee\ud83c\uddea",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.937585+00:00"
+  },
+  {
+    "code": "IT",
+    "name": "Italy",
+    "flag_emoji": "\ud83c\uddee\ud83c\uddf9",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.937827+00:00"
+  },
+  {
+    "code": "XK",
+    "name": "Kosovo",
+    "flag_emoji": "\ud83c\uddfd\ud83c\uddf0",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.938122+00:00"
+  },
+  {
+    "code": "LV",
+    "name": "Latvia",
+    "flag_emoji": "\ud83c\uddf1\ud83c\uddfb",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.938446+00:00"
+  },
+  {
+    "code": "LI",
+    "name": "Liechtenstein",
+    "flag_emoji": "\ud83c\uddf1\ud83c\uddee",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.938756+00:00"
+  },
+  {
+    "code": "LT",
+    "name": "Lithuania",
+    "flag_emoji": "\ud83c\uddf1\ud83c\uddf9",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.939047+00:00"
+  },
+  {
+    "code": "LU",
+    "name": "Luxembourg",
+    "flag_emoji": "\ud83c\uddf1\ud83c\uddfa",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.939327+00:00"
+  },
+  {
+    "code": "MT",
+    "name": "Malta",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddf9",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.939574+00:00"
+  },
+  {
+    "code": "MD",
+    "name": "Moldova",
+    "flag_emoji": "\ud83c\uddf2\ud83c\udde9",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.939823+00:00"
+  },
+  {
+    "code": "MC",
+    "name": "Monaco",
+    "flag_emoji": "\ud83c\uddf2\ud83c\udde8",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.940066+00:00"
+  },
+  {
+    "code": "ME",
+    "name": "Montenegro",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddea",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.940331+00:00"
+  },
+  {
+    "code": "NL",
+    "name": "Netherlands",
+    "flag_emoji": "\ud83c\uddf3\ud83c\uddf1",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.940575+00:00"
+  },
+  {
+    "code": "MK",
+    "name": "North Macedonia",
+    "flag_emoji": "\ud83c\uddf2\ud83c\uddf0",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.940820+00:00"
+  },
+  {
+    "code": "NO",
+    "name": "Norway",
+    "flag_emoji": "\ud83c\uddf3\ud83c\uddf4",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.941064+00:00"
+  },
+  {
+    "code": "PL",
+    "name": "Poland",
+    "flag_emoji": "\ud83c\uddf5\ud83c\uddf1",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.941327+00:00"
+  },
+  {
+    "code": "PT",
+    "name": "Portugal",
+    "flag_emoji": "\ud83c\uddf5\ud83c\uddf9",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.941574+00:00"
+  },
+  {
+    "code": "RO",
+    "name": "Romania",
+    "flag_emoji": "\ud83c\uddf7\ud83c\uddf4",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.941820+00:00"
+  },
+  {
+    "code": "SM",
+    "name": "San Marino",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddf2",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.942067+00:00"
+  },
+  {
+    "code": "RS",
+    "name": "Serbia",
+    "flag_emoji": "\ud83c\uddf7\ud83c\uddf8",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.942293+00:00"
+  },
+  {
+    "code": "SK",
+    "name": "Slovakia",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddf0",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.942481+00:00"
+  },
+  {
+    "code": "SI",
+    "name": "Slovenia",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddee",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.942688+00:00"
+  },
+  {
+    "code": "SE",
+    "name": "Sweden",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddea",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.942942+00:00"
+  },
+  {
+    "code": "CH",
+    "name": "Switzerland",
+    "flag_emoji": "\ud83c\udde8\ud83c\udded",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.943205+00:00"
+  },
+  {
+    "code": "UA",
+    "name": "Ukraine",
+    "flag_emoji": "\ud83c\uddfa\ud83c\udde6",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.943459+00:00"
+  },
+  {
+    "code": "VA",
+    "name": "Vatican City",
+    "flag_emoji": "\ud83c\uddfb\ud83c\udde6",
+    "region": "Europe",
+    "created_at": "2026-02-22T01:53:16.943703+00:00"
+  },
+  {
+    "code": "AG",
+    "name": "Antigua and Barbuda",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddec",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.943947+00:00"
+  },
+  {
+    "code": "BS",
+    "name": "Bahamas",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddf8",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.944208+00:00"
+  },
+  {
+    "code": "BB",
+    "name": "Barbados",
+    "flag_emoji": "\ud83c\udde7\ud83c\udde7",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.944459+00:00"
+  },
+  {
+    "code": "BZ",
+    "name": "Belize",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddff",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.944702+00:00"
+  },
+  {
+    "code": "CR",
+    "name": "Costa Rica",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddf7",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.944944+00:00"
+  },
+  {
+    "code": "CU",
+    "name": "Cuba",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddfa",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.945198+00:00"
+  },
+  {
+    "code": "DM",
+    "name": "Dominica",
+    "flag_emoji": "\ud83c\udde9\ud83c\uddf2",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.945443+00:00"
+  },
+  {
+    "code": "DO",
+    "name": "Dominican Republic",
+    "flag_emoji": "\ud83c\udde9\ud83c\uddf4",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.945684+00:00"
+  },
+  {
+    "code": "SV",
+    "name": "El Salvador",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddfb",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.945922+00:00"
+  },
+  {
+    "code": "GD",
+    "name": "Grenada",
+    "flag_emoji": "\ud83c\uddec\ud83c\udde9",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.946190+00:00"
+  },
+  {
+    "code": "GT",
+    "name": "Guatemala",
+    "flag_emoji": "\ud83c\uddec\ud83c\uddf9",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.946439+00:00"
+  },
+  {
+    "code": "HT",
+    "name": "Haiti",
+    "flag_emoji": "\ud83c\udded\ud83c\uddf9",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.946685+00:00"
+  },
+  {
+    "code": "HN",
+    "name": "Honduras",
+    "flag_emoji": "\ud83c\udded\ud83c\uddf3",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.946926+00:00"
+  },
+  {
+    "code": "JM",
+    "name": "Jamaica",
+    "flag_emoji": "\ud83c\uddef\ud83c\uddf2",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.947195+00:00"
+  },
+  {
+    "code": "NI",
+    "name": "Nicaragua",
+    "flag_emoji": "\ud83c\uddf3\ud83c\uddee",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.947450+00:00"
+  },
+  {
+    "code": "PA",
+    "name": "Panama",
+    "flag_emoji": "\ud83c\uddf5\ud83c\udde6",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.947695+00:00"
+  },
+  {
+    "code": "KN",
+    "name": "Saint Kitts and Nevis",
+    "flag_emoji": "\ud83c\uddf0\ud83c\uddf3",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.947937+00:00"
+  },
+  {
+    "code": "LC",
+    "name": "Saint Lucia",
+    "flag_emoji": "\ud83c\uddf1\ud83c\udde8",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.948202+00:00"
+  },
+  {
+    "code": "VC",
+    "name": "Saint Vincent and the Grenadines",
+    "flag_emoji": "\ud83c\uddfb\ud83c\udde8",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.948456+00:00"
+  },
+  {
+    "code": "TT",
+    "name": "Trinidad and Tobago",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddf9",
+    "region": "North America",
+    "created_at": "2026-02-22T01:53:16.948704+00:00"
+  },
+  {
+    "code": "BO",
+    "name": "Bolivia",
+    "flag_emoji": "\ud83c\udde7\ud83c\uddf4",
+    "region": "South America",
+    "created_at": "2026-02-22T01:53:16.948947+00:00"
+  },
+  {
+    "code": "CL",
+    "name": "Chile",
+    "flag_emoji": "\ud83c\udde8\ud83c\uddf1",
+    "region": "South America",
+    "created_at": "2026-02-22T01:53:16.949212+00:00"
+  },
+  {
+    "code": "EC",
+    "name": "Ecuador",
+    "flag_emoji": "\ud83c\uddea\ud83c\udde8",
+    "region": "South America",
+    "created_at": "2026-02-22T01:53:16.949460+00:00"
+  },
+  {
+    "code": "GY",
+    "name": "Guyana",
+    "flag_emoji": "\ud83c\uddec\ud83c\uddfe",
+    "region": "South America",
+    "created_at": "2026-02-22T01:53:16.949709+00:00"
+  },
+  {
+    "code": "PY",
+    "name": "Paraguay",
+    "flag_emoji": "\ud83c\uddf5\ud83c\uddfe",
+    "region": "South America",
+    "created_at": "2026-02-22T01:53:16.949948+00:00"
+  },
+  {
+    "code": "PE",
+    "name": "Peru",
+    "flag_emoji": "\ud83c\uddf5\ud83c\uddea",
+    "region": "South America",
+    "created_at": "2026-02-22T01:53:16.950212+00:00"
+  },
+  {
+    "code": "SR",
+    "name": "Suriname",
+    "flag_emoji": "\ud83c\uddf8\ud83c\uddf7",
+    "region": "South America",
+    "created_at": "2026-02-22T01:53:16.950463+00:00"
+  },
+  {
+    "code": "UY",
+    "name": "Uruguay",
+    "flag_emoji": "\ud83c\uddfa\ud83c\uddfe",
+    "region": "South America",
+    "created_at": "2026-02-22T01:53:16.950708+00:00"
+  },
+  {
+    "code": "VE",
+    "name": "Venezuela",
+    "flag_emoji": "\ud83c\uddfb\ud83c\uddea",
+    "region": "South America",
+    "created_at": "2026-02-22T01:53:16.950950+00:00"
+  },
+  {
+    "code": "AU",
+    "name": "Australia",
+    "flag_emoji": "\ud83c\udde6\ud83c\uddfa",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.951215+00:00"
+  },
+  {
+    "code": "FJ",
+    "name": "Fiji",
+    "flag_emoji": "\ud83c\uddeb\ud83c\uddef",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.951465+00:00"
+  },
+  {
+    "code": "KI",
+    "name": "Kiribati",
+    "flag_emoji": "\ud83c\uddf0\ud83c\uddee",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.951720+00:00"
+  },
+  {
+    "code": "MH",
+    "name": "Marshall Islands",
+    "flag_emoji": "\ud83c\uddf2\ud83c\udded",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.951966+00:00"
+  },
+  {
+    "code": "FM",
+    "name": "Micronesia",
+    "flag_emoji": "\ud83c\uddeb\ud83c\uddf2",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.952215+00:00"
+  },
+  {
+    "code": "NR",
+    "name": "Nauru",
+    "flag_emoji": "\ud83c\uddf3\ud83c\uddf7",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.952422+00:00"
+  },
+  {
+    "code": "NZ",
+    "name": "New Zealand",
+    "flag_emoji": "\ud83c\uddf3\ud83c\uddff",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.952603+00:00"
+  },
+  {
+    "code": "PW",
+    "name": "Palau",
+    "flag_emoji": "\ud83c\uddf5\ud83c\uddfc",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.952787+00:00"
+  },
+  {
+    "code": "PG",
+    "name": "Papua New Guinea",
+    "flag_emoji": "\ud83c\uddf5\ud83c\uddec",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.952961+00:00"
+  },
+  {
+    "code": "WS",
+    "name": "Samoa",
+    "flag_emoji": "\ud83c\uddfc\ud83c\uddf8",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.953133+00:00"
+  },
+  {
+    "code": "SB",
+    "name": "Solomon Islands",
+    "flag_emoji": "\ud83c\uddf8\ud83c\udde7",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.953323+00:00"
+  },
+  {
+    "code": "TO",
+    "name": "Tonga",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddf4",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.953492+00:00"
+  },
+  {
+    "code": "TV",
+    "name": "Tuvalu",
+    "flag_emoji": "\ud83c\uddf9\ud83c\uddfb",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.954128+00:00"
+  },
+  {
+    "code": "VU",
+    "name": "Vanuatu",
+    "flag_emoji": "\ud83c\uddfb\ud83c\uddfa",
+    "region": "Oceania",
+    "created_at": "2026-02-22T01:53:16.954320+00:00"
+  }
+]
