@@ -886,6 +886,120 @@ async def fix_channel_countries():
     }
 
 
+@api_router.post("/admin/add-country-channels/{country_code}")
+async def add_country_channels(country_code: str, background_tasks: BackgroundTasks):
+    """Add popular YouTube channels for a specific country"""
+    
+    # Popular channels by country (verified channel IDs)
+    country_channels = {
+        "PK": [  # Pakistan
+            {"channel_id": "UCcr0Ewy3Q-j5bjq8TuPFqng", "name": "ARY Digital HD"},
+            {"channel_id": "UC6YcM0Ddod4YqydoH39BWPQ", "name": "Hum TV"},
+            {"channel_id": "UCJwAGz48lOfnZhVK7QZwGvA", "name": "Geo TV"},
+            {"channel_id": "UCq5ANZhwtJPLokKxP25MyuA", "name": "Ducky Bhai"},
+            {"channel_id": "UC2_C7xQkCz6r5qblHHMnG3A", "name": "Sahir Lodhi"},
+            {"channel_id": "UCqS1VHu7FMhuDqGF6S8s2dw", "name": "Nadir Ali"},
+        ],
+        "PE": [  # Peru
+            {"channel_id": "UCLj7pY6GQ7Xhyy2YLZCRIvA", "name": "Whatdafaqshow"},
+            {"channel_id": "UCKBPimzSQvp22hTAl0HjINQ", "name": "Mox"},
+            {"channel_id": "UC8xNhJPq-hySn7BHwK9FZFA", "name": "DeBarrio"},
+            {"channel_id": "UCX6bZ6pq5CDKIh04IoWX8Mw", "name": "El Robot de Platon"},
+        ],
+        "PH": [  # Philippines - add more
+            {"channel_id": "UCuZ60EEHpS6Pv5u7oSIqGZw", "name": "Ivana Alawi"},
+            {"channel_id": "UCqMWPVWk8m40Y6yNsjoB8_g", "name": "Cong TV"},
+            {"channel_id": "UCTg_MKrpEDbXrOqZwP3r4Nw", "name": "Mimiyuuuh"},
+            {"channel_id": "UC8cqQMLRDbU3e_XU7J93UlA", "name": "Donnalyn Bartolome"},
+        ],
+        "ZA": [  # South Africa - add more
+            {"channel_id": "UCO5SYu7T1NKvT6xqU6IRo3w", "name": "Caspar Lee"},
+            {"channel_id": "UCDGbVBqZqJcvmAXxxv7j_pw", "name": "Lasizwe"},
+            {"channel_id": "UC2V0A2ZKrPJNbF-fCT_vLrQ", "name": "Trevor Noah"},
+        ],
+        "BD": [  # Bangladesh
+            {"channel_id": "UC6rGWyC_qKxS7GNxCvI1Cag", "name": "Tawhid Afridi"},
+            {"channel_id": "UCuMB23TMp0J5VrfJT_5W7NA", "name": "Salman Muqtadir"},
+        ],
+        "KE": [  # Kenya
+            {"channel_id": "UCKPxaS2-z_gRf6jbgbS4y0A", "name": "Churchill Show"},
+            {"channel_id": "UC4mxP2yNyHJECe0DWZqF6Aw", "name": "Bahati Kenya"},
+        ],
+    }
+    
+    country_code = country_code.upper()
+    if country_code not in country_channels:
+        return {"error": f"No channel list for {country_code}", "available": list(country_channels.keys())}
+    
+    # Get country info
+    country = await db.countries.find_one({"code": country_code}, {"_id": 0})
+    if not country:
+        return {"error": f"Country {country_code} not found"}
+    
+    country_name = country.get("name", country_code)
+    channels_to_add = country_channels[country_code]
+    
+    added_count = 0
+    updated_count = 0
+    failed_count = 0
+    
+    for channel_info in channels_to_add:
+        channel_id = channel_info["channel_id"]
+        
+        try:
+            existing = await db.channels.find_one({"channel_id": channel_id})
+            yt_data = await youtube_service.get_channel_stats(channel_id)
+            
+            if not yt_data:
+                logger.warning(f"Could not fetch data for channel {channel_id}")
+                failed_count += 1
+                continue
+            
+            channel_doc = {
+                "channel_id": channel_id,
+                "title": yt_data.get("title", channel_info.get("name", "Unknown")),
+                "description": yt_data.get("description", ""),
+                "custom_url": yt_data.get("custom_url", ""),
+                "thumbnail_url": yt_data.get("thumbnail_url", ""),
+                "subscriber_count": yt_data.get("subscriber_count", 0),
+                "view_count": yt_data.get("view_count", 0),
+                "video_count": yt_data.get("video_count", 0),
+                "country_code": country_code,
+                "country_name": country_name,
+                "published_at": yt_data.get("published_at", ""),
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+                "is_active": True,
+                "viral_label": "Stable",
+                "viral_score": 0.0,
+                "daily_subscriber_gain": 0,
+                "daily_growth_percent": 0.0,
+            }
+            
+            if existing:
+                await db.channels.update_one({"channel_id": channel_id}, {"$set": channel_doc})
+                updated_count += 1
+            else:
+                channel_doc["created_at"] = datetime.now(timezone.utc).isoformat()
+                channel_doc["current_rank"] = 0
+                channel_doc["previous_rank"] = 0
+                await db.channels.insert_one(channel_doc)
+                added_count += 1
+                
+        except Exception as e:
+            logger.error(f"Error processing channel {channel_id}: {e}")
+            failed_count += 1
+    
+    background_tasks.add_task(ranking_service.update_rankings, country_code)
+    
+    return {
+        "message": f"Channels processed for {country_name}",
+        "country": country_code,
+        "added": added_count,
+        "updated": updated_count,
+        "failed": failed_count
+    }
+
+
 @api_router.post("/admin/add-top-global-channels")
 async def add_top_global_channels(background_tasks: BackgroundTasks):
     """Add the real top global YouTube channels by subscriber count"""
