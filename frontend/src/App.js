@@ -742,10 +742,11 @@ const CountriesListSEO = ({ totalCountries }) => {
 
 // Trending Page SEO
 const TrendingSEO = () => {
+  const currentYear = new Date().getFullYear();
   useSEO({
-    title: `Trending YouTube Channels - Fastest Growing YouTubers ${new Date().getFullYear()}`,
-    description: "Discover the fastest growing YouTube channels right now. See which YouTubers are gaining subscribers the fastest with real-time growth analytics and viral predictions.",
-    keywords: "trending YouTube channels, fastest growing YouTubers, viral YouTube channels, YouTube growth, rising YouTubers, YouTube trending, biggest daily gains",
+    title: `Fastest Growing YouTube Channels ${currentYear} - Trending YouTubers Right Now`,
+    description: `See which YouTubers are exploding in ${currentYear}! Live tracking of the fastest growing YouTube channels right now. Daily subscriber gains, viral predictions & growth rates updated hourly.`,
+    keywords: `fastest growing youtube channels ${currentYear}, fastest growing youtubers ${currentYear}, trending youtube channels ${currentYear}, fastest growing youtube channels right now ${currentYear}, viral youtube channels, rising youtubers ${currentYear}`,
     canonical: `${SITE_URL}/trending`
   });
   
@@ -755,13 +756,13 @@ const TrendingSEO = () => {
 // Top 100 Page SEO
 const Top100SEO = ({ channels }) => {
   const year = new Date().getFullYear();
-  const title = `Top 100 Most Subscribed YouTube Channels ${year} - Global Rankings`;
-  const description = `Complete list of the top 100 most subscribed YouTube channels in ${year}. ${channels?.[0]?.title || 'MrBeast'} leads with ${formatNumber(channels?.[0]?.subscriber_count || 0)} subscribers. Live rankings updated daily.`;
+  const title = `Top 100 Most Subscribed YouTube Channels ${year} - Complete List`;
+  const description = `Official ${year} ranking: #1 ${channels?.[0]?.title || 'MrBeast'} (${formatNumber(channels?.[0]?.subscriber_count || 0)}), #2 T-Series, #3 Cocomelon. Full list of 100 most subscribed YouTubers with live subscriber counts.`;
   
   useSEO({
     title,
     description,
-    keywords: "top 100 YouTube channels, most subscribed YouTube channels, top 100 YouTubers, biggest YouTube channels, YouTube subscriber rankings, top YouTubers list",
+    keywords: `top 100 youtube channels ${year}, most subscribed youtube channels ${year}, most subscribed youtubers ${year}, top 100 youtubers ${year}, biggest youtube channels, youtube rankings ${year}`,
     canonical: `${SITE_URL}/top-100`
   });
   
