@@ -604,12 +604,13 @@ const HomeSEO = () => {
 
 // Country Page SEO
 const CountrySEO = ({ country, channels }) => {
+  const currentYear = new Date().getFullYear();
   const topChannel = channels?.[0];
   const channelCount = channels?.length || 0;
   
-  const title = country ? `Top YouTube Channels in ${country.name} ${country.flag_emoji} - Most Subscribed YouTubers ${new Date().getFullYear()}` : "";
-  const description = country ? `Discover the ${channelCount} most subscribed YouTube channels in ${country.name}. ${topChannel ? `#1 is ${topChannel.title} with ${formatNumber(topChannel.subscriber_count)} subscribers.` : ''} Real-time rankings and growth analytics.` : "";
-  const keywords = country ? `top YouTube channels ${country.name}, most subscribed YouTubers ${country.name}, ${country.name} YouTube rankings, popular YouTubers in ${country.name}, ${country.name} YouTube statistics, best YouTubers ${country.name}` : "";
+  const title = country ? `Most Subscribed YouTube Channels in ${country.name} ${currentYear} ${country.flag_emoji} Top ${channelCount} YouTubers` : "";
+  const description = country ? `Top YouTubers in ${country.name} ${currentYear}: ${topChannel ? `#1 ${topChannel.title} (${formatNumber(topChannel.subscriber_count)} subs)` : 'See rankings'}. Live subscriber counts, growth stats & trending ${country.name} YouTube channels updated daily.` : "";
+  const keywords = country ? `most subscribed youtube channels ${country.name.toLowerCase()} ${currentYear}, top youtubers ${country.name.toLowerCase()} ${currentYear}, trending youtube channels ${country.name.toLowerCase()}, popular youtubers ${country.name.toLowerCase()}, ${country.name.toLowerCase()} youtube rankings, best youtubers ${country.name.toLowerCase()} ${currentYear}` : "";
   const pageUrl = country ? `${SITE_URL}/country/${country.code}` : "";
   
   useSEO({
