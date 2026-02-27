@@ -1783,7 +1783,7 @@ const HomePage = () => {
             <Link to="/leaderboard" className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors" data-testid="cta-leaderboard">
               View Leaderboard
             </Link>
-            <Link to="/countries" className="bg-[#222] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#333] transition-colors !text-white" data-testid="cta-countries">
+            <Link to="/countries" className="bg-[#222] px-6 py-3 rounded-lg font-semibold hover:bg-[#333] transition-colors" style={{color: 'white'}} data-testid="cta-countries">
               Browse Countries
             </Link>
           </div>
