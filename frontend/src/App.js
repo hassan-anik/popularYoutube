@@ -648,9 +648,10 @@ const CountrySEO = ({ country, channels }) => {
 
 // Channel Page SEO
 const ChannelSEO = ({ channel }) => {
-  const title = channel ? `${channel.title} - YouTube Channel Stats & Analytics | ${formatNumber(channel.subscriber_count)} Subscribers` : "";
-  const description = channel ? `${channel.title} YouTube channel statistics: ${formatNumber(channel.subscriber_count)} subscribers, ${formatNumber(channel.view_count)} total views, ${channel.video_count} videos. From ${channel.country_name}. Track growth and rankings.` : "";
-  const keywords = channel ? `${channel.title}, ${channel.title} subscribers, ${channel.title} stats, ${channel.title} YouTube, ${channel.country_name} YouTuber, YouTube channel analytics` : "";
+  const currentYear = new Date().getFullYear();
+  const title = channel ? `${channel.title} YouTube Stats ${currentYear} - ${formatNumber(channel.subscriber_count)} Subscribers Live Count` : "";
+  const description = channel ? `${channel.title} live subscriber count: ${formatNumber(channel.subscriber_count)} subs, ${formatNumber(channel.view_count)} views, ${channel.video_count} videos. Ranked #${channel.current_rank || '?'} in ${channel.country_name}. Real-time ${channel.title} YouTube stats ${currentYear}.` : "";
+  const keywords = channel ? `${channel.title} youtube stats, ${channel.title} subscribers ${currentYear}, ${channel.title} subscriber count, ${channel.title} total views, ${channel.title} youtube channel, ${channel.country_name.toLowerCase()} youtuber` : "";
   const pageUrl = channel ? `${SITE_URL}/channel/${channel.channel_id}` : "";
   
   useSEO({
