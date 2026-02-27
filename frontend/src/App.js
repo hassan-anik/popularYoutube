@@ -581,8 +581,8 @@ const HomeSEO = () => {
   const currentYear = new Date().getFullYear();
   useSEO({
     title: `Most Subscribed YouTube Channels ${currentYear} - Live Rankings & Stats`,
-    description: `#1 MrBeast (468M) vs T-Series (310M) - See the real-time most subscribed YouTube channels ${currentYear}. Updated live with subscriber counts, growth rates & rankings for 197 countries.`,
-    keywords: `most subscribed youtube channel ${currentYear}, most subscribed youtubers ${currentYear}, top youtube channels ${currentYear}, youtube rankings ${currentYear}, fastest growing youtube channels, mrbeast subscribers, t-series subscribers`,
+    description: `#1 MrBeast (468M) vs #2 T-Series (310M) - Who is the second most subscribed YouTuber ${currentYear}? Live rankings of most subscribed YouTube channels updated in real-time for 197 countries.`,
+    keywords: `most subscribed youtube channel ${currentYear}, second most subscribed youtuber ${currentYear}, most subscribed youtubers ${currentYear}, most subscribed youtube channel worldwide ${currentYear}, most popular youtubers worldwide ${currentYear}, mrbeast subscribers, t-series subscribers, youtube ranking ${currentYear}`,
     canonical: SITE_URL
   });
   
