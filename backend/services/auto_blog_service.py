@@ -70,6 +70,7 @@ class AutoBlogService:
                 "excerpt": f"Daily update on the most subscribed YouTube channels. See who's leading the global rankings and which channels are growing fastest on {date_str}.",
                 "category": "Daily Rankings",
                 "author": "TopTube Bot",
+                "status": "published",
                 "published_at": today.isoformat(),
                 "created_at": today.isoformat(),
                 "updated_at": today.isoformat(),
@@ -80,17 +81,17 @@ class AutoBlogService:
             }
             
             # Check if today's post already exists
-            existing = await self.db.blogs.find_one({"slug": post["slug"]})
+            existing = await self.db.blog_posts.find_one({"slug": post["slug"]})
             if existing:
                 # Update existing post
-                await self.db.blogs.update_one(
+                await self.db.blog_posts.update_one(
                     {"slug": post["slug"]},
                     {"$set": post}
                 )
                 logger.info(f"Updated existing daily post: {post['slug']}")
             else:
                 # Insert new post
-                await self.db.blogs.insert_one(post)
+                await self.db.blog_posts.insert_one(post)
                 logger.info(f"Published new daily post: {post['slug']}")
             
             return post
