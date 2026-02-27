@@ -3941,10 +3941,9 @@ const BlogPostPage = () => {
           />
         )}
 
-        <div className="prose prose-invert prose-lg max-w-none">
+        <div className="prose prose-invert prose-lg max-w-none markdown-content">
           <ReactMarkdown 
             remarkPlugins={[remarkGfm]}
-            className="text-gray-300 leading-relaxed markdown-content"
             components={{
               table: ({node, ...props}) => (
                 <div className="overflow-x-auto my-4">
