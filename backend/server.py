@@ -1921,6 +1921,29 @@ async def trigger_growth_calculation(background_tasks: BackgroundTasks):
     return {"message": "Growth metrics calculation triggered"}
 
 
+@api_router.post("/scheduler/trigger-daily-blog")
+async def trigger_daily_blog(background_tasks: BackgroundTasks):
+    """Manually trigger daily blog post generation"""
+    if scheduler_service is None:
+        raise HTTPException(status_code=500, detail="Scheduler not initialized")
+    background_tasks.add_task(scheduler_service.generate_daily_blog_post)
+    return {"message": "Daily blog post generation triggered"}
+
+
+@api_router.get("/blog/posts/auto-generated")
+async def get_auto_generated_posts(limit: int = Query(10, ge=1, le=50)):
+    """Get auto-generated blog posts"""
+    posts = await db.blogs.find(
+        {"is_auto_generated": True, "is_published": True},
+        {"_id": 0}
+    ).sort("published_at", -1).limit(limit).to_list(limit)
+    
+    return {
+        "posts": posts,
+        "total": len(posts)
+    }
+
+
 # ==================== APP SETUP ====================
 
 # Root-level sitemap (for Google Search Console - must be at /sitemap.xml)
