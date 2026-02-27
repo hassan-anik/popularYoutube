@@ -1888,7 +1888,7 @@ const HomePage = () => {
                     </Link>
                     <Link 
                       to="/top-100"
-                      className="bg-[#222] hover:bg-[#333] text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                      className="bg-[#222] hover:bg-[#333] px-4 py-2 rounded-lg font-medium transition-colors !text-white"
                     >
                       See Full Top 100
                     </Link>
