@@ -886,6 +886,105 @@ async def fix_channel_countries():
     }
 
 
+@api_router.post("/admin/search-and-add-country-channels/{country_code}")
+async def search_and_add_country_channels(country_code: str, background_tasks: BackgroundTasks):
+    """Search YouTube for popular channels in a country and add them"""
+    
+    country_code = country_code.upper()
+    
+    # Get country info
+    country = await db.countries.find_one({"code": country_code}, {"_id": 0})
+    if not country:
+        return {"error": f"Country {country_code} not found"}
+    
+    country_name = country.get("name", country_code)
+    
+    # Search queries to find popular YouTubers
+    search_queries = [
+        f"popular YouTuber {country_name}",
+        f"top YouTube channel {country_name}",
+        f"famous YouTuber from {country_name}",
+    ]
+    
+    found_channels = {}
+    
+    for query in search_queries:
+        try:
+            results = await youtube_service.search_channels(query, region_code=country_code, max_results=5)
+            for ch in results:
+                if ch["channel_id"] not in found_channels:
+                    found_channels[ch["channel_id"]] = ch
+        except Exception as e:
+            logger.error(f"Search error for '{query}': {e}")
+            continue
+    
+    if not found_channels:
+        return {"error": f"No channels found for {country_name}", "country": country_code}
+    
+    added_count = 0
+    updated_count = 0
+    failed_count = 0
+    
+    for channel_id, basic_info in found_channels.items():
+        try:
+            existing = await db.channels.find_one({"channel_id": channel_id})
+            yt_data = await youtube_service.get_channel_stats(channel_id)
+            
+            if not yt_data:
+                failed_count += 1
+                continue
+            
+            # Only add channels with decent subscriber counts
+            if yt_data.get("subscriber_count", 0) < 10000:
+                continue
+            
+            channel_doc = {
+                "channel_id": channel_id,
+                "title": yt_data.get("title", basic_info.get("title", "Unknown")),
+                "description": yt_data.get("description", ""),
+                "custom_url": yt_data.get("custom_url", ""),
+                "thumbnail_url": yt_data.get("thumbnail_url", ""),
+                "subscriber_count": yt_data.get("subscriber_count", 0),
+                "view_count": yt_data.get("view_count", 0),
+                "video_count": yt_data.get("video_count", 0),
+                "country_code": country_code,
+                "country_name": country_name,
+                "published_at": yt_data.get("published_at", ""),
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+                "is_active": True,
+                "viral_label": "Stable",
+                "viral_score": 0.0,
+                "daily_subscriber_gain": 0,
+                "daily_growth_percent": 0.0,
+            }
+            
+            if existing:
+                await db.channels.update_one({"channel_id": channel_id}, {"$set": channel_doc})
+                updated_count += 1
+            else:
+                channel_doc["created_at"] = datetime.now(timezone.utc).isoformat()
+                channel_doc["current_rank"] = 0
+                channel_doc["previous_rank"] = 0
+                await db.channels.insert_one(channel_doc)
+                added_count += 1
+                
+        except Exception as e:
+            logger.error(f"Error processing channel {channel_id}: {e}")
+            failed_count += 1
+    
+    if added_count > 0 or updated_count > 0:
+        background_tasks.add_task(ranking_service.update_rankings, country_code)
+    
+    return {
+        "message": f"Channels searched and processed for {country_name}",
+        "country": country_code,
+        "found": len(found_channels),
+        "added": added_count,
+        "updated": updated_count,
+        "failed": failed_count
+    }
+
+
 @api_router.post("/admin/add-country-channels/{country_code}")
 async def add_country_channels(country_code: str, background_tasks: BackgroundTasks):
     """Add popular YouTube channels for a specific country"""
