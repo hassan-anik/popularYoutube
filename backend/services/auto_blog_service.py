@@ -236,6 +236,7 @@ Congratulations to {channel.get('title')} and their community!
             "excerpt": f"{channel.get('title')} has reached {fmt(milestone)} subscribers on YouTube!",
             "category": "Milestones",
             "author": "TopTube Bot",
+            "status": "published",
             "published_at": today.isoformat(),
             "created_at": today.isoformat(),
             "updated_at": today.isoformat(),
@@ -245,7 +246,7 @@ Congratulations to {channel.get('title')} and their community!
             "tags": ["milestone", channel.get('title', '').lower(), f"{fmt(milestone).lower()} subscribers"]
         }
         
-        await self.db.blogs.insert_one(post)
+        await self.db.blog_posts.insert_one(post)
         logger.info(f"Published milestone post: {post['slug']}")
         
         return post
