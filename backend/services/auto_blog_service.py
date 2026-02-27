@@ -235,7 +235,7 @@ Congratulations to {channel.get('title')} and their community!
             "content": content.strip(),
             "excerpt": f"{channel.get('title')} has reached {fmt(milestone)} subscribers on YouTube!",
             "category": "Milestones",
-            "author": "TopTube Bot",
+            "author": "TopTube Editorial",
             "status": "published",
             "published_at": today.isoformat(),
             "created_at": today.isoformat(),
