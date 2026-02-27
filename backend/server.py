@@ -957,6 +957,53 @@ async def remove_misattributed_channels():
     }
 
 
+@api_router.post("/admin/import-channels")
+async def import_channels(channels: List[Dict[Any, Any]]):
+    """Import channels from JSON data (used for syncing between environments)"""
+    
+    added_count = 0
+    updated_count = 0
+    
+    for channel_data in channels:
+        channel_id = channel_data.get("channel_id")
+        if not channel_id:
+            continue
+            
+        # Remove _id if present
+        channel_data.pop("_id", None)
+        
+        existing = await db.channels.find_one({"channel_id": channel_id})
+        
+        if existing:
+            await db.channels.update_one(
+                {"channel_id": channel_id},
+                {"$set": channel_data}
+            )
+            updated_count += 1
+        else:
+            await db.channels.insert_one(channel_data)
+            added_count += 1
+    
+    return {
+        "message": "Channels imported successfully",
+        "added": added_count,
+        "updated": updated_count,
+        "total": len(channels)
+    }
+
+
+@api_router.get("/admin/export-channels")
+async def export_channels():
+    """Export all channels as JSON (used for syncing between environments)"""
+    
+    channels = await db.channels.find({}, {"_id": 0}).to_list(length=None)
+    
+    return {
+        "channels": channels,
+        "total": len(channels)
+    }
+
+
 @api_router.post("/admin/search-and-add-country-channels/{country_code}")
 async def search_and_add_country_channels(country_code: str, background_tasks: BackgroundTasks):
     """Search YouTube for popular channels in a country and add them"""
