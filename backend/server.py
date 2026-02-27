@@ -843,30 +843,46 @@ async def fix_channel_countries():
     # Map of channel_id -> correct country_code
     # These are well-known channels with verified countries
     corrections = {
-        # MrBeast - United States
-        "UCX6OQ3DkcsbYNE6H8uQQuVA": {"country_code": "US", "country_name": "United States"},
-        # YouTube Movies - United States
-        "UClgRkhTL3_hImCAmdLfDE4g": {"country_code": "US", "country_name": "United States"},
-        # Music (YouTube) - United States
-        "UC-9-kyTW8ZkZNDHQJ6FgpwQ": {"country_code": "US", "country_name": "United States"},
-        # Dude Perfect - United States  
-        "UCRijo3ddMTht_IHyNSNXpNQ": {"country_code": "US", "country_name": "United States"},
-        # Marshmello - United States
-        "UCEdvpU2pFRCVqU6yIPyTpMQ": {"country_code": "US", "country_name": "United States"},
-        # XXXTENTACION - United States
-        "UCM9r1xn6s30OnlJWb-jc3Sw": {"country_code": "US", "country_name": "United States"},
-        # The Weeknd - Canada
-        "UC0WP5P-ufpRfjbNrmOWwLBQ": {"country_code": "CA", "country_name": "Canada"},
-        # Michael Jackson - United States
-        "UC5OrDvL9DscpcAstz7JnQGA": {"country_code": "US", "country_name": "United States"},
-        # James Charles - United States
-        "UCucot-Zp428OwkyRm2I7v2Q": {"country_code": "US", "country_name": "United States"},
-        # JuegaGerman - Chile
-        "UCYiGq8XF7YQD00x7wAd62Zg": {"country_code": "CL", "country_name": "Chile"},
-        # elrubiusOMG - Spain
-        "UCXazgXDIYyWH-yXLAkcrFxw": {"country_code": "ES", "country_name": "Spain"},
-        # VEGETTA777 - Spain
-        "UCam8T03EOFBsNdR0thrFHdQ": {"country_code": "ES", "country_name": "Spain"},
+        # === UNITED STATES ===
+        "UCX6OQ3DkcsbYNE6H8uQQuVA": {"country_code": "US", "country_name": "United States"},  # MrBeast
+        "UClgRkhTL3_hImCAmdLfDE4g": {"country_code": "US", "country_name": "United States"},  # YouTube Movies
+        "UC-9-kyTW8ZkZNDHQJ6FgpwQ": {"country_code": "US", "country_name": "United States"},  # Music (YouTube)
+        "UCRijo3ddMTht_IHyNSNXpNQ": {"country_code": "US", "country_name": "United States"},  # Dude Perfect
+        "UCEdvpU2pFRCVqU6yIPyTpMQ": {"country_code": "US", "country_name": "United States"},  # Marshmello
+        "UCM9r1xn6s30OnlJWb-jc3Sw": {"country_code": "US", "country_name": "United States"},  # XXXTENTACION
+        "UC5OrDvL9DscpcAstz7JnQGA": {"country_code": "US", "country_name": "United States"},  # Michael Jackson
+        "UCucot-Zp428OwkyRm2I7v2Q": {"country_code": "US", "country_name": "United States"},  # James Charles
+        "UCG8rbF3g2AMX70yOd8vqIZg": {"country_code": "US", "country_name": "United States"},  # Logan Paul
+        "UC-2Y8dQb0S6DtpxNgAKoJKA": {"country_code": "US", "country_name": "United States"},  # PlayStation
+        "UCfA5CSlYGseqSeOhsiiZTfw": {"country_code": "US", "country_name": "United States"},  # Sturniolo Triplets
+        "UC1a2ZCw7tugRZYRMnecNj3A": {"country_code": "US", "country_name": "United States"},  # Celine Dept
+        "UCMHKlaUOwMvgZ339zcjEI2A": {"country_code": "US", "country_name": "United States"},  # Stassiebaby
+        "UCHkj014U2CQ2Nv0UZeYpE_A": {"country_code": "CA", "country_name": "Canada"},  # Justin Bieber
+        "UC0WP5P-ufpRfjbNrmOWwLBQ": {"country_code": "CA", "country_name": "Canada"},  # The Weeknd
+        
+        # === ITALY (Real Italian channels) ===
+        "UC86suRFnqiw8zN6LIYxddYQ": {"country_code": "IT", "country_name": "Italy"},  # Khaby Lame (Senegal-born, based in Italy)
+        
+        # === SPAIN ===
+        "UCXazgXDIYyWH-yXLAkcrFxw": {"country_code": "ES", "country_name": "Spain"},  # elrubiusOMG
+        "UCam8T03EOFBsNdR0thrFHdQ": {"country_code": "ES", "country_name": "Spain"},  # VEGETTA777
+        "UCvPRgjCz3nJrdPVHgPvRe0w": {"country_code": "ES", "country_name": "Spain"},  # Ibai (Spanish, not Argentine)
+        
+        # === CHILE ===
+        "UCYiGq8XF7YQD00x7wAd62Zg": {"country_code": "CL", "country_name": "Chile"},  # JuegaGerman
+        
+        # === PAKISTAN ===
+        "UCq5ANZhwtJPLokKxP25MyuA": {"country_code": "PK", "country_name": "Pakistan"},  # Ducky Bhai
+        
+        # === UAE ===
+        "UC-YO7JkqlrBsgMGiAlqQ7Tg": {"country_code": "AE", "country_name": "United Arab Emirates"},  # Mo Vlogs
+        
+        # === VIETNAM ===
+        "UCnr9mXQGjCp6ZSLWt3E9ruQ": {"country_code": "VN", "country_name": "Vietnam"},  # Stokes Twins are American
+        
+        # === UK ===
+        "UC0C-w0YjGpqDXGB8IHb662A": {"country_code": "GB", "country_name": "United Kingdom"},  # Ed Sheeran
+        "UCMtFAi84ehTSYSE9XoHefig": {"country_code": "GB", "country_name": "United Kingdom"},  # Mrwhosetheboss (UK based)
     }
     
     updated_count = 0
@@ -883,6 +899,61 @@ async def fix_channel_countries():
         "message": "Channel countries fixed",
         "updated_count": updated_count,
         "total_corrections_attempted": len(corrections)
+    }
+
+
+@api_router.delete("/admin/remove-misattributed-channels")
+async def remove_misattributed_channels():
+    """Remove channels that are clearly not from the country they're listed in"""
+    
+    # Channels to remove from specific countries (they belong elsewhere)
+    to_remove = [
+        # Remove from Italy - these are not Italian
+        {"channel_id": "UCG8rbF3g2AMX70yOd8vqIZg", "wrong_country": "IT"},  # Logan Paul (US)
+        {"channel_id": "UC-2Y8dQb0S6DtpxNgAKoJKA", "wrong_country": "IT"},  # PlayStation (US/Japan)
+        {"channel_id": "UCfA5CSlYGseqSeOhsiiZTfw", "wrong_country": "IT"},  # Sturniolo Triplets (US)
+        {"channel_id": "UC1a2ZCw7tugRZYRMnecNj3A", "wrong_country": "IT"},  # Celine Dept (US)
+        {"channel_id": "UCMHKlaUOwMvgZ339zcjEI2A", "wrong_country": "IT"},  # Stassiebaby (US)
+        
+        # Remove from Turkey - not Turkish
+        {"channel_id": "UC-YO7JkqlrBsgMGiAlqQ7Tg", "wrong_country": "TR"},  # Mo Vlogs (UAE)
+        {"channel_id": "UCq5ANZhwtJPLokKxP25MyuA", "wrong_country": "TR"},  # Ducky Bhai (Pakistan)
+        
+        # Remove from Vietnam - not Vietnamese  
+        {"channel_id": "UCnr9mXQGjCp6ZSLWt3E9ruQ", "wrong_country": "VN"},  # Stokes Twins (US)
+        
+        # Remove from Argentina - not Argentine
+        {"channel_id": "UCvPRgjCz3nJrdPVHgPvRe0w", "wrong_country": "AR"},  # Ibai (Spanish)
+        
+        # Remove from Kenya - not Kenyan
+        {"channel_id": "UCMtFAi84ehTSYSE9XoHefig", "wrong_country": "KE"},  # Mrwhosetheboss (UK)
+        
+        # Remove from South Africa - not South African
+        {"channel_id": "UCnUYZLuoy1rq1aVMwx4aTzw", "wrong_country": "ZA"},  # David Dobrik (US)
+    ]
+    
+    removed_count = 0
+    for item in to_remove:
+        # Check if channel exists in wrong country
+        channel = await db.channels.find_one({
+            "channel_id": item["channel_id"],
+            "country_code": item["wrong_country"]
+        })
+        
+        if channel:
+            # Delete from wrong country
+            result = await db.channels.delete_one({
+                "channel_id": item["channel_id"],
+                "country_code": item["wrong_country"]
+            })
+            if result.deleted_count > 0:
+                removed_count += 1
+                logger.info(f"Removed misattributed channel {item['channel_id']} from {item['wrong_country']}")
+    
+    return {
+        "message": "Misattributed channels removed",
+        "removed_count": removed_count,
+        "total_attempted": len(to_remove)
     }
 
 
