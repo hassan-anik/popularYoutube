@@ -6,6 +6,7 @@ import logging
 from datetime import datetime, timezone
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from apscheduler.triggers.cron import CronTrigger
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 logger = logging.getLogger(__name__)
@@ -19,9 +20,14 @@ class SchedulerService:
         self.scheduler = AsyncIOScheduler()
         self._is_refreshing = False
         self._is_ranking = False
+        self._auto_blog_service = None
         
     def start(self):
         """Start the background scheduler with all jobs"""
+        # Import auto blog service here to avoid circular imports
+        from services.auto_blog_service import get_auto_blog_service
+        self._auto_blog_service = get_auto_blog_service(self.db)
+        
         # Job 1: Refresh all channel data every 6 hours
         self.scheduler.add_job(
             self.refresh_all_channels,
@@ -58,8 +64,27 @@ class SchedulerService:
             replace_existing=True
         )
         
+        # Job 5: Generate daily blog post at 9:00 AM UTC every day
+        self.scheduler.add_job(
+            self.generate_daily_blog_post,
+            trigger=CronTrigger(hour=9, minute=0),
+            id='daily_blog_post',
+            name='Generate daily ranking blog post',
+            replace_existing=True
+        )
+        
         self.scheduler.start()
-        logger.info("Background scheduler started with jobs: refresh_channels (6h), update_rankings (10m), calculate_growth (1h), record_stats (4h)")
+        logger.info("Background scheduler started with jobs: refresh_channels (6h), update_rankings (10m), calculate_growth (1h), record_stats (4h), daily_blog_post (9am UTC)")
+    
+    async def generate_daily_blog_post(self):
+        """Generate the daily ranking blog post"""
+        logger.info("Generating daily blog post...")
+        try:
+            if self._auto_blog_service:
+                await self._auto_blog_service.generate_daily_ranking_post()
+                logger.info("Daily blog post generated successfully")
+        except Exception as e:
+            logger.error(f"Error generating daily blog post: {e}")
         
     def stop(self):
         """Stop the background scheduler"""
