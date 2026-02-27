@@ -1848,6 +1848,58 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Second Most Subscribed - SEO Section */}
+      {globalTop.length >= 2 && (
+        <section className="py-12" data-testid="second-most-subscribed-section">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="bg-gradient-to-r from-orange-600/10 to-red-600/10 border border-orange-500/20 rounded-xl p-6 md:p-8">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-shrink-0">
+                  <div className="relative">
+                    <img 
+                      src={globalTop[1].thumbnail_url} 
+                      alt={globalTop[1].title}
+                      className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-orange-500/50"
+                    />
+                    <div className="absolute -top-2 -right-2 bg-orange-500 text-white text-sm font-bold px-2 py-1 rounded-full">
+                      #2
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
+                    Who is the Second Most Subscribed YouTuber in {new Date().getFullYear()}?
+                  </h2>
+                  <h3 className="text-2xl md:text-3xl font-bold text-orange-400 mb-2">
+                    {globalTop[1].title}
+                  </h3>
+                  <p className="text-gray-400 mb-4">
+                    With <span className="text-white font-semibold">{formatNumber(globalTop[1].subscriber_count)}</span> subscribers, 
+                    {globalTop[1].title} from <span className="text-white">{globalTop[1].country_name}</span> holds 
+                    the #2 spot globally, just behind {globalTop[0].title} ({formatNumber(globalTop[0].subscriber_count)} subs).
+                  </p>
+                  <div className="flex flex-wrap justify-center md:justify-start gap-3">
+                    <Link 
+                      to={`/channel/${globalTop[1].channel_id}`}
+                      className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                      data-testid="view-second-channel"
+                    >
+                      View {globalTop[1].title} Stats
+                    </Link>
+                    <Link 
+                      to="/top-100"
+                      className="bg-[#222] hover:bg-[#333] text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                    >
+                      See Full Top 100
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Trending Section */}
       <section className="py-12">
         <div className="max-w-6xl mx-auto px-4">
