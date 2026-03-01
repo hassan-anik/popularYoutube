@@ -11,11 +11,12 @@
 - **Database:** MongoDB
 - **External API:** YouTube Data API v3
 
-## Current Stats (Feb 25, 2026)
+## Current Stats (Mar 1, 2026)
 - **197 Countries** - All world countries supported
-- **155 Channels** - Top YouTube channels tracked (real data only)
-- **529 Data Points** - Historical tracking records
+- **~745 Channels** - Top YouTube channels tracked (real data only)
+- **Historical Data** - Tracking records from channel_stats_history collection
 - **3 Background Jobs** - Auto-refresh, ranking, growth metrics
+- **Auto-Blogger** - Daily automated blog post generation
 
 ## Code Architecture (Refactored Feb 25, 2026)
 ```
