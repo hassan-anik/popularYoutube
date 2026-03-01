@@ -2036,6 +2036,28 @@ async def root_sitemap():
     <priority>0.75</priority>
   </url>''')
     
+    # Blog posts from database (includes country ranking posts)
+    blog_posts = await db.blog_posts.find(
+        {"status": "published"},
+        {"slug": 1, "updated_at": 1, "created_at": 1}
+    ).to_list(500)
+    
+    for post in blog_posts:
+        slug = post.get("slug", "")
+        if not slug:
+            continue
+        lastmod = post.get("updated_at") or post.get("created_at") or today
+        if isinstance(lastmod, str) and len(lastmod) >= 10:
+            lastmod = lastmod[:10]
+        else:
+            lastmod = today
+        xml_parts.append(f'''  <url>
+    <loc>{base_url}/blog/{slug}</loc>
+    <lastmod>{lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>''')
+    
     channels = await db.channels.find(
         {"is_active": True, "channel_id": {"$exists": True, "$ne": ""}}, 
         {"channel_id": 1, "updated_at": 1}
