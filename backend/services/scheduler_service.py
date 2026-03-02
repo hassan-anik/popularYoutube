@@ -28,10 +28,10 @@ class SchedulerService:
         from services.auto_blog_service import get_auto_blog_service
         self._auto_blog_service = get_auto_blog_service(self.db)
         
-        # Job 1: Refresh all channel data every 6 hours
+        # Job 1: Refresh all channel data every 2 hours (uses ~15 API units per refresh)
         self.scheduler.add_job(
             self.refresh_all_channels,
-            trigger=IntervalTrigger(hours=6),
+            trigger=IntervalTrigger(hours=2),
             id='refresh_channels',
             name='Refresh all channel data from YouTube',
             replace_existing=True
@@ -55,10 +55,10 @@ class SchedulerService:
             replace_existing=True
         )
         
-        # Job 4: Record stats snapshot every 4 hours (for growth tracking)
+        # Job 4: Record stats snapshot every 2 hours (for growth tracking)
         self.scheduler.add_job(
             self.record_stats_snapshot,
-            trigger=IntervalTrigger(hours=4),
+            trigger=IntervalTrigger(hours=2),
             id='record_stats',
             name='Record stats snapshot for growth tracking',
             replace_existing=True
@@ -73,8 +73,27 @@ class SchedulerService:
             replace_existing=True
         )
         
+        # Job 6: Discover new channels for empty/low countries every 3 hours
+        # Uses search API (100 units per search) - targets ~30 searches = 3000 units
+        self.scheduler.add_job(
+            self.discover_new_channels,
+            trigger=IntervalTrigger(hours=3),
+            id='discover_channels',
+            name='Discover new channels for countries with low data',
+            replace_existing=True
+        )
+        
+        # Job 7: Expand channels in countries with few channels every 4 hours
+        self.scheduler.add_job(
+            self.expand_country_channels,
+            trigger=IntervalTrigger(hours=4),
+            id='expand_channels',
+            name='Expand channel coverage in countries with 1-5 channels',
+            replace_existing=True
+        )
+        
         self.scheduler.start()
-        logger.info("Background scheduler started with jobs: refresh_channels (6h), update_rankings (10m), calculate_growth (1h), record_stats (4h), daily_blog_post (9am UTC)")
+        logger.info("Background scheduler started with 7 jobs: refresh_channels (2h), update_rankings (10m), calculate_growth (1h), record_stats (2h), daily_blog_post (9am), discover_channels (3h), expand_channels (4h)")
     
     async def generate_daily_blog_post(self):
         """Generate the daily ranking blog post"""
