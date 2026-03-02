@@ -1952,6 +1952,92 @@ async def trigger_daily_blog(background_tasks: BackgroundTasks):
     return {"message": "Daily blog post generation triggered"}
 
 
+@api_router.post("/scheduler/trigger-discovery")
+async def trigger_channel_discovery(background_tasks: BackgroundTasks):
+    """Manually trigger channel discovery for empty countries"""
+    if scheduler_service is None:
+        raise HTTPException(status_code=500, detail="Scheduler not initialized")
+    background_tasks.add_task(scheduler_service.discover_new_channels)
+    return {"message": "Channel discovery triggered"}
+
+
+@api_router.post("/scheduler/trigger-expansion")
+async def trigger_channel_expansion(background_tasks: BackgroundTasks):
+    """Manually trigger channel expansion for low-coverage countries"""
+    if scheduler_service is None:
+        raise HTTPException(status_code=500, detail="Scheduler not initialized")
+    background_tasks.add_task(scheduler_service.expand_country_channels)
+    return {"message": "Channel expansion triggered"}
+
+
+@api_router.get("/scheduler/quota-estimate")
+async def get_quota_estimate():
+    """Get estimated daily YouTube API quota usage"""
+    # Count channels
+    channel_count = await db.channels.count_documents({"is_active": True})
+    
+    # Count countries
+    countries = await db.countries.find({}, {"code": 1}).to_list(300)
+    empty_countries = 0
+    low_coverage = 0
+    
+    for country in countries:
+        count = await db.channels.count_documents({"country_code": country["code"]})
+        if count == 0:
+            empty_countries += 1
+        elif count <= 5:
+            low_coverage += 1
+    
+    # Calculate quota usage
+    # channels.list = 1 unit per request (batches of 50)
+    # search.list = 100 units per request
+    
+    refresh_per_day = 12  # Every 2 hours
+    batches_per_refresh = (channel_count // 50) + 1
+    refresh_quota = refresh_per_day * batches_per_refresh * 1  # 1 unit per batch
+    
+    discovery_per_day = 8  # Every 3 hours
+    discovery_searches = min(10, empty_countries)  # 10 countries per run
+    discovery_quota = discovery_per_day * discovery_searches * 100  # 100 units per search
+    
+    expansion_per_day = 6  # Every 4 hours  
+    expansion_searches = min(15, low_coverage)  # 15 countries per run
+    expansion_quota = expansion_per_day * expansion_searches * 100  # 100 units per search
+    
+    # Channel stats fetches during discovery/expansion
+    new_channel_fetches = (discovery_searches + expansion_searches) * 10 * (discovery_per_day + expansion_per_day) // 2
+    fetch_quota = new_channel_fetches * 1  # 1 unit per channel
+    
+    total_daily = refresh_quota + discovery_quota + expansion_quota + fetch_quota
+    
+    return {
+        "daily_quota_limit": 10000,
+        "estimated_daily_usage": total_daily,
+        "quota_remaining": 10000 - total_daily,
+        "breakdown": {
+            "channel_refresh": {
+                "runs_per_day": refresh_per_day,
+                "channels": channel_count,
+                "quota_per_day": refresh_quota
+            },
+            "channel_discovery": {
+                "runs_per_day": discovery_per_day,
+                "empty_countries": empty_countries,
+                "quota_per_day": discovery_quota
+            },
+            "channel_expansion": {
+                "runs_per_day": expansion_per_day,
+                "low_coverage_countries": low_coverage,
+                "quota_per_day": expansion_quota
+            },
+            "new_channel_fetches": {
+                "estimated_fetches": new_channel_fetches,
+                "quota_per_day": fetch_quota
+            }
+        }
+    }
+
+
 @api_router.get("/blog/posts/auto-generated")
 async def get_auto_generated_posts(limit: int = Query(10, ge=1, le=50)):
     """Get auto-generated blog posts"""
