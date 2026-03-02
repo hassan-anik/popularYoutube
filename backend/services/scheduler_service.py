@@ -335,8 +335,175 @@ class SchedulerService:
             "jobs": jobs,
             "last_channel_refresh": status.get("last_channel_refresh") if status else None,
             "last_ranking_update": status.get("last_ranking_update") if status else None,
-            "channels_refreshed": status.get("channels_refreshed", 0) if status else 0
+            "channels_refreshed": status.get("channels_refreshed", 0) if status else 0,
+            "last_discovery": status.get("last_discovery") if status else None,
+            "channels_discovered": status.get("channels_discovered", 0) if status else 0
         }
+    
+    async def discover_new_channels(self):
+        """Discover new channels for countries with 0 channels using YouTube Search API"""
+        logger.info("Starting channel discovery for empty countries...")
+        
+        try:
+            # Get countries with 0 channels
+            countries = await self.db.countries.find({}, {"code": 1, "name": 1}).to_list(300)
+            
+            empty_countries = []
+            for country in countries:
+                count = await self.db.channels.count_documents({"country_code": country["code"]})
+                if count == 0:
+                    empty_countries.append(country)
+            
+            logger.info(f"Found {len(empty_countries)} countries with 0 channels")
+            
+            # Process up to 10 countries per run (1000 API units for search)
+            discovered_total = 0
+            for country in empty_countries[:10]:
+                try:
+                    code = country["code"]
+                    name = country["name"]
+                    
+                    # Search for popular YouTubers from this country
+                    search_queries = [
+                        f"popular YouTubers from {name}",
+                        f"{name} YouTube channel",
+                        f"top YouTubers {name}"
+                    ]
+                    
+                    for query in search_queries[:1]:  # 1 search per country = 100 units
+                        results = await self.youtube_service.search_channels(query, region_code=code, max_results=10)
+                        
+                        for result in results:
+                            channel_id = result.get("channel_id")
+                            if not channel_id:
+                                continue
+                            
+                            # Check if already exists
+                            existing = await self.db.channels.find_one({"channel_id": channel_id})
+                            if existing:
+                                continue
+                            
+                            # Fetch full channel data
+                            yt_data = await self.youtube_service.get_channel_stats(channel_id)
+                            if not yt_data or yt_data.get("subscriber_count", 0) < 1000:
+                                continue
+                            
+                            # Add to database
+                            channel_doc = {
+                                "channel_id": channel_id,
+                                "name": yt_data.get("title", ""),
+                                "description": yt_data.get("description", "")[:500],
+                                "country_code": code,
+                                "subscriber_count": yt_data.get("subscriber_count", 0),
+                                "view_count": yt_data.get("view_count", 0),
+                                "video_count": yt_data.get("video_count", 0),
+                                "thumbnail_url": yt_data.get("thumbnail_url", ""),
+                                "is_active": True,
+                                "created_at": datetime.now(timezone.utc).isoformat(),
+                                "updated_at": datetime.now(timezone.utc).isoformat()
+                            }
+                            
+                            await self.db.channels.insert_one(channel_doc)
+                            discovered_total += 1
+                            logger.info(f"Discovered: {yt_data.get('title')} for {name}")
+                        
+                except Exception as e:
+                    logger.error(f"Error discovering channels for {country.get('name')}: {e}")
+                    continue
+            
+            # Update system status
+            await self.db.system_status.update_one(
+                {"_id": "scheduler"},
+                {
+                    "$set": {
+                        "last_discovery": datetime.now(timezone.utc).isoformat(),
+                        "channels_discovered": discovered_total
+                    },
+                    "$inc": {"total_discovered": discovered_total}
+                },
+                upsert=True
+            )
+            
+            logger.info(f"Channel discovery completed: {discovered_total} new channels added")
+            
+        except Exception as e:
+            logger.error(f"Error during channel discovery: {e}")
+    
+    async def expand_country_channels(self):
+        """Expand channel coverage for countries with only 1-5 channels"""
+        logger.info("Starting channel expansion for low-coverage countries...")
+        
+        try:
+            # Get countries with 1-5 channels
+            countries = await self.db.countries.find({}, {"code": 1, "name": 1}).to_list(300)
+            
+            low_coverage = []
+            for country in countries:
+                count = await self.db.channels.count_documents({"country_code": country["code"]})
+                if 1 <= count <= 5:
+                    low_coverage.append((country, count))
+            
+            # Sort by lowest count first
+            low_coverage.sort(key=lambda x: x[1])
+            
+            logger.info(f"Found {len(low_coverage)} countries with 1-5 channels")
+            
+            # Process up to 15 countries per run (1500 API units for search)
+            expanded_total = 0
+            for country, current_count in low_coverage[:15]:
+                try:
+                    code = country["code"]
+                    name = country["name"]
+                    
+                    # Search for more channels
+                    results = await self.youtube_service.search_channels(
+                        f"most subscribed YouTubers {name}",
+                        region_code=code,
+                        max_results=10
+                    )
+                    
+                    for result in results:
+                        channel_id = result.get("channel_id")
+                        if not channel_id:
+                            continue
+                        
+                        # Check if already exists
+                        existing = await self.db.channels.find_one({"channel_id": channel_id})
+                        if existing:
+                            continue
+                        
+                        # Fetch full channel data
+                        yt_data = await self.youtube_service.get_channel_stats(channel_id)
+                        if not yt_data or yt_data.get("subscriber_count", 0) < 10000:
+                            continue
+                        
+                        # Add to database
+                        channel_doc = {
+                            "channel_id": channel_id,
+                            "name": yt_data.get("title", ""),
+                            "description": yt_data.get("description", "")[:500],
+                            "country_code": code,
+                            "subscriber_count": yt_data.get("subscriber_count", 0),
+                            "view_count": yt_data.get("view_count", 0),
+                            "video_count": yt_data.get("video_count", 0),
+                            "thumbnail_url": yt_data.get("thumbnail_url", ""),
+                            "is_active": True,
+                            "created_at": datetime.now(timezone.utc).isoformat(),
+                            "updated_at": datetime.now(timezone.utc).isoformat()
+                        }
+                        
+                        await self.db.channels.insert_one(channel_doc)
+                        expanded_total += 1
+                        logger.info(f"Expanded: {yt_data.get('title')} for {name}")
+                        
+                except Exception as e:
+                    logger.error(f"Error expanding channels for {country.get('name')}: {e}")
+                    continue
+            
+            logger.info(f"Channel expansion completed: {expanded_total} new channels added")
+            
+        except Exception as e:
+            logger.error(f"Error during channel expansion: {e}")
 
 
 # Singleton instance
