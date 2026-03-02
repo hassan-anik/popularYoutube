@@ -1996,12 +1996,12 @@ async def get_quota_estimate():
     batches_per_refresh = (channel_count // 50) + 1
     refresh_quota = refresh_per_day * batches_per_refresh * 1  # 1 unit per batch
     
-    discovery_per_day = 8  # Every 3 hours
-    discovery_searches = min(10, empty_countries)  # 10 countries per run
+    discovery_per_day = 4  # Every 6 hours
+    discovery_searches = min(15, empty_countries)  # 15 countries per run
     discovery_quota = discovery_per_day * discovery_searches * 100  # 100 units per search
     
-    expansion_per_day = 6  # Every 4 hours  
-    expansion_searches = min(15, low_coverage)  # 15 countries per run
+    expansion_per_day = 4  # Every 6 hours  
+    expansion_searches = min(20, low_coverage)  # 20 countries per run
     expansion_quota = expansion_per_day * expansion_searches * 100  # 100 units per search
     
     # Channel stats fetches during discovery/expansion
