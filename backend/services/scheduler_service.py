@@ -448,9 +448,9 @@ class SchedulerService:
             
             logger.info(f"Found {len(low_coverage)} countries with 1-5 channels")
             
-            # Process up to 15 countries per run (1500 API units for search)
+            # Process up to 20 countries per run (2000 API units for search)
             expanded_total = 0
-            for country, current_count in low_coverage[:15]:
+            for country, current_count in low_coverage[:20]:
                 try:
                     code = country["code"]
                     name = country["name"]
