@@ -356,9 +356,9 @@ class SchedulerService:
             
             logger.info(f"Found {len(empty_countries)} countries with 0 channels")
             
-            # Process up to 10 countries per run (1000 API units for search)
+            # Process up to 15 countries per run (1500 API units for search)
             discovered_total = 0
-            for country in empty_countries[:10]:
+            for country in empty_countries[:15]:
                 try:
                     code = country["code"]
                     name = country["name"]
