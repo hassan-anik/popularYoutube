@@ -73,20 +73,20 @@ class SchedulerService:
             replace_existing=True
         )
         
-        # Job 6: Discover new channels for empty/low countries every 3 hours
-        # Uses search API (100 units per search) - targets ~30 searches = 3000 units
+        # Job 6: Discover new channels for empty countries every 6 hours
+        # Uses search API (100 units per search) - targets ~5 searches per run = 500 units
         self.scheduler.add_job(
             self.discover_new_channels,
-            trigger=IntervalTrigger(hours=3),
+            trigger=IntervalTrigger(hours=6),
             id='discover_channels',
             name='Discover new channels for countries with low data',
             replace_existing=True
         )
         
-        # Job 7: Expand channels in countries with few channels every 4 hours
+        # Job 7: Expand channels in countries with few channels every 6 hours
         self.scheduler.add_job(
             self.expand_country_channels,
-            trigger=IntervalTrigger(hours=4),
+            trigger=IntervalTrigger(hours=6),
             id='expand_channels',
             name='Expand channel coverage in countries with 1-5 channels',
             replace_existing=True
