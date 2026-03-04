@@ -1,5 +1,11 @@
 # TopTube World Pro - Product Requirements Document
 
+## ⚠️ CRITICAL: ALWAYS USE PRODUCTION DATABASE
+**All database operations must target the PRODUCTION database directly.**
+- Production API: `https://mostpopularyoutubechannel.com/api`
+- Admin Key: `toptube2024admin`
+- DO NOT make changes to preview database - always use production!
+
 ## Project Overview
 **Name:** TopTube World Pro  
 **Type:** SaaS Website  
@@ -11,12 +17,13 @@
 - **Database:** MongoDB
 - **External API:** YouTube Data API v3
 
-## Current Stats (Mar 1, 2026)
+## Current Stats (Mar 4, 2026)
 - **197 Countries** - All world countries supported
-- **~745 Channels** - Top YouTube channels tracked (real data only)
-- **Historical Data** - Tracking records from channel_stats_history collection
-- **3 Background Jobs** - Auto-refresh, ranking, growth metrics
+- **~1,437 Channels** - Top YouTube channels tracked (production)
+- **~47,599 Data Points** - Historical tracking records
+- **7 Background Jobs** - Auto-refresh (2h), ranking (10m), growth (1h), stats (2h), daily blog (9am), channel discovery (8h), channel expansion (8h)
 - **Auto-Blogger** - Daily automated blog post generation
+- **151 Blog Posts** - Country ranking posts for all countries with data
 
 ## Code Architecture (Refactored Feb 25, 2026)
 ```
