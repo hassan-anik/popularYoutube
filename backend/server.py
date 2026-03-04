@@ -418,15 +418,18 @@ async def get_map_data():
         )
         
         if top_channel:
+            # Handle both 'title' and 'name' field names
+            channel_title = top_channel.get("title") or top_channel.get("name") or "Unknown"
             map_data.append({
                 "country_code": country["code"],
                 "country_name": country["name"],
                 "flag_emoji": country.get("flag_emoji", ""),
+                "channel_count": await db.channels.count_documents({"country_code": country["code"]}),
                 "top_channel": {
-                    "channel_id": top_channel["channel_id"],
-                    "title": top_channel["title"],
+                    "channel_id": top_channel.get("channel_id", ""),
+                    "title": channel_title,
                     "thumbnail_url": top_channel.get("thumbnail_url", ""),
-                    "subscriber_count": top_channel["subscriber_count"],
+                    "subscriber_count": top_channel.get("subscriber_count", 0),
                     "viral_label": top_channel.get("viral_label", "Stable")
                 }
             })
