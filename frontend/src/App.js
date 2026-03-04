@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo, lazy, Suspense } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo, lazy, Suspense, memo } from "react";
 import { BrowserRouter, Routes, Route, Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import ReactMarkdown from 'react-markdown';
@@ -78,8 +78,15 @@ import { formatNumber, formatDate, formatShortDate } from './utils/format';
 // Import theme context
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 
+// Loading fallback component
+const LoadingFallback = memo(() => (
+  <div className="flex items-center justify-center p-8">
+    <div className="w-8 h-8 border-2 border-gray-300 border-t-red-500 rounded-full animate-spin"></div>
+  </div>
+));
+
 // Theme Toggle Button Component
-const ThemeToggle = () => {
+const ThemeToggle = memo(() => {
   const { theme, toggleTheme } = useTheme();
   
   return (
@@ -96,7 +103,7 @@ const ThemeToggle = () => {
       )}
     </button>
   );
-};
+});
 
 // ==================== AD COMPONENTS ====================
 
@@ -1494,7 +1501,7 @@ const Header = () => {
                           onClick={() => handleSelectResult(channel.channel_id)}
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] transition-colors text-left"
                         >
-                          <img src={channel.thumbnail_url} alt="" className="w-8 h-8 rounded-full" />
+                          <img src={channel.thumbnail_url} alt="" loading="lazy" className="w-8 h-8 rounded-full" />
                           <div>
                             <div className="text-gray-900 dark:text-white text-sm font-medium">{channel.title}</div>
                             <div className="text-gray-500 text-xs">{formatNumber(channel.subscriber_count)} subs</div>
@@ -1635,16 +1642,24 @@ const RankChange = ({ current, previous }) => {
 };
 
 // World Map Component
-const WorldMap = ({ mapData, onCountryClick }) => {
+const WorldMap = memo(({ mapData, onCountryClick }) => {
   // Create lookup maps by both country_code and country_name
-  const countryDataMap = {};
-  const countryNameMap = {};
-  mapData?.forEach(item => {
-    countryDataMap[item.country_code] = item;
-    // Normalize country names for matching
-    const normalizedName = item.country_name?.toLowerCase().trim();
-    countryNameMap[normalizedName] = item;
-  });
+  const countryDataMap = useMemo(() => {
+    const map = {};
+    mapData?.forEach(item => {
+      map[item.country_code] = item;
+    });
+    return map;
+  }, [mapData]);
+  
+  const countryNameMap = useMemo(() => {
+    const map = {};
+    mapData?.forEach(item => {
+      const normalizedName = item.country_name?.toLowerCase().trim();
+      map[normalizedName] = item;
+    });
+    return map;
+  }, [mapData]);
 
   // Map of common name variations
   const nameVariations = {
@@ -1756,10 +1771,10 @@ const WorldMap = ({ mapData, onCountryClick }) => {
       </ComposableMap>
     </div>
   );
-};
+});
 
-// Growth Chart
-const GrowthChart = ({ data }) => {
+// Growth Chart - Memoized
+const GrowthChart = memo(({ data }) => {
   const chartData = data?.map(item => ({
     date: formatShortDate(item.timestamp),
     subscribers: item.subscriber_count
@@ -1788,7 +1803,7 @@ const GrowthChart = ({ data }) => {
       </ResponsiveContainer>
     </div>
   );
-};
+});
 
 // Channel Card Component
 const ChannelCard = ({ channel, rank, onClick }) => (
@@ -1911,7 +1926,9 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-2xl font-bold text-white mb-2">Top Channels by Country</h2>
           <p className="text-gray-500 mb-6">Click on a highlighted country to view its top YouTube channels</p>
-          <WorldMap mapData={mapData} onCountryClick={(code) => navigate(`/country/${code}`)} />
+          <Suspense fallback={<LoadingFallback />}>
+            <WorldMap mapData={mapData} onCountryClick={(code) => navigate(`/country/${code}`)} />
+          </Suspense>
         </div>
       </section>
 
@@ -2016,7 +2033,7 @@ const HomePage = () => {
                 data-testid={`trending-card-${idx}`}
               >
                 <div className="flex items-center gap-3">
-                  <img src={channel.thumbnail_url || "https://via.placeholder.com/48"} alt="" className="w-12 h-12 rounded-full" />
+                  <img src={channel.thumbnail_url || "https://via.placeholder.com/48"} alt="" loading="lazy" className="w-12 h-12 rounded-full" />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-white truncate">{channel.title}</h4>
                     <p className="text-gray-500 text-sm">{channel.country_name}</p>
@@ -2224,7 +2241,7 @@ const LeaderboardPage = () => {
                     <td className="px-4 py-4 font-bold text-gray-400">#{idx + 1}</td>
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
-                        <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" loading="lazy" />
+                        <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" loading="lazy" className="w-10 h-10 rounded-full" loading="lazy" />
                         <div>
                           <div className="font-medium text-white">{channel.title}</div>
                           <div className="text-xs text-gray-500">{channel.country_name}</div>
@@ -2506,7 +2523,7 @@ const CountriesPage = () => {
                 <div className="mt-4 pt-4 border-t border-[#222]">
                   <p className="text-xs text-gray-500 mb-2">Top Channel</p>
                   <div className="flex items-center gap-2">
-                    <img src={country.top_channel.thumbnail_url || "https://via.placeholder.com/32"} alt="" className="w-8 h-8 rounded-full" />
+                    <img src={country.top_channel.thumbnail_url || "https://via.placeholder.com/32"} alt="" loading="lazy" className="w-8 h-8 rounded-full" />
                     <div className="flex-1 min-w-0">
                       <div className="text-sm text-white truncate">{country.top_channel.title}</div>
                       <div className="text-xs text-gray-500">{formatNumber(country.top_channel.subscriber_count)} subs</div>
@@ -2640,7 +2657,7 @@ const CountryPage = () => {
               <div className="text-center mb-4">
                 <span className="text-3xl">{idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉'}</span>
               </div>
-              <img src={channel.thumbnail_url || "https://via.placeholder.com/80"} alt="" className="w-20 h-20 rounded-full mx-auto mb-4" />
+              <img src={channel.thumbnail_url || "https://via.placeholder.com/80"} alt="" loading="lazy" className="w-20 h-20 rounded-full mx-auto mb-4" />
               <h3 className="font-bold text-white text-center mb-1">{channel.title}</h3>
               <p className="text-2xl font-bold text-white text-center">{formatNumber(channel.subscriber_count)}</p>
               <p className="text-gray-500 text-sm text-center">subscribers</p>
@@ -2667,7 +2684,7 @@ const CountryPage = () => {
                 data-testid={`country-rank-${idx}`}
               >
                 <div className="w-8 font-bold text-gray-500">#{idx + 1}</div>
-                <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" />
+                <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" loading="lazy" className="w-10 h-10 rounded-full" />
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-white truncate">{channel.title}</div>
                   <div className="text-sm text-gray-500">{formatNumber(channel.view_count)} views</div>
@@ -2972,7 +2989,9 @@ const ChannelPage = () => {
         {channel.growth_history?.length > 0 && (
           <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
             <h2 className="text-xl font-bold text-white mb-4">Subscriber Growth (30 Days)</h2>
-            <GrowthChart data={channel.growth_history} />
+            <Suspense fallback={<LoadingFallback />}>
+              <GrowthChart data={channel.growth_history} />
+            </Suspense>
           </div>
         )}
 
@@ -2990,7 +3009,7 @@ const ChannelPage = () => {
                   className="block hover:opacity-80 transition-opacity"
                   data-testid={`video-${video.video_id}`}
                 >
-                  <img src={video.thumbnail_url} alt="" className="w-full rounded-lg mb-2" loading="lazy" />
+                  <img src={video.thumbnail_url} alt="" loading="lazy" className="w-full rounded-lg mb-2" loading="lazy" />
                   <h4 className="font-medium text-white text-sm line-clamp-2 mb-1">{video.title}</h4>
                   <p className="text-gray-500 text-xs">{formatNumber(video.view_count)} views • {formatShortDate(video.published_at)}</p>
                 </a>
@@ -3171,7 +3190,7 @@ const TrendingPage = () => {
                   data-testid={`fastest-${idx}`}
                 >
                   <div className="w-6 font-bold text-gray-500">{idx + 1}</div>
-                  <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" />
+                  <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" loading="lazy" className="w-10 h-10 rounded-full" />
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-white truncate">{channel.title}</div>
                     <div className="text-xs text-gray-500">{channel.country_name}</div>
@@ -3196,7 +3215,7 @@ const TrendingPage = () => {
                   data-testid={`gainer-${idx}`}
                 >
                   <div className="w-6 font-bold text-gray-500">{idx + 1}</div>
-                  <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" className="w-10 h-10 rounded-full" />
+                  <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" loading="lazy" className="w-10 h-10 rounded-full" />
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-white truncate">{channel.title}</div>
                     <div className="text-xs text-gray-500">{channel.country_name}</div>
@@ -3381,7 +3400,7 @@ const ComparePage = () => {
           <div className="flex flex-wrap gap-3 mb-4">
             {channels.map((ch, idx) => (
               <div key={ch.channel_id} className="flex items-center gap-2 bg-[#0d0d0d] rounded-lg px-3 py-2" style={{ borderLeft: `3px solid ${colors[idx]}` }}>
-                <img src={ch.thumbnail_url} alt="" className="w-6 h-6 rounded-full" />
+                <img src={ch.thumbnail_url} alt="" loading="lazy" className="w-6 h-6 rounded-full" />
                 <span className="text-white text-sm">{ch.title}</span>
                 <button onClick={() => removeChannel(ch.channel_id)} className="text-gray-500 hover:text-red-500">
                   <X className="w-4 h-4" />
@@ -3407,7 +3426,7 @@ const ComparePage = () => {
                         onClick={() => addChannel(ch.channel_id)}
                         className="w-full flex items-center gap-3 px-4 py-2 hover:bg-[#1a1a1a] text-left"
                       >
-                        <img src={ch.thumbnail_url} alt="" className="w-8 h-8 rounded-full" />
+                        <img src={ch.thumbnail_url} alt="" loading="lazy" className="w-8 h-8 rounded-full" />
                         <div>
                           <div className="text-white text-sm">{ch.title}</div>
                           <div className="text-gray-500 text-xs">{formatNumber(ch.subscriber_count)} subs</div>
@@ -3450,7 +3469,7 @@ const ComparePage = () => {
                       <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase w-1/5">Metric</th>
                       {channels.map((ch, idx) => (
                         <th key={ch.channel_id} className="px-4 py-3 text-center" style={{ borderBottom: `3px solid ${colors[idx]}` }}>
-                          <img src={ch.thumbnail_url} alt="" className="w-10 h-10 rounded-full mx-auto mb-1" />
+                          <img src={ch.thumbnail_url} alt="" loading="lazy" className="w-10 h-10 rounded-full mx-auto mb-1" />
                           <div className="text-white text-sm font-medium">{ch.title}</div>
                         </th>
                       ))}
@@ -4631,7 +4650,7 @@ const BlogAdminPage = () => {
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
                         {post.image && (
-                          <img src={post.image} alt="" className="w-12 h-12 rounded object-cover" />
+                          <img src={post.image} alt="" loading="lazy" className="w-12 h-12 rounded object-cover" />
                         )}
                         <div>
                           <div className="font-medium text-white">{post.title}</div>
@@ -4898,7 +4917,7 @@ const AdminPage = () => {
             <div className="border border-[#222] rounded-lg divide-y divide-[#222]">
               {searchResults.map(result => (
                 <div key={result.channel_id} className="p-4 flex items-center gap-4">
-                  <img src={result.thumbnail_url} alt="" className="w-10 h-10 rounded-full" />
+                  <img src={result.thumbnail_url} alt="" loading="lazy" className="w-10 h-10 rounded-full" />
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-white truncate">{result.title}</div>
                     <div className="text-xs text-gray-500 truncate">{result.description}</div>

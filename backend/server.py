@@ -2,10 +2,11 @@
 TopTube World Pro - Main FastAPI Server
 Tracks, ranks, and predicts the most subscribed YouTube channels per country
 """
-from fastapi import FastAPI, APIRouter, HTTPException, BackgroundTasks, Query, Response
-from fastapi.responses import PlainTextResponse
+from fastapi import FastAPI, APIRouter, HTTPException, BackgroundTasks, Query, Response, Request
+from fastapi.responses import PlainTextResponse, JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
@@ -35,6 +36,9 @@ scheduler_service = None  # Will be initialized on startup
 
 # Create the main app
 app = FastAPI(title="TopTube World Pro", version="1.0.0")
+
+# Add GZip compression for responses > 500 bytes
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -121,8 +125,11 @@ async def health_check():
 # ==================== COUNTRIES ====================
 
 @api_router.get("/countries", response_model=List[CountryResponse])
-async def get_countries():
+async def get_countries(response: Response):
     """Get all tracked countries with their top channel"""
+    # Cache for 10 minutes
+    response.headers["Cache-Control"] = "public, max-age=600"
+    
     countries = await db.countries.find({}, {"_id": 0}).to_list(300)
     
     result = []
@@ -405,8 +412,11 @@ async def get_biggest_gainers(response: Response, limit: int = Query(default=20,
 # ==================== STATS & ANALYTICS ====================
 
 @api_router.get("/stats/map-data")
-async def get_map_data():
+async def get_map_data(response: Response):
     """Get data for world map visualization - top channel per country"""
+    # Cache for 5 minutes
+    response.headers["Cache-Control"] = "public, max-age=300"
+    
     countries = await db.countries.find({}, {"_id": 0}).to_list(300)
     
     map_data = []
