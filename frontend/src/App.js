@@ -4,24 +4,6 @@ import axios from "axios";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  ZoomableGroup
-} from "react-simple-maps";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  Legend
-} from "recharts";
-import {
   TrendingUp,
   TrendingDown,
   Minus,
@@ -70,6 +52,10 @@ import {
   HelpCircle
 } from "lucide-react";
 import "@/App.css";
+
+// Lazy load heavy components (react-simple-maps ~8MB, recharts ~8MB)
+const LazyWorldMap = lazy(() => import('./components/LazyWorldMap'));
+const LazyGrowthChart = lazy(() => import('./components/LazyGrowthChart'));
 
 // Import from modular structure
 import { API, API_URL, BACKEND_URL, SITE_NAME, SITE_URL, geoUrl, COUNTRY_SLUGS, BLOG_CATEGORIES, FAVORITES_KEY, THEME_KEY } from './utils/constants';
@@ -1641,170 +1627,6 @@ const RankChange = ({ current, previous }) => {
   return <span className="text-gray-500 text-sm">-</span>;
 };
 
-// World Map Component
-const WorldMap = memo(({ mapData, onCountryClick }) => {
-  // Create lookup maps by both country_code and country_name
-  const countryDataMap = useMemo(() => {
-    const map = {};
-    mapData?.forEach(item => {
-      map[item.country_code] = item;
-    });
-    return map;
-  }, [mapData]);
-  
-  const countryNameMap = useMemo(() => {
-    const map = {};
-    mapData?.forEach(item => {
-      const normalizedName = item.country_name?.toLowerCase().trim();
-      map[normalizedName] = item;
-    });
-    return map;
-  }, [mapData]);
-
-  // Map of common name variations
-  const nameVariations = {
-    'united states of america': 'US',
-    'united states': 'US',
-    'usa': 'US',
-    'united kingdom': 'GB',
-    'uk': 'GB',
-    'russia': 'RU',
-    'russian federation': 'RU',
-    'south korea': 'KR',
-    'korea, republic of': 'KR',
-    'republic of korea': 'KR',
-    'north korea': 'KP',
-    'vietnam': 'VN',
-    'viet nam': 'VN',
-    'czech republic': 'CZ',
-    'czechia': 'CZ',
-    'ivory coast': 'CI',
-    "cote d'ivoire": 'CI',
-    'democratic republic of the congo': 'CD',
-    'dem. rep. congo': 'CD',
-    'republic of the congo': 'CG',
-    'congo': 'CG',
-    'tanzania': 'TZ',
-    'united republic of tanzania': 'TZ',
-    'iran': 'IR',
-    'islamic republic of iran': 'IR',
-    'syria': 'SY',
-    'syrian arab republic': 'SY',
-    'venezuela': 'VE',
-    'bolivia': 'BO',
-    'laos': 'LA',
-    'brunei': 'BN',
-    'taiwan': 'TW',
-    'palestine': 'PS',
-    'myanmar': 'MM',
-    'burma': 'MM',
-  };
-
-  const getCountryData = (geo) => {
-    // Try ISO_A2 first (some maps have it)
-    const isoA2 = geo.properties?.ISO_A2;
-    if (isoA2 && countryDataMap[isoA2]) {
-      return { code: isoA2, data: countryDataMap[isoA2] };
-    }
-    
-    // Try by name
-    const geoName = geo.properties?.name?.toLowerCase().trim();
-    if (geoName) {
-      // Check direct name match
-      if (countryNameMap[geoName]) {
-        return { code: countryNameMap[geoName].country_code, data: countryNameMap[geoName] };
-      }
-      
-      // Check name variations
-      const mappedCode = nameVariations[geoName];
-      if (mappedCode && countryDataMap[mappedCode]) {
-        return { code: mappedCode, data: countryDataMap[mappedCode] };
-      }
-      
-      // Partial match - check if country name contains the geo name
-      for (const [normalizedName, item] of Object.entries(countryNameMap)) {
-        if (normalizedName.includes(geoName) || geoName.includes(normalizedName)) {
-          return { code: item.country_code, data: item };
-        }
-      }
-    }
-    
-    return null;
-  };
-
-  return (
-    <div className="bg-[#111] dark:bg-[#111] rounded-lg border border-[#222] overflow-hidden" data-testid="world-map">
-      <ComposableMap projectionConfig={{ scale: 140 }} style={{ width: "100%", height: "350px" }}>
-        <ZoomableGroup center={[0, 20]} zoom={1}>
-          <Geographies geography={geoUrl}>
-            {({ geographies }) =>
-              geographies.map((geo) => {
-                const countryInfo = getCountryData(geo);
-                const hasData = !!countryInfo;
-                return (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    onClick={() => hasData && onCountryClick(countryInfo.code)}
-                    style={{
-                      default: {
-                        fill: hasData ? "#1e40af" : "#e5e5e5",
-                        stroke: "#999",
-                        strokeWidth: 0.5,
-                        outline: "none",
-                        cursor: hasData ? "pointer" : "default"
-                      },
-                      hover: {
-                        fill: hasData ? "#2563eb" : "#d4d4d4",
-                        stroke: "#666",
-                        strokeWidth: 0.5,
-                        outline: "none"
-                      },
-                      pressed: { outline: "none" }
-                    }}
-                  />
-                );
-              })
-            }
-          </Geographies>
-        </ZoomableGroup>
-      </ComposableMap>
-    </div>
-  );
-});
-
-// Growth Chart - Memoized
-const GrowthChart = memo(({ data }) => {
-  const chartData = data?.map(item => ({
-    date: formatShortDate(item.timestamp),
-    subscribers: item.subscriber_count
-  })) || [];
-
-  return (
-    <div className="h-64" data-testid="growth-chart">
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData}>
-          <defs>
-            <linearGradient id="colorSubs" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
-              <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#222" />
-          <XAxis dataKey="date" stroke="#666" tick={{ fill: '#666', fontSize: 11 }} />
-          <YAxis stroke="#666" tick={{ fill: '#666', fontSize: 11 }} tickFormatter={formatNumber} />
-          <Tooltip 
-            contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '8px' }}
-            labelStyle={{ color: '#999' }}
-            formatter={(value) => [formatNumber(value), "Subscribers"]}
-          />
-          <Area type="monotone" dataKey="subscribers" stroke="#22c55e" fill="url(#colorSubs)" />
-        </AreaChart>
-      </ResponsiveContainer>
-    </div>
-  );
-});
-
 // Channel Card Component
 const ChannelCard = ({ channel, rank, onClick }) => (
   <div 
@@ -1927,7 +1749,7 @@ const HomePage = () => {
           <h2 className="text-2xl font-bold text-white mb-2">Top Channels by Country</h2>
           <p className="text-gray-500 mb-6">Click on a highlighted country to view its top YouTube channels</p>
           <Suspense fallback={<LoadingFallback />}>
-            <WorldMap mapData={mapData} onCountryClick={(code) => navigate(`/country/${code}`)} />
+            <LazyWorldMap mapData={mapData} onCountryClick={(code) => navigate(`/country/${code}`)} />
           </Suspense>
         </div>
       </section>
@@ -2990,7 +2812,7 @@ const ChannelPage = () => {
           <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
             <h2 className="text-xl font-bold text-white mb-4">Subscriber Growth (30 Days)</h2>
             <Suspense fallback={<LoadingFallback />}>
-              <GrowthChart data={channel.growth_history} />
+              <LazyGrowthChart data={channel.growth_history} />
             </Suspense>
           </div>
         )}
