@@ -1791,7 +1791,7 @@ async def admin_upload_image(admin_key: str = Query(...)):
 
 @api_router.get("/sitemap.xml", response_class=PlainTextResponse)
 async def get_sitemap():
-    """Generate dynamic XML sitemap for SEO"""
+    """Generate dynamic XML sitemap for SEO - Quality over quantity"""
     base_url = os.environ.get('SITE_URL', 'https://mostpopularyoutubechannel.com').rstrip('/')
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     
@@ -1801,18 +1801,15 @@ async def get_sitemap():
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
     
-    # Static pages (no trailing slash for consistency)
+    # Static pages - HIGH PRIORITY
     static_pages = [
-        ('', '1.0', 'daily'),  # Homepage - empty string = no trailing slash after base_url
-        ('/top-100', '0.95', 'daily'),  # High-traffic SEO page
+        ('', '1.0', 'daily'),  # Homepage
         ('/leaderboard', '0.9', 'hourly'),
         ('/countries', '0.8', 'daily'),
         ('/trending', '0.9', 'hourly'),
         ('/compare', '0.7', 'weekly'),
         ('/blog', '0.8', 'daily'),
         ('/about', '0.3', 'monthly'),
-        ('/privacy', '0.2', 'monthly'),
-        ('/terms', '0.2', 'monthly'),
         ('/contact', '0.3', 'monthly'),
     ]
     
@@ -1824,9 +1821,15 @@ async def get_sitemap():
     <priority>{priority}</priority>
   </url>''')
     
-    # Country pages (197 countries)
+    # Country pages - Only countries WITH channel data (148 countries)
     countries = await db.countries.find({}, {"code": 1, "name": 1}).to_list(300)
+    countries_with_data = []
     for country in countries:
+        channel_count = await db.channels.count_documents({"country_code": country["code"]})
+        if channel_count > 0:
+            countries_with_data.append(country)
+    
+    for country in countries_with_data:
         xml_parts.append(f'''  <url>
     <loc>{base_url}/country/{country["code"]}</loc>
     <lastmod>{today}</lastmod>
@@ -1834,31 +1837,7 @@ async def get_sitemap():
     <priority>0.8</priority>
   </url>''')
     
-    # SEO-friendly country slug URLs (e.g., /india-youtubers)
-    seo_slugs = {
-        'US': 'united-states-youtubers', 'IN': 'india-youtubers', 'BR': 'brazil-youtubers',
-        'MX': 'mexico-youtubers', 'RU': 'russia-youtubers', 'JP': 'japan-youtubers',
-        'KR': 'south-korea-youtubers', 'GB': 'united-kingdom-youtubers', 'DE': 'germany-youtubers',
-        'FR': 'france-youtubers', 'ID': 'indonesia-youtubers', 'PH': 'philippines-youtubers'
-    }
-    for code, slug in seo_slugs.items():
-        xml_parts.append(f'''  <url>
-    <loc>{base_url}/{slug}</loc>
-    <lastmod>{today}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>''')
-    
-    # Auto-generated country blog posts (197 posts)
-    for country in countries:
-        xml_parts.append(f'''  <url>
-    <loc>{base_url}/blog/country/{country["code"]}</loc>
-    <lastmod>{today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>''')
-    
-    # Blog posts from database (includes country ranking posts)
+    # Blog posts from database - Only published posts with actual content
     blog_posts = await db.blog_posts.find(
         {"status": "published"},
         {"slug": 1, "updated_at": 1, "created_at": 1}
@@ -1880,19 +1859,19 @@ async def get_sitemap():
     <priority>0.8</priority>
   </url>''')
     
-    # Channel pages - only include active channels with valid IDs
-    channels = await db.channels.find(
+    # Channel pages - Only TOP 50 channels by subscriber count (quality over quantity)
+    top_channels = await db.channels.find(
         {"is_active": True, "channel_id": {"$exists": True, "$ne": ""}}, 
         {"channel_id": 1, "updated_at": 1}
-    ).to_list(1000)
+    ).sort("subscriber_count", -1).limit(50).to_list(50)
     
-    for channel in channels:
+    for channel in top_channels:
         channel_id = channel.get("channel_id", "")
-        if not channel_id or len(channel_id) < 10:  # Skip invalid channel IDs
+        if not channel_id or len(channel_id) < 10:
             continue
         lastmod = channel.get("updated_at", today)
         if isinstance(lastmod, str) and len(lastmod) >= 10:
-            lastmod = lastmod[:10]  # Get just the date part
+            lastmod = lastmod[:10]
         else:
             lastmod = today
         xml_parts.append(f'''  <url>
