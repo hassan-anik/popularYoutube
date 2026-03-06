@@ -2697,7 +2697,7 @@ const TrendingPage = () => {
                   <div className="w-6 font-bold text-gray-500">{idx + 1}</div>
                   <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" loading="lazy" className="w-10 h-10 rounded-full" />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-white truncate">{channel.title}</div>
+                    <div className="font-medium text-white truncate">{channel.title || channel.name}</div>
                     <div className="text-xs text-gray-500">{channel.country_name}</div>
                   </div>
                   <div className="text-green-400 font-bold">+{channel.daily_growth_percent?.toFixed(2) || 0}%</div>
@@ -2722,7 +2722,7 @@ const TrendingPage = () => {
                   <div className="w-6 font-bold text-gray-500">{idx + 1}</div>
                   <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" loading="lazy" className="w-10 h-10 rounded-full" />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-white truncate">{channel.title}</div>
+                    <div className="font-medium text-white truncate">{channel.title || channel.name}</div>
                     <div className="text-xs text-gray-500">{channel.country_name}</div>
                   </div>
                   <div className="text-green-400 font-bold">+{formatNumber(channel.daily_subscriber_gain || 0)}</div>

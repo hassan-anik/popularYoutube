@@ -437,6 +437,11 @@
 
 ## Refactoring Progress (Mar 6, 2026)
 
+### Data Issues Fixed ✓
+- **Triggered growth metrics calculation** - Data was showing zeros because the scheduler job hadn't calculated growth metrics
+- **Fixed `title` vs `name` inconsistency** - Some channels had `name` instead of `title`, causing display issues
+- **Backend ranking service updated** - Now normalizes `title` field for all channel responses
+
 ### Soft 404 SEO Fix ✓
 - Fixed React Hook ordering violation in `CountryPage` component
 - Verified `noindex, nofollow` meta tag is correctly added to invalid pages

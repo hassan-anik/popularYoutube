@@ -101,6 +101,11 @@ class RankingService:
             {"_id": 0}
         ).sort("daily_growth_percent", -1).limit(limit).to_list(limit)
         
+        # Normalize title field
+        for channel in channels:
+            if "title" not in channel and "name" in channel:
+                channel["title"] = channel["name"]
+        
         return channels
     
     async def get_biggest_gainers_24h(self, limit: int = 20) -> List[Dict]:
@@ -109,6 +114,11 @@ class RankingService:
             {"is_active": True, "daily_subscriber_gain": {"$exists": True}, "original_channel_id": {"$exists": False}},
             {"_id": 0}
         ).sort("daily_subscriber_gain", -1).limit(limit).to_list(limit)
+        
+        # Normalize title field
+        for channel in channels:
+            if "title" not in channel and "name" in channel:
+                channel["title"] = channel["name"]
         
         return channels
     
