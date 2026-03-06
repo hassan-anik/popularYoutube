@@ -7,3 +7,5 @@ export { SocialShareButtons } from './SocialShare';
 export { NewsletterSignup } from './Newsletter';
 export { AnimatedCounter, LastUpdatedIndicator, LiveIndicator } from './Indicators';
 export { ViralBadge, RankChange } from './Badges';
+export { LanguageSelector } from './LanguageSelector';
+export { UserMenu } from './UserMenu';

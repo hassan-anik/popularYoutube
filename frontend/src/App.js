@@ -2707,6 +2707,20 @@ const CountryPage = () => {
     fetchData();
   }, [countryCode]);
 
+  // Set noindex for 404 pages - must be before any conditional returns
+  useEffect(() => {
+    if (!loading && !country) {
+      let robotsMeta = document.querySelector('meta[name="robots"]');
+      if (!robotsMeta) {
+        robotsMeta = document.createElement('meta');
+        robotsMeta.setAttribute('name', 'robots');
+        document.head.appendChild(robotsMeta);
+      }
+      robotsMeta.setAttribute('content', 'noindex, nofollow');
+      document.title = 'Country Not Found - TopTube World Pro';
+    }
+  }, [loading, country]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -2717,8 +2731,20 @@ const CountryPage = () => {
 
   if (!country) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500">
-        Country not found
+      <div className="min-h-screen flex flex-col items-center justify-center px-4" data-testid="country-not-found">
+        <div className="text-6xl mb-4">🌍</div>
+        <h1 className="text-2xl font-bold text-white mb-2">Country Not Found</h1>
+        <p className="text-gray-400 mb-6 text-center max-w-md">
+          The country you're looking for doesn't exist in our database.
+        </p>
+        <div className="flex gap-4">
+          <Link 
+            to="/countries" 
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
+          >
+            Browse All Countries
+          </Link>
+        </div>
       </div>
     );
   }
@@ -2979,6 +3005,28 @@ const ChannelPage = () => {
     fetchData();
   }, [channelId]);
 
+  // Set noindex for 404 pages
+  useEffect(() => {
+    if (!loading && !channel) {
+      // Add noindex meta tag
+      let robotsMeta = document.querySelector('meta[name="robots"]');
+      if (!robotsMeta) {
+        robotsMeta = document.createElement('meta');
+        robotsMeta.setAttribute('name', 'robots');
+        document.head.appendChild(robotsMeta);
+      }
+      robotsMeta.setAttribute('content', 'noindex, nofollow');
+      document.title = 'Channel Not Found - TopTube World Pro';
+      
+      return () => {
+        // Clean up - remove noindex when leaving page
+        if (robotsMeta) {
+          robotsMeta.setAttribute('content', 'index, follow');
+        }
+      };
+    }
+  }, [loading, channel]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -2989,8 +3037,26 @@ const ChannelPage = () => {
 
   if (!channel) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500">
-        Channel not found
+      <div className="min-h-screen flex flex-col items-center justify-center px-4" data-testid="channel-not-found">
+        <div className="text-6xl mb-4">🔍</div>
+        <h1 className="text-2xl font-bold text-white mb-2">Channel Not Found</h1>
+        <p className="text-gray-400 mb-6 text-center max-w-md">
+          The YouTube channel you're looking for doesn't exist in our database or may have been removed.
+        </p>
+        <div className="flex gap-4">
+          <Link 
+            to="/leaderboard" 
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
+          >
+            View Leaderboard
+          </Link>
+          <Link 
+            to="/request-channel" 
+            className="px-4 py-2 bg-[#222] hover:bg-[#333] text-white rounded-lg"
+          >
+            Request a Channel
+          </Link>
+        </div>
       </div>
     );
   }
@@ -3947,13 +4013,28 @@ const CategoryPage = () => {
     canonical: `${SITE_URL}/category/${categorySlug}`
   });
 
+  // Set noindex for 404 pages
+  useEffect(() => {
+    if (!category) {
+      let robotsMeta = document.querySelector('meta[name="robots"]');
+      if (!robotsMeta) {
+        robotsMeta = document.createElement('meta');
+        robotsMeta.setAttribute('name', 'robots');
+        document.head.appendChild(robotsMeta);
+      }
+      robotsMeta.setAttribute('content', 'noindex, nofollow');
+    }
+  }, [category]);
+
   if (!category) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <h1 className="text-2xl font-bold text-white mb-4">Category Not Found</h1>
-        <button onClick={() => navigate('/categories')} className="text-red-500 hover:text-red-400">
+      <div className="min-h-screen flex flex-col items-center justify-center px-4" data-testid="category-not-found">
+        <div className="text-6xl mb-4">📁</div>
+        <h1 className="text-2xl font-bold text-white mb-2">Category Not Found</h1>
+        <p className="text-gray-400 mb-6 text-center">The category you're looking for doesn't exist.</p>
+        <Link to="/categories" className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg">
           Browse All Categories
-        </button>
+        </Link>
       </div>
     );
   }

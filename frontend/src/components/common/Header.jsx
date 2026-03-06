@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { PlayCircle, Search, Heart, Menu } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
+import { LanguageSelector } from './LanguageSelector';
+import { UserMenu } from './UserMenu';
 import { API } from '../../utils/constants';
 import { formatNumber } from '../../utils/format';
 
@@ -12,6 +15,7 @@ export const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSearch = async (query) => {
     setSearchQuery(query);
@@ -47,12 +51,24 @@ export const Header = () => {
           
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-home">Home</Link>
-            <Link to="/leaderboard" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-leaderboard">Leaderboard</Link>
-            <Link to="/countries" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-countries">Countries</Link>
-            <Link to="/trending" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-trending">Trending</Link>
-            <Link to="/compare" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-compare">Compare</Link>
-            <Link to="/blog" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-blog">Blog</Link>
+            <Link to="/" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-home">
+              {t('common.home')}
+            </Link>
+            <Link to="/leaderboard" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-leaderboard">
+              {t('common.leaderboard')}
+            </Link>
+            <Link to="/countries" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-countries">
+              {t('common.countries')}
+            </Link>
+            <Link to="/trending" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-trending">
+              {t('common.trending')}
+            </Link>
+            <Link to="/compare" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-compare">
+              {t('common.compare')}
+            </Link>
+            <Link to="/blog" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-blog">
+              {t('common.blog')}
+            </Link>
           </nav>
           
           {/* Search & Favorites */}
@@ -90,7 +106,7 @@ export const Header = () => {
                           onClick={() => handleSelectResult(channel.channel_id)}
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] transition-colors text-left"
                         >
-                          <img src={channel.thumbnail_url} alt="" className="w-8 h-8 rounded-full" />
+                          <img src={channel.thumbnail_url} alt="" loading="lazy" className="w-8 h-8 rounded-full" />
                           <div>
                             <div className="text-gray-900 dark:text-white text-sm font-medium">{channel.title}</div>
                             <div className="text-gray-500 text-xs">{formatNumber(channel.subscriber_count)} subs</div>
@@ -102,6 +118,12 @@ export const Header = () => {
                 </div>
               )}
             </div>
+
+            {/* Language Selector */}
+            <LanguageSelector />
+
+            {/* User Menu */}
+            <UserMenu />
 
             {/* Mobile Menu Button */}
             <button 
@@ -133,3 +155,5 @@ export const Header = () => {
     </header>
   );
 };
+
+export default Header;
