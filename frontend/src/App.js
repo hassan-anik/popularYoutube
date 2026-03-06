@@ -1051,6 +1051,20 @@ const PrivacyPage = () => {
         <p className="text-gray-400 mb-8">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
         
         <div className="bg-[#111] border border-[#222] rounded-lg p-8 space-y-8">
+          {/* YouTube API Services Compliance Notice */}
+          <section className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+            <h2 className="text-xl font-semibold text-white mb-4">YouTube API Services</h2>
+            <p className="text-gray-300 leading-relaxed mb-3">
+              TopTube World Pro uses the YouTube API Services. By using our service, you are also agreeing to be bound by the Google Privacy Policy.
+            </p>
+            <p className="text-gray-300 leading-relaxed">
+              <strong>Google Privacy Policy:</strong>{' '}
+              <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline">
+                http://www.google.com/policies/privacy
+              </a>
+            </p>
+          </section>
+
           <section>
             <h2 className="text-xl font-semibold text-white mb-4">1. Information We Collect</h2>
             <p className="text-gray-300 leading-relaxed mb-4">
@@ -1088,7 +1102,7 @@ const PrivacyPage = () => {
               Our service integrates with third-party services including:
             </p>
             <ul className="text-gray-300 list-disc list-inside space-y-2 mt-2">
-              <li><strong>YouTube Data API:</strong> To fetch publicly available channel statistics</li>
+              <li><strong>YouTube Data API:</strong> To fetch publicly available channel statistics. Subject to <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline">Google Privacy Policy</a></li>
               <li><strong>Google Analytics:</strong> To analyze website traffic and usage patterns</li>
               <li><strong>Google AdSense:</strong> To display relevant advertisements</li>
             </ul>
@@ -1148,11 +1162,25 @@ const TermsPage = () => {
         <p className="text-gray-400 mb-8">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
         
         <div className="bg-[#111] border border-[#222] rounded-lg p-8 space-y-8">
+          {/* YouTube Terms of Service Compliance Notice */}
+          <section className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+            <h2 className="text-xl font-semibold text-white mb-4">YouTube Terms of Service</h2>
+            <p className="text-gray-300 leading-relaxed mb-3">
+              TopTube World Pro uses the YouTube API Services. By using TopTube World Pro, you are agreeing to be bound by the YouTube Terms of Service.
+            </p>
+            <p className="text-gray-300 leading-relaxed">
+              <strong>YouTube Terms of Service:</strong>{' '}
+              <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline">
+                https://www.youtube.com/t/terms
+              </a>
+            </p>
+          </section>
+
           <section>
             <h2 className="text-xl font-semibold text-white mb-4">1. Acceptance of Terms</h2>
             <p className="text-gray-300 leading-relaxed">
               By accessing and using TopTube World Pro, you accept and agree to be bound by these Terms of 
-              Service. If you do not agree to these terms, please do not use our service.
+              Service and the YouTube Terms of Service (<a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline">https://www.youtube.com/t/terms</a>). If you do not agree to these terms, please do not use our service.
             </p>
           </section>
 
@@ -1186,7 +1214,24 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-4">5. Disclaimer of Warranties</h2>
+            <h2 className="text-xl font-semibold text-white mb-4">5. Data Disclaimer</h2>
+            <p className="text-gray-300 leading-relaxed mb-3">
+              <strong>Important:</strong> Subscriber counts, view counts, and video counts are obtained from the YouTube Data API. 
+              However, the following metrics are <strong>independently calculated by TopTube World Pro</strong> and are NOT provided by YouTube:
+            </p>
+            <ul className="text-gray-300 list-disc list-inside space-y-2">
+              <li>Daily subscriber gains/losses (estimated from historical tracking)</li>
+              <li>Growth percentages (7-day, 30-day growth rates)</li>
+              <li>Viral status labels (Exploding, Rising Fast, Stable, Slowing)</li>
+              <li>Growth predictions and overtake estimates</li>
+            </ul>
+            <p className="text-gray-300 leading-relaxed mt-3">
+              These estimated metrics are provided for informational purposes only and may not reflect actual YouTube data.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-4">6. Disclaimer of Warranties</h2>
             <p className="text-gray-300 leading-relaxed">
               Our service is provided "as is" without warranties of any kind. We do not guarantee the 
               accuracy, completeness, or timeliness of the data displayed. YouTube channel statistics 
@@ -1195,7 +1240,7 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-4">6. Limitation of Liability</h2>
+            <h2 className="text-xl font-semibold text-white mb-4">7. Limitation of Liability</h2>
             <p className="text-gray-300 leading-relaxed">
               TopTube World Pro shall not be liable for any indirect, incidental, special, consequential, 
               or punitive damages resulting from your use of or inability to use the service.
@@ -1203,7 +1248,7 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-4">7. Third-Party Links</h2>
+            <h2 className="text-xl font-semibold text-white mb-4">8. Third-Party Links</h2>
             <p className="text-gray-300 leading-relaxed">
               Our service contains links to YouTube and other third-party websites. We are not responsible 
               for the content or practices of these external sites.
@@ -1211,7 +1256,7 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-4">8. Changes to Terms</h2>
+            <h2 className="text-xl font-semibold text-white mb-4">9. Changes to Terms</h2>
             <p className="text-gray-300 leading-relaxed">
               We reserve the right to modify these terms at any time. Continued use of the service after 
               changes constitutes acceptance of the new terms.
@@ -1219,7 +1264,7 @@ const TermsPage = () => {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-4">9. Contact</h2>
+            <h2 className="text-xl font-semibold text-white mb-4">10. Contact</h2>
             <p className="text-gray-300 leading-relaxed">
               For questions about these Terms of Service, please contact us at anikhasan1100@gmail.com.
             </p>
@@ -1586,7 +1631,12 @@ const Footer = () => (
         </div>
       </div>
       <div className="border-t border-[#1a1a1a] mt-8 pt-8 text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} TopTube World Pro. All rights reserved. Data sourced from YouTube Data API.
+        <p className="mb-2">© {new Date().getFullYear()} TopTube World Pro. All rights reserved.</p>
+        <p className="text-xs text-gray-600">
+          Data sourced from YouTube Data API. Growth statistics, viral scores, and predictions are estimated by TopTube World Pro.
+          <br />
+          By using this site, you agree to the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:text-red-400">YouTube Terms of Service</a> and <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:text-red-400">Google Privacy Policy</a>.
+        </p>
       </div>
     </div>
   </footer>
@@ -1609,11 +1659,23 @@ const ViralBadge = ({ label }) => {
   };
 
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium border ${styles[label] || styles["Stable"]}`} data-testid={`viral-badge-${label?.toLowerCase()}`}>
+    <span 
+      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium border ${styles[label] || styles["Stable"]}`} 
+      data-testid={`viral-badge-${label?.toLowerCase()}`}
+      title="Estimated status by TopTube World Pro"
+    >
       {icons[label]} {label || "Stable"}
     </span>
   );
 };
+
+// Estimated Metric Label Component - Shows disclaimer for derived data
+const EstimatedLabel = ({ children, tooltip = "Estimated by TopTube World Pro" }) => (
+  <span className="group relative" title={tooltip}>
+    {children}
+    <span className="ml-1 text-[10px] text-gray-500 align-super">*</span>
+  </span>
+);
 
 // Rank Change Display
 const RankChange = ({ current, previous }) => {
@@ -2046,8 +2108,8 @@ const LeaderboardPage = () => {
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Channel</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Subscribers</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Change</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">24h Gain</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">24h Gain <span className="text-[10px]" title="Estimated">*</span></th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status <span className="text-[10px]" title="Estimated">*</span></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#222]">
@@ -2086,6 +2148,11 @@ const LeaderboardPage = () => {
           {filteredChannels.map((channel, idx) => (
             <ChannelCard key={channel.channel_id} channel={channel} rank={idx + 1} onClick={() => navigate(`/channel/${channel.channel_id}`)} />
           ))}
+        </div>
+        
+        {/* Estimated Data Disclaimer */}
+        <div className="mt-4 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
+          <span className="text-yellow-500">*</span> 24h Gains, Growth %, and Status are estimated by TopTube World Pro based on historical tracking. These metrics are not provided by YouTube.
         </div>
       </div>
     </div>
@@ -2772,14 +2839,19 @@ const ChannelPage = () => {
           <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
             <Zap className="w-6 h-6 text-yellow-500 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{channel.viral_prediction?.viral_score || 0}</div>
-            <div className="text-gray-500 text-sm">Viral Score</div>
+            <div className="text-gray-500 text-sm">Viral Score <span className="text-[10px]" title="Estimated by TopTube World Pro">*</span></div>
           </div>
+        </div>
+
+        {/* Estimated Data Disclaimer */}
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4 text-sm text-yellow-200/80">
+          <strong>*</strong> Growth statistics, predictions, and viral scores are estimated by TopTube World Pro based on historical tracking and are not provided by YouTube.
         </div>
 
         {/* Growth Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-[#111] border border-[#222] rounded-lg p-5">
-            <h3 className="text-gray-500 text-sm mb-2">24-Hour Growth</h3>
+            <h3 className="text-gray-500 text-sm mb-2">24-Hour Growth <span className="text-[10px]" title="Estimated">*</span></h3>
             <div className={`text-3xl font-bold ${(channel.daily_subscriber_gain || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
               {channel.daily_subscriber_gain >= 0 ? '+' : ''}{formatNumber(channel.daily_subscriber_gain || 0)}
             </div>
@@ -2788,7 +2860,7 @@ const ChannelPage = () => {
             </div>
           </div>
           <div className="bg-[#111] border border-[#222] rounded-lg p-5">
-            <h3 className="text-gray-500 text-sm mb-2">7-Day Growth</h3>
+            <h3 className="text-gray-500 text-sm mb-2">7-Day Growth <span className="text-[10px]" title="Estimated">*</span></h3>
             <div className={`text-3xl font-bold ${(channel.weekly_subscriber_gain || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
               {channel.weekly_subscriber_gain >= 0 ? '+' : ''}{formatNumber(channel.weekly_subscriber_gain || 0)}
             </div>
@@ -2797,7 +2869,7 @@ const ChannelPage = () => {
             </div>
           </div>
           <div className="bg-[#111] border border-[#222] rounded-lg p-5">
-            <h3 className="text-gray-500 text-sm mb-2">30-Day Growth</h3>
+            <h3 className="text-gray-500 text-sm mb-2">30-Day Growth <span className="text-[10px]" title="Estimated">*</span></h3>
             <div className={`text-3xl font-bold ${(channel.monthly_subscriber_gain || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
               {channel.monthly_subscriber_gain >= 0 ? '+' : ''}{formatNumber(channel.monthly_subscriber_gain || 0)}
             </div>

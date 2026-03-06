@@ -292,3 +292,21 @@
 
 ## Known Blockers
 - **YouTube API Quota** - Daily limit frequently exceeded. 74 countries still have 0 channels.
+
+## YouTube API ToS Compliance (Mar 6, 2026) ✅
+**CRITICAL FIX COMPLETED** - Resolved all violations from YouTube ToS Report
+
+### Violations Fixed:
+1. ✅ **Policy III.A.1 (YouTube ToS Agreement)** - Added prominent YouTube ToS notice to Terms of Service page with link to https://www.youtube.com/t/terms
+2. ✅ **Policy III.A.2c (Google Privacy Policy Link)** - Added Google Privacy Policy link to Privacy Policy page at http://www.google.com/policies/privacy
+3. ✅ **Policy III.E.4h (Derived Metrics Disclaimer)** - Added clear disclaimers that growth stats, viral scores, and predictions are "estimated by TopTube World Pro" and not from YouTube
+
+### Implementation Details:
+- **Terms of Service page**: New red highlighted section with YouTube ToS link + "Data Disclaimer" section explaining derived metrics
+- **Privacy Policy page**: New red highlighted section with Google Privacy Policy link
+- **Channel pages**: Yellow disclaimer banner + asterisks (*) on all derived metrics (24h Growth, 7-Day Growth, 30-Day Growth, Viral Score)
+- **Leaderboard pages**: Asterisks on "24H GAIN" and "STATUS" columns + footer disclaimer
+- **Site-wide footer**: Added links to YouTube ToS and Google Privacy Policy with disclaimer text
+
+### Admin Action Required:
+- User must respond to YouTube's email confirming whether they use one or multiple API project numbers
