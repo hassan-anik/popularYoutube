@@ -2230,52 +2230,72 @@ async def get_blog_post(slug: str):
 @api_router.get("/blog/country/{country_code}")
 async def get_country_blog_post(country_code: str):
     """Get auto-generated blog post for a country with top YouTubers"""
-    country = await db.countries.find_one({"code": country_code.upper()}, {"_id": 0})
-    if not country:
-        raise HTTPException(status_code=404, detail="Country not found")
-    
-    # Get top 10 channels for this country
-    channels = await db.channels.find(
-        {"country_code": country_code.upper(), "is_active": True},
-        {"_id": 0}
-    ).sort("subscriber_count", -1).limit(10).to_list(10)
-    
-    year = datetime.now(timezone.utc).year
-    country_name = country.get("name", country_code)
-    flag = country.get("flag_emoji", "")
-    region = country.get("region", "")
-    
-    # Generate SEO-optimized content
-    title = f"Top 10 Most Subscribed YouTubers in {country_name} {flag} ({year})"
-    slug = f"top-youtubers-{country_name.lower().replace(' ', '-')}-{year}"
-    
-    # Build the article content
-    intro = f"""Discover the most popular YouTube channels from {country_name}! This comprehensive guide ranks the top 10 most subscribed YouTubers from {country_name} in {year}, complete with subscriber counts, growth statistics, and what makes each channel special.
+    try:
+        country = await db.countries.find_one({"code": country_code.upper()}, {"_id": 0})
+        if not country:
+            raise HTTPException(status_code=404, detail="Country not found")
+        
+        # Get top 10 channels for this country
+        channels = await db.channels.find(
+            {"country_code": country_code.upper(), "is_active": True},
+            {"_id": 0}
+        ).sort("subscriber_count", -1).limit(10).to_list(10)
+        
+        # Ensure channels is always a list
+        if channels is None:
+            channels = []
+        
+        year = datetime.now(timezone.utc).year
+        country_name = country.get("name", country_code) or country_code
+        flag = country.get("flag_emoji", "") or ""
+        region = country.get("region", "") or "Unknown"
+        
+        # Generate SEO-optimized content
+        title = f"Top 10 Most Subscribed YouTubers in {country_name} {flag} ({year})"
+        slug = f"top-youtubers-{country_name.lower().replace(' ', '-')}-{year}"
+        
+        # Build the article content - handle empty channels case
+        if channels and len(channels) > 0:
+            top_channel_text = f"The #1 YouTuber is {channels[0].get('title', 'Unknown')} with {format_number_simple(channels[0].get('subscriber_count', 0))} subscribers."
+        else:
+            top_channel_text = "We are currently tracking YouTube creators from this country."
+        
+        intro = f"""Discover the most popular YouTube channels from {country_name}! This comprehensive guide ranks the top 10 most subscribed YouTubers from {country_name} in {year}, complete with subscriber counts, growth statistics, and what makes each channel special.
 
-{country_name}, located in {region}, has a thriving YouTube community. {"The #1 YouTuber is " + channels[0]['title'] + " with " + format_number_simple(channels[0]['subscriber_count']) + " subscribers." if channels else ""}"""
+{country_name}, located in {region}, has a thriving YouTube community. {top_channel_text}"""
 
-    # Generate channel sections
-    channel_sections = []
-    for idx, channel in enumerate(channels):
-        rank = idx + 1
-        section = f"""
-### #{rank}. {channel.get('title', 'Unknown')}
+        # Generate channel sections
+        channel_sections = []
+        for idx, channel in enumerate(channels):
+            if not channel:
+                continue
+            rank = idx + 1
+            channel_title = channel.get('title', 'Unknown') or 'Unknown'
+            subscriber_count = channel.get('subscriber_count', 0) or 0
+            view_count = channel.get('view_count', 0) or 0
+            video_count = channel.get('video_count', 0) or 0
+            daily_gain = channel.get('daily_subscriber_gain', 0) or 0
+            viral_label = channel.get('viral_label', '')
+            channel_id = channel.get('channel_id', '')
+            
+            section = f"""
+### #{rank}. {channel_title}
 
-**Subscribers:** {format_number_simple(channel.get('subscriber_count', 0))}
-**Total Views:** {format_number_simple(channel.get('view_count', 0))}
-**Videos:** {channel.get('video_count', 0)}
-**24h Growth:** +{format_number_simple(channel.get('daily_subscriber_gain', 0))} subscribers
+**Subscribers:** {format_number_simple(subscriber_count)}
+**Total Views:** {format_number_simple(view_count)}
+**Videos:** {video_count}
+**24h Growth:** +{format_number_simple(daily_gain)} subscribers
 
-{channel.get('title', 'This channel')} ranks #{rank} in {country_name} with an impressive {format_number_simple(channel.get('subscriber_count', 0))} subscribers. {"Currently showing " + channel.get('viral_label', 'stable') + " growth patterns." if channel.get('viral_label') else ""}
+{channel_title} ranks #{rank} in {country_name} with an impressive {format_number_simple(subscriber_count)} subscribers. {"Currently showing " + viral_label + " growth patterns." if viral_label else ""}
 
-[View detailed statistics →](/channel/{channel.get('channel_id', '')})
+[View detailed statistics →](/channel/{channel_id})
 """
-        channel_sections.append(section)
+            channel_sections.append(section)
     
-    content = intro + "\n\n## The Top 10 YouTubers in " + country_name + " " + str(year) + "\n" + "\n".join(channel_sections)
-    
-    # Add conclusion
-    content += f"""
+        content = intro + "\n\n## The Top 10 YouTubers in " + country_name + " " + str(year) + "\n" + "\n".join(channel_sections)
+        
+        # Add conclusion
+        content += f"""
 
 ## Conclusion
 
@@ -2288,27 +2308,48 @@ These are the top 10 most subscribed YouTube channels from {country_name} as of 
 
 *Data updated regularly from YouTube API. Last update: {datetime.now(timezone.utc).strftime('%B %d, %Y')}*
 """
-    
-    # Calculate read time (roughly 200 words per minute)
-    word_count = len(content.split())
-    read_time = max(3, word_count // 200)
-    
-    return {
-        "title": title,
-        "slug": slug,
-        "country_code": country_code.upper(),
-        "country_name": country_name,
-        "flag_emoji": flag,
-        "region": region,
-        "excerpt": f"Discover the top 10 most subscribed YouTube channels from {country_name} in {year}. See who's #1 and track their growth statistics.",
-        "content": content,
-        "category": "Country Rankings",
-        "channels": channels,
-        "total_channels": len(channels),
-        "read_time": f"{read_time} min read",
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "is_auto_generated": True
-    }
+        
+        # Calculate read time (roughly 200 words per minute)
+        word_count = len(content.split())
+        read_time = max(3, word_count // 200)
+        
+        return {
+            "title": title,
+            "slug": slug,
+            "country_code": country_code.upper(),
+            "country_name": country_name,
+            "flag_emoji": flag,
+            "region": region,
+            "excerpt": f"Discover the top 10 most subscribed YouTube channels from {country_name} in {year}. See who's #1 and track their growth statistics.",
+            "content": content,
+            "category": "Country Rankings",
+            "channels": channels,
+            "total_channels": len(channels) if channels else 0,
+            "read_time": f"{read_time} min read",
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "is_auto_generated": True
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating country blog post for {country_code}: {e}")
+        # Return a minimal valid response instead of 500
+        return {
+            "title": f"YouTube Channels in {country_code.upper()}",
+            "slug": f"youtubers-{country_code.lower()}",
+            "country_code": country_code.upper(),
+            "country_name": country_code.upper(),
+            "flag_emoji": "",
+            "region": "Unknown",
+            "excerpt": f"YouTube channels from {country_code.upper()}",
+            "content": f"# YouTube Channels in {country_code.upper()}\n\nWe are currently gathering data for this country. Please check back later.",
+            "category": "Country Rankings",
+            "channels": [],
+            "total_channels": 0,
+            "read_time": "1 min read",
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "is_auto_generated": True
+        }
 
 
 @api_router.get("/blog/countries")
