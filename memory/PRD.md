@@ -400,4 +400,35 @@
 - `/app/frontend/src/locales/en.json` - English translations
 - `/app/frontend/src/locales/es.json` - Spanish translations
 - `/app/frontend/src/locales/hi.json` - Hindi translations
+
+
+### Additional Languages Added (Mar 6, 2026):
+**New Languages (Total: 8):**
+- 🇫🇷 French (Français)
+- 🇩🇪 German (Deutsch)
+- 🇯🇵 Japanese (日本語)
+- 🇰🇷 Korean (한국어)
+
+### User Notification Alerts Added (Mar 6, 2026):
+**URL:** `/alerts`
+
+**Features:**
+- Create custom alerts for any YouTube channel
+- Alert Types:
+  - **Milestone Alert**: Notified when channel reaches X subscribers (e.g., 100M, 500M)
+  - **Daily Gain Alert**: Notified when channel gains X+ subscribers in 24h
+  - **Rank Change Alert**: Notified when channel's global rank changes
+- Enable/disable individual alerts
+- Delete alerts
+- View triggered alerts with reason
+
+**Backend Endpoints:**
+- `GET /api/user/alerts` - List user's alerts
+- `POST /api/user/alerts` - Create new alert
+- `PUT /api/user/alerts/{id}` - Update alert (enable/disable, change threshold)
+- `DELETE /api/user/alerts/{id}` - Delete alert
+- `GET /api/user/alerts/check` - Check for triggered alerts
+
+**Requires Authentication:** Yes (Google OAuth)
+
 - `/app/frontend/src/locales/pt.json` - Portuguese translations

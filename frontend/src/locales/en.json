@@ -188,6 +188,18 @@
     "agreeTo": "By using this site, you agree to the",
     "and": "and"
   },
+  "alerts": {
+    "title": "Notification Alerts",
+    "subtitle": "Get notified when your favorite channels reach milestones",
+    "createAlert": "Create Alert",
+    "myAlerts": "My Alerts",
+    "alertTypes": "Alert Types",
+    "milestone": "Milestone Alert",
+    "dailyGain": "Daily Gain Alert",
+    "rankChange": "Rank Change Alert",
+    "noAlerts": "No alerts yet",
+    "deleteAlert": "Delete Alert"
+  },
   "viral": {
     "exploding": "Exploding",
     "risingFast": "Rising Fast",

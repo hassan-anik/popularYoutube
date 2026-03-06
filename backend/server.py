@@ -892,6 +892,211 @@ async def remove_user_favorite(channel_id: str, request: Request):
     return {"success": True, "message": "Removed from favorites"}
 
 
+# ==================== USER NOTIFICATION ALERTS ====================
+
+class AlertCreate(BaseModel):
+    channel_id: str
+    alert_type: str  # milestone, daily_gain, rank_change
+    threshold: Optional[int] = None  # For milestone: target sub count; For daily_gain: min daily gain
+    notify_email: bool = True
+
+class AlertUpdate(BaseModel):
+    enabled: bool = True
+    threshold: Optional[int] = None
+    notify_email: Optional[bool] = None
+
+@api_router.get("/user/alerts")
+async def get_user_alerts(request: Request):
+    """Get user's notification alerts"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required")
+    
+    alerts = await db.user_alerts.find(
+        {"user_id": user["user_id"]},
+        {"_id": 0}
+    ).to_list(100)
+    
+    # Enrich with channel data
+    for alert in alerts:
+        channel = await db.channels.find_one(
+            {"channel_id": alert["channel_id"]},
+            {"_id": 0, "title": 1, "thumbnail_url": 1, "subscriber_count": 1, "country_name": 1}
+        )
+        alert["channel"] = channel
+    
+    return {"alerts": alerts}
+
+@api_router.post("/user/alerts")
+async def create_alert(alert_data: AlertCreate, request: Request):
+    """Create a new notification alert"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required")
+    
+    # Validate alert type
+    valid_types = ["milestone", "daily_gain", "rank_change"]
+    if alert_data.alert_type not in valid_types:
+        raise HTTPException(status_code=400, detail=f"Invalid alert type. Must be one of: {valid_types}")
+    
+    # Check if channel exists
+    channel = await db.channels.find_one({"channel_id": alert_data.channel_id}, {"_id": 0, "subscriber_count": 1})
+    if not channel:
+        raise HTTPException(status_code=404, detail="Channel not found")
+    
+    # Check if alert already exists for this channel and type
+    existing = await db.user_alerts.find_one({
+        "user_id": user["user_id"],
+        "channel_id": alert_data.channel_id,
+        "alert_type": alert_data.alert_type
+    })
+    
+    if existing:
+        return {"success": False, "message": "Alert already exists for this channel and type"}
+    
+    # Set default thresholds based on alert type
+    threshold = alert_data.threshold
+    if threshold is None:
+        if alert_data.alert_type == "milestone":
+            # Default to next milestone (round up to nearest 10M, 50M, or 100M)
+            current_subs = channel.get("subscriber_count", 0)
+            if current_subs < 10000000:
+                threshold = 10000000
+            elif current_subs < 50000000:
+                threshold = 50000000
+            elif current_subs < 100000000:
+                threshold = 100000000
+            else:
+                threshold = ((current_subs // 100000000) + 1) * 100000000
+        elif alert_data.alert_type == "daily_gain":
+            threshold = 100000  # Alert when daily gain > 100K
+        elif alert_data.alert_type == "rank_change":
+            threshold = 1  # Alert on any rank change
+    
+    alert = {
+        "alert_id": f"alert_{uuid.uuid4().hex[:12]}",
+        "user_id": user["user_id"],
+        "user_email": user.get("email"),
+        "channel_id": alert_data.channel_id,
+        "alert_type": alert_data.alert_type,
+        "threshold": threshold,
+        "enabled": True,
+        "notify_email": alert_data.notify_email,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "last_triggered": None,
+        "trigger_count": 0
+    }
+    
+    await db.user_alerts.insert_one(alert)
+    
+    return {
+        "success": True,
+        "message": "Alert created successfully",
+        "alert_id": alert["alert_id"]
+    }
+
+@api_router.put("/user/alerts/{alert_id}")
+async def update_alert(alert_id: str, alert_data: AlertUpdate, request: Request):
+    """Update an existing alert"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required")
+    
+    # Find the alert
+    alert = await db.user_alerts.find_one({
+        "alert_id": alert_id,
+        "user_id": user["user_id"]
+    })
+    
+    if not alert:
+        raise HTTPException(status_code=404, detail="Alert not found")
+    
+    # Update fields
+    update_data = {"enabled": alert_data.enabled}
+    if alert_data.threshold is not None:
+        update_data["threshold"] = alert_data.threshold
+    if alert_data.notify_email is not None:
+        update_data["notify_email"] = alert_data.notify_email
+    
+    await db.user_alerts.update_one(
+        {"alert_id": alert_id},
+        {"$set": update_data}
+    )
+    
+    return {"success": True, "message": "Alert updated"}
+
+@api_router.delete("/user/alerts/{alert_id}")
+async def delete_alert(alert_id: str, request: Request):
+    """Delete a notification alert"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required")
+    
+    result = await db.user_alerts.delete_one({
+        "alert_id": alert_id,
+        "user_id": user["user_id"]
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Alert not found")
+    
+    return {"success": True, "message": "Alert deleted"}
+
+@api_router.get("/user/alerts/check")
+async def check_triggered_alerts(request: Request):
+    """Check for triggered alerts for the current user"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required")
+    
+    alerts = await db.user_alerts.find(
+        {"user_id": user["user_id"], "enabled": True},
+        {"_id": 0}
+    ).to_list(100)
+    
+    triggered = []
+    
+    for alert in alerts:
+        channel = await db.channels.find_one(
+            {"channel_id": alert["channel_id"]},
+            {"_id": 0, "title": 1, "subscriber_count": 1, "daily_subscriber_gain": 1, "global_rank": 1}
+        )
+        
+        if not channel:
+            continue
+        
+        is_triggered = False
+        trigger_reason = ""
+        
+        if alert["alert_type"] == "milestone":
+            if channel.get("subscriber_count", 0) >= alert.get("threshold", 0):
+                is_triggered = True
+                trigger_reason = f"Reached {alert['threshold']:,} subscribers!"
+        
+        elif alert["alert_type"] == "daily_gain":
+            if channel.get("daily_subscriber_gain", 0) >= alert.get("threshold", 0):
+                is_triggered = True
+                trigger_reason = f"Daily gain exceeded {alert['threshold']:,}!"
+        
+        elif alert["alert_type"] == "rank_change":
+            # For rank change, we'd need to track previous rank - simplified for now
+            pass
+        
+        if is_triggered:
+            triggered.append({
+                "alert": alert,
+                "channel": channel,
+                "reason": trigger_reason
+            })
+    
+    return {"triggered_alerts": triggered, "total_alerts": len(alerts)}
+
+
 # ==================== ADMIN ====================
 
 @api_router.get("/admin/stats")

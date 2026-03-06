@@ -6,12 +6,20 @@ import en from './locales/en.json';
 import es from './locales/es.json';
 import hi from './locales/hi.json';
 import pt from './locales/pt.json';
+import fr from './locales/fr.json';
+import de from './locales/de.json';
+import ja from './locales/ja.json';
+import ko from './locales/ko.json';
 
 const resources = {
   en: { translation: en },
   es: { translation: es },
   hi: { translation: hi },
-  pt: { translation: pt }
+  pt: { translation: pt },
+  fr: { translation: fr },
+  de: { translation: de },
+  ja: { translation: ja },
+  ko: { translation: ko }
 };
 
 i18n
@@ -36,7 +44,11 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
   { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
-  { code: 'pt', name: 'Português', flag: '🇧🇷' }
+  { code: 'pt', name: 'Português', flag: '🇧🇷' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'ko', name: '한국어', flag: '🇰🇷' }
 ];
 
 export default i18n;
