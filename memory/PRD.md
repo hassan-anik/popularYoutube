@@ -432,3 +432,44 @@
 **Requires Authentication:** Yes (Google OAuth)
 
 - `/app/frontend/src/locales/pt.json` - Portuguese translations
+
+---
+
+## Refactoring Progress (Mar 6, 2026)
+
+### Soft 404 SEO Fix ✓
+- Fixed React Hook ordering violation in `CountryPage` component
+- Verified `noindex, nofollow` meta tag is correctly added to invalid pages
+- Verified valid pages retain `index, follow` meta tag
+
+### Frontend Code Refactoring - IN PROGRESS
+
+**Completed:**
+- Created `/app/frontend/src/pages/StaticPages.jsx` - Extracted AboutPage, MethodologyPage, PrivacyPage, TermsPage, ContactPage
+- Created `/app/frontend/src/pages/index.js` - Page exports
+- Created `/app/frontend/src/components/common/LanguageSelector.jsx`
+- Created `/app/frontend/src/components/common/UserMenu.jsx`
+- Updated `/app/frontend/src/components/common/Header.jsx` with i18n support
+- **App.js reduced from 7,117 lines to 6,409 lines** (708 lines extracted)
+
+**Remaining Pages to Extract (23 total):**
+- HomePage, LeaderboardPage, Top100Page
+- CountriesPage, CountryPage, ChannelPage
+- TrendingPage, RacePage, MilestonePage
+- CategoryListPage, CategoryPage, RisingStarsPage
+- ComparePage, AuthCallbackPage, ChannelRequestPage
+- PollsPage, AlertsPage, FavoritesPage
+- BlogPage, BlogPostPage, CountryBlogPostPage
+- BlogAdminPage, AdminPage
+
+### Backend Refactoring - NOT STARTED
+**Target Structure:**
+```
+/app/backend/
+├── app/
+│   ├── routes/    # API endpoints
+│   ├── services/  # Business logic
+│   ├── models/    # Data models
+│   └── utils/     # Helpers
+└── server.py      # Main entry point
+```
