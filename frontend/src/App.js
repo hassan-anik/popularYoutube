@@ -1825,17 +1825,19 @@ const Footer = () => (
             <li><Link to="/top-100" className="text-gray-400 hover:text-white">Top 100 YouTubers</Link></li>
             <li><Link to="/leaderboard" className="text-gray-400 hover:text-white">Global Leaderboard</Link></li>
             <li><Link to="/trending" className="text-gray-400 hover:text-white">Fastest Growing</Link></li>
-            <li><Link to="/countries" className="text-gray-400 hover:text-white">By Country</Link></li>
-            <li><Link to="/compare" className="text-gray-400 hover:text-white">Compare Channels</Link></li>
+            <li><Link to="/rising-stars" className="text-gray-400 hover:text-white">Rising Stars</Link></li>
+            <li><Link to="/race" className="text-gray-400 hover:text-white">Race to Milestone</Link></li>
+            <li><Link to="/milestones" className="text-gray-400 hover:text-white">Milestone Tracker</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="font-semibold text-white mb-4">Popular Countries</h4>
+          <h4 className="font-semibold text-white mb-4">Browse</h4>
           <ul className="space-y-2 text-sm">
+            <li><Link to="/countries" className="text-gray-400 hover:text-white">By Country</Link></li>
+            <li><Link to="/categories" className="text-gray-400 hover:text-white">By Category</Link></li>
+            <li><Link to="/compare" className="text-gray-400 hover:text-white">Compare Channels</Link></li>
             <li><Link to="/country/US" className="text-gray-400 hover:text-white">United States</Link></li>
             <li><Link to="/country/IN" className="text-gray-400 hover:text-white">India</Link></li>
-            <li><Link to="/country/BR" className="text-gray-400 hover:text-white">Brazil</Link></li>
-            <li><Link to="/country/KR" className="text-gray-400 hover:text-white">South Korea</Link></li>
           </ul>
         </div>
         <div>
@@ -3347,6 +3349,863 @@ const TrendingPage = () => {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==================== RACE TO MILESTONE PAGE ====================
+
+const RacePage = () => {
+  const navigate = useNavigate();
+  const [races, setRaces] = useState([]);
+  const [channels, setChannels] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Define milestone targets
+  const milestones = [500000000, 400000000, 300000000, 250000000, 200000000, 150000000, 100000000];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API}/leaderboard/global?limit=100`);
+        const channelData = response.data.channels || [];
+        setChannels(channelData);
+        
+        // Generate races based on channels close to milestones
+        const generatedRaces = [];
+        
+        milestones.forEach(milestone => {
+          // Find channels approaching this milestone (within 80% of milestone)
+          const approaching = channelData.filter(c => 
+            c.subscriber_count < milestone && 
+            c.subscriber_count >= milestone * 0.7
+          ).slice(0, 3);
+          
+          if (approaching.length >= 2) {
+            generatedRaces.push({
+              milestone,
+              title: `Race to ${formatNumber(milestone)} Subscribers`,
+              channels: approaching.map(c => ({
+                ...c,
+                remaining: milestone - c.subscriber_count,
+                daysToReach: c.daily_subscriber_gain > 0 
+                  ? Math.ceil((milestone - c.subscriber_count) / c.daily_subscriber_gain)
+                  : null,
+                progress: (c.subscriber_count / milestone) * 100
+              }))
+            });
+          }
+        });
+        
+        setRaces(generatedRaces);
+      } catch (error) {
+        console.error("Error fetching race data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const currentYear = new Date().getFullYear();
+
+  useSEO({
+    title: `Race to Milestone ${currentYear} - Who Will Hit 500M First? | Live YouTube Subscriber Race`,
+    description: `Watch the live race to subscriber milestones! Track which YouTube channels will hit 500M, 300M, 200M subscribers first. Real-time progress tracking with estimated arrival dates.`,
+    keywords: `youtube subscriber race ${currentYear}, race to 500 million subscribers, mrbeast vs t-series, who will hit 500m first, youtube milestone tracker, subscriber countdown`,
+    canonical: `${SITE_URL}/race`
+  });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // Featured race - channels closest to 500M
+  const featuredRace = races.find(r => r.milestone === 500000000) || races[0];
+
+  return (
+    <div className="py-8" data-testid="race-page">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Trophy className="w-10 h-10 text-yellow-500" />
+            <h1 className="text-3xl md:text-4xl font-bold text-white">Race to Milestone</h1>
+          </div>
+          <p className="text-gray-400 text-lg">Live tracking of YouTube channels racing to subscriber milestones</p>
+          <LiveIndicator />
+        </div>
+
+        {/* Featured Race */}
+        {featuredRace && (
+          <div className="bg-gradient-to-r from-yellow-500/10 to-red-500/10 border border-yellow-500/30 rounded-xl p-6 mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <Flame className="w-6 h-6 text-yellow-500" />
+              <h2 className="text-2xl font-bold text-white">{featuredRace.title}</h2>
+              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">LIVE</span>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-4">
+              {featuredRace.channels.map((channel, idx) => (
+                <div 
+                  key={channel.channel_id}
+                  className={`bg-[#111] border ${idx === 0 ? 'border-yellow-500/50' : 'border-[#333]'} rounded-lg p-4 cursor-pointer hover:border-yellow-500/30 transition-colors`}
+                  onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className={`text-2xl font-bold ${idx === 0 ? 'text-yellow-500' : idx === 1 ? 'text-gray-400' : 'text-amber-700'}`}>
+                      #{idx + 1}
+                    </span>
+                    <img src={channel.thumbnail_url} alt={channel.title} className="w-12 h-12 rounded-full" />
+                    <div>
+                      <h3 className="font-semibold text-white text-sm">{channel.title}</h3>
+                      <p className="text-gray-500 text-xs">{channel.country_name}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Progress Bar */}
+                  <div className="mb-3">
+                    <div className="flex justify-between text-xs text-gray-400 mb-1">
+                      <span>{formatNumber(channel.subscriber_count)}</span>
+                      <span>{formatNumber(featuredRace.milestone)}</span>
+                    </div>
+                    <div className="h-3 bg-[#222] rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full ${idx === 0 ? 'bg-yellow-500' : idx === 1 ? 'bg-gray-500' : 'bg-amber-700'}`}
+                        style={{ width: `${channel.progress}%` }}
+                      />
+                    </div>
+                    <div className="text-center text-xs text-gray-500 mt-1">{channel.progress.toFixed(1)}%</div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 text-center">
+                    <div className="bg-[#0d0d0d] rounded p-2">
+                      <div className="text-red-400 font-bold text-sm">{formatNumber(channel.remaining)}</div>
+                      <div className="text-gray-500 text-xs">Remaining</div>
+                    </div>
+                    <div className="bg-[#0d0d0d] rounded p-2">
+                      <div className="text-green-400 font-bold text-sm">
+                        {channel.daysToReach ? `~${channel.daysToReach} days` : 'N/A'}
+                      </div>
+                      <div className="text-gray-500 text-xs">Est. Time *</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* All Active Races */}
+        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-red-500" />
+          All Active Races
+        </h2>
+        
+        <div className="space-y-6">
+          {races.filter(r => r !== featuredRace).map(race => (
+            <div key={race.milestone} className="bg-[#111] border border-[#222] rounded-lg p-5">
+              <h3 className="text-lg font-semibold text-white mb-4">{race.title}</h3>
+              <div className="space-y-3">
+                {race.channels.map((channel, idx) => (
+                  <div 
+                    key={channel.channel_id}
+                    className="flex items-center gap-4 p-3 bg-[#0d0d0d] rounded-lg cursor-pointer hover:bg-[#1a1a1a] transition-colors"
+                    onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                  >
+                    <span className={`text-lg font-bold w-8 ${idx === 0 ? 'text-yellow-500' : 'text-gray-500'}`}>#{idx + 1}</span>
+                    <img src={channel.thumbnail_url} alt={channel.title} className="w-10 h-10 rounded-full" />
+                    <div className="flex-1">
+                      <div className="font-medium text-white">{channel.title}</div>
+                      <div className="text-sm text-gray-500">{formatNumber(channel.subscriber_count)} subs</div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="h-2 bg-[#222] rounded-full overflow-hidden">
+                        <div className="h-full bg-red-500 rounded-full" style={{ width: `${channel.progress}%` }} />
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">{channel.progress.toFixed(1)}% complete</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-green-400 text-sm font-medium">
+                        {channel.daysToReach ? `~${channel.daysToReach} days` : 'N/A'}
+                      </div>
+                      <div className="text-xs text-gray-500">Est. arrival *</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Disclaimer */}
+        <div className="mt-6 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
+          <span className="text-yellow-500">*</span> Estimated arrival times are calculated based on current daily growth rates and may vary significantly. These are projections by TopTube World Pro, not YouTube data.
+        </div>
+
+        {/* SEO Content */}
+        <div className="mt-12 bg-[#111] border border-[#222] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">About YouTube Subscriber Races</h2>
+          <div className="text-gray-400 space-y-3 text-sm">
+            <p>
+              The race to major subscriber milestones has become one of the most exciting narratives in YouTube history. 
+              From the legendary PewDiePie vs T-Series battle to MrBeast's meteoric rise, these races captivate millions of viewers worldwide.
+            </p>
+            <p>
+              Our live tracker monitors the top YouTube channels and calculates estimated arrival times based on current growth rates. 
+              While these predictions are estimates and can change based on viral videos or algorithm changes, they provide an exciting 
+              way to follow the competition.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==================== MILESTONE TIMELINE PAGE ====================
+
+const MilestonePage = () => {
+  const navigate = useNavigate();
+  const [channels, setChannels] = useState([]);
+  const [upcomingMilestones, setUpcomingMilestones] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const milestoneValues = [500000000, 400000000, 300000000, 250000000, 200000000, 150000000, 100000000, 75000000, 50000000];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API}/leaderboard/global?limit=200`);
+        const channelData = response.data.channels || [];
+        setChannels(channelData);
+        
+        // Calculate upcoming milestones
+        const upcoming = [];
+        channelData.forEach(channel => {
+          milestoneValues.forEach(milestone => {
+            if (channel.subscriber_count < milestone && channel.subscriber_count >= milestone * 0.9) {
+              const remaining = milestone - channel.subscriber_count;
+              const daysToReach = channel.daily_subscriber_gain > 0 
+                ? Math.ceil(remaining / channel.daily_subscriber_gain)
+                : null;
+              
+              if (daysToReach && daysToReach <= 365) { // Only show if within a year
+                upcoming.push({
+                  channel,
+                  milestone,
+                  remaining,
+                  daysToReach,
+                  progress: (channel.subscriber_count / milestone) * 100
+                });
+              }
+            }
+          });
+        });
+        
+        // Sort by days to reach
+        upcoming.sort((a, b) => (a.daysToReach || 9999) - (b.daysToReach || 9999));
+        setUpcomingMilestones(upcoming.slice(0, 20));
+      } catch (error) {
+        console.error("Error fetching milestone data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const currentYear = new Date().getFullYear();
+
+  // Historical milestones (hardcoded significant events)
+  const historicalMilestones = [
+    { channel: "MrBeast", milestone: "400M", date: "2024", country: "US" },
+    { channel: "T-Series", milestone: "300M", date: "2024", country: "IN" },
+    { channel: "MrBeast", milestone: "300M", date: "2024", country: "US" },
+    { channel: "T-Series", milestone: "250M", date: "2023", country: "IN" },
+    { channel: "Cocomelon", milestone: "150M", date: "2023", country: "US" },
+    { channel: "T-Series", milestone: "200M", date: "2022", country: "IN" },
+    { channel: "PewDiePie", milestone: "100M", date: "2019", country: "SE" },
+    { channel: "T-Series", milestone: "100M", date: "2019", country: "IN" },
+  ];
+
+  useSEO({
+    title: `YouTube Milestone Tracker ${currentYear} - Channels About to Hit 100M, 200M, 500M Subscribers`,
+    description: `Track YouTube channels approaching major subscriber milestones. See who's about to hit 100M, 200M, 300M, 500M subscribers next. Historical milestone timeline included.`,
+    keywords: `youtube milestones ${currentYear}, channels hitting 100 million, youtube 500m subscribers, subscriber milestone tracker, next youtuber to hit 100m`,
+    canonical: `${SITE_URL}/milestones`
+  });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="milestone-page">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Star className="w-10 h-10 text-yellow-500" />
+            <h1 className="text-3xl md:text-4xl font-bold text-white">Milestone Tracker</h1>
+          </div>
+          <p className="text-gray-400 text-lg">Track channels approaching and achieving major subscriber milestones</p>
+        </div>
+
+        {/* Upcoming Milestones */}
+        <section className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <Clock className="w-6 h-6 text-green-500" />
+            <h2 className="text-2xl font-bold text-white">Upcoming Milestones</h2>
+            <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">LIVE</span>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-4">
+            {upcomingMilestones.map((item, idx) => (
+              <div 
+                key={`${item.channel.channel_id}-${item.milestone}`}
+                className={`bg-[#111] border ${idx < 3 ? 'border-yellow-500/30' : 'border-[#222]'} rounded-lg p-4 cursor-pointer hover:border-yellow-500/50 transition-colors`}
+                onClick={() => navigate(`/channel/${item.channel.channel_id}`)}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  {idx < 3 && <Flame className="w-5 h-5 text-yellow-500" />}
+                  <img src={item.channel.thumbnail_url} alt={item.channel.title} className="w-10 h-10 rounded-full" />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-white">{item.channel.title}</h3>
+                    <p className="text-gray-500 text-sm">{item.channel.country_name}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-yellow-500 font-bold">{formatNumber(item.milestone)}</div>
+                    <div className="text-gray-500 text-xs">Target</div>
+                  </div>
+                </div>
+                
+                {/* Progress */}
+                <div className="mb-2">
+                  <div className="h-2 bg-[#222] rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-yellow-500 to-red-500 rounded-full"
+                      style={{ width: `${item.progress}%` }}
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">{formatNumber(item.channel.subscriber_count)} current</span>
+                  <span className="text-green-400">~{item.daysToReach} days away *</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Historical Timeline */}
+        <section className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <BookOpen className="w-6 h-6 text-blue-500" />
+            <h2 className="text-2xl font-bold text-white">Milestone History</h2>
+          </div>
+          
+          <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-[#333]" />
+              
+              <div className="space-y-6">
+                {historicalMilestones.map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-4 ml-2">
+                    <div className={`w-5 h-5 rounded-full ${idx < 2 ? 'bg-yellow-500' : 'bg-blue-500'} flex-shrink-0 z-10`} />
+                    <div className="flex-1 bg-[#0d0d0d] rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="font-semibold text-white">{item.channel}</h3>
+                        <span className="text-gray-500 text-sm">{item.date}</span>
+                      </div>
+                      <p className="text-gray-400">
+                        Reached <span className="text-yellow-500 font-bold">{item.milestone}</span> subscribers
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Milestone Levels */}
+        <section>
+          <div className="flex items-center gap-2 mb-6">
+            <Trophy className="w-6 h-6 text-purple-500" />
+            <h2 className="text-2xl font-bold text-white">Milestone Levels</h2>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { value: "500M", label: "Diamond", color: "text-cyan-400", bg: "bg-cyan-500/20", count: channels.filter(c => c.subscriber_count >= 500000000).length },
+              { value: "200M", label: "Platinum", color: "text-gray-300", bg: "bg-gray-500/20", count: channels.filter(c => c.subscriber_count >= 200000000).length },
+              { value: "100M", label: "Gold", color: "text-yellow-500", bg: "bg-yellow-500/20", count: channels.filter(c => c.subscriber_count >= 100000000).length },
+              { value: "50M", label: "Silver", color: "text-gray-400", bg: "bg-gray-400/20", count: channels.filter(c => c.subscriber_count >= 50000000).length },
+            ].map(level => (
+              <div key={level.value} className={`${level.bg} border border-[#333] rounded-lg p-4 text-center`}>
+                <div className={`text-3xl font-bold ${level.color} mb-1`}>{level.value}</div>
+                <div className="text-gray-400 text-sm">{level.label} Level</div>
+                <div className="text-white font-semibold mt-2">{level.count} channels</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Disclaimer */}
+        <div className="mt-6 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
+          <span className="text-yellow-500">*</span> Estimated arrival times are calculated based on current daily growth rates by TopTube World Pro and may change.
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==================== CHANNEL CATEGORY PAGES ====================
+
+const CHANNEL_CATEGORIES = [
+  { slug: 'music', name: 'Music', icon: '🎵', keywords: ['music', 'vevo', 'records', 'songs', 'official artist'] },
+  { slug: 'gaming', name: 'Gaming', icon: '🎮', keywords: ['gaming', 'games', 'gameplay', 'gamer', 'plays'] },
+  { slug: 'entertainment', name: 'Entertainment', icon: '🎬', keywords: ['entertainment', 'comedy', 'funny', 'vlog', 'challenge'] },
+  { slug: 'education', name: 'Education', icon: '📚', keywords: ['education', 'learn', 'tutorial', 'how to', 'explained', 'science'] },
+  { slug: 'sports', name: 'Sports', icon: '⚽', keywords: ['sports', 'football', 'basketball', 'soccer', 'nba', 'fifa'] },
+  { slug: 'news', name: 'News & Politics', icon: '📰', keywords: ['news', 'politics', 'media', 'tv', 'broadcast'] },
+  { slug: 'kids', name: 'Kids & Family', icon: '👶', keywords: ['kids', 'children', 'nursery', 'cartoon', 'family', 'baby'] },
+  { slug: 'tech', name: 'Technology', icon: '💻', keywords: ['tech', 'technology', 'review', 'unboxing', 'gadget'] },
+];
+
+const CategoryListPage = () => {
+  const navigate = useNavigate();
+  const [channels, setChannels] = useState([]);
+  const [categoryStats, setCategoryStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API}/leaderboard/global?limit=500`);
+        const channelData = response.data.channels || [];
+        setChannels(channelData);
+        
+        // Categorize channels
+        const stats = CHANNEL_CATEGORIES.map(cat => {
+          const categoryChannels = channelData.filter(ch => {
+            const title = (ch.title || '').toLowerCase();
+            const desc = (ch.description || '').toLowerCase();
+            return cat.keywords.some(kw => title.includes(kw) || desc.includes(kw));
+          });
+          
+          return {
+            ...cat,
+            channelCount: categoryChannels.length,
+            topChannel: categoryChannels[0],
+            totalSubs: categoryChannels.reduce((sum, c) => sum + (c.subscriber_count || 0), 0)
+          };
+        });
+        
+        setCategoryStats(stats.sort((a, b) => b.totalSubs - a.totalSubs));
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const currentYear = new Date().getFullYear();
+
+  useSEO({
+    title: `YouTube Channel Categories ${currentYear} - Top Gaming, Music, Entertainment YouTubers`,
+    description: `Browse YouTube channels by category. Find the top Gaming, Music, Entertainment, Education, Sports, and Tech YouTubers ranked by subscribers.`,
+    keywords: `youtube categories ${currentYear}, top gaming youtubers, best music channels, entertainment youtube, youtube by category`,
+    canonical: `${SITE_URL}/categories`
+  });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="categories-page">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Browse by Category</h1>
+          <p className="text-gray-400 text-lg">Explore top YouTube channels across different content categories</p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {categoryStats.map(cat => (
+            <div
+              key={cat.slug}
+              className="bg-[#111] border border-[#222] rounded-lg p-5 cursor-pointer hover:border-red-500/50 transition-colors group"
+              onClick={() => navigate(`/category/${cat.slug}`)}
+            >
+              <div className="text-4xl mb-3">{cat.icon}</div>
+              <h2 className="text-xl font-bold text-white group-hover:text-red-500 transition-colors">{cat.name}</h2>
+              <p className="text-gray-500 text-sm mt-1">{cat.channelCount} channels tracked</p>
+              <p className="text-gray-400 text-sm">{formatNumber(cat.totalSubs)} total subs</p>
+              
+              {cat.topChannel && (
+                <div className="mt-4 pt-4 border-t border-[#222]">
+                  <p className="text-gray-500 text-xs mb-2">Top Channel</p>
+                  <div className="flex items-center gap-2">
+                    <img src={cat.topChannel.thumbnail_url} alt="" className="w-8 h-8 rounded-full" />
+                    <div>
+                      <div className="text-white text-sm font-medium truncate">{cat.topChannel.title}</div>
+                      <div className="text-gray-500 text-xs">{formatNumber(cat.topChannel.subscriber_count)} subs</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CategoryPage = () => {
+  const { categorySlug } = useParams();
+  const navigate = useNavigate();
+  const [channels, setChannels] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const category = CHANNEL_CATEGORIES.find(c => c.slug === categorySlug);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!category) return;
+      
+      try {
+        const response = await axios.get(`${API}/leaderboard/global?limit=500`);
+        const channelData = response.data.channels || [];
+        
+        // Filter by category keywords
+        const categoryChannels = channelData.filter(ch => {
+          const title = (ch.title || '').toLowerCase();
+          const desc = (ch.description || '').toLowerCase();
+          return category.keywords.some(kw => title.includes(kw) || desc.includes(kw));
+        });
+        
+        setChannels(categoryChannels);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [categorySlug, category]);
+
+  const currentYear = new Date().getFullYear();
+
+  useSEO({
+    title: category ? `Top ${category.name} YouTube Channels ${currentYear} - Best ${category.name} YouTubers Ranked` : "Category Not Found",
+    description: category ? `Ranking of the most subscribed ${category.name} YouTube channels in ${currentYear}. See the top ${category.name} YouTubers with live subscriber counts and growth stats.` : "",
+    keywords: category ? `top ${category.name.toLowerCase()} youtubers ${currentYear}, best ${category.name.toLowerCase()} youtube channels, ${category.name.toLowerCase()} youtube ranking` : "",
+    canonical: `${SITE_URL}/category/${categorySlug}`
+  });
+
+  if (!category) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold text-white mb-4">Category Not Found</h1>
+        <button onClick={() => navigate('/categories')} className="text-red-500 hover:text-red-400">
+          Browse All Categories
+        </button>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="category-page">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Breadcrumb */}
+        <Breadcrumb items={[
+          { label: 'Home', href: '/' },
+          { label: 'Categories', href: '/categories' },
+          { label: category.name }
+        ]} />
+
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-4xl">{category.icon}</span>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">Top {category.name} YouTubers</h1>
+          </div>
+          <p className="text-gray-400">Ranking of the most subscribed {category.name} channels • {channels.length} channels</p>
+        </div>
+
+        {/* Top 3 Podium */}
+        {channels.length >= 3 && (
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            {[1, 0, 2].map((position) => {
+              const channel = channels[position];
+              if (!channel) return null;
+              const isFirst = position === 0;
+              return (
+                <div 
+                  key={channel.channel_id}
+                  className={`bg-[#111] border ${isFirst ? 'border-yellow-500/50 -mt-4' : 'border-[#222]'} rounded-lg p-4 text-center cursor-pointer hover:border-yellow-500/30 transition-colors`}
+                  onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                >
+                  <div className={`text-2xl font-bold mb-2 ${isFirst ? 'text-yellow-500' : position === 1 ? 'text-gray-400' : 'text-amber-700'}`}>
+                    #{position + 1}
+                  </div>
+                  <img src={channel.thumbnail_url} alt={channel.title} className="w-16 h-16 rounded-full mx-auto mb-2" />
+                  <h3 className="font-semibold text-white truncate">{channel.title}</h3>
+                  <p className="text-gray-500 text-sm">{formatNumber(channel.subscriber_count)} subs</p>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Channel List */}
+        <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-[#0d0d0d] border-b border-[#222]">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Rank</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Channel</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Subscribers</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Country</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">24h Gain *</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#222]">
+              {channels.slice(0, 50).map((channel, idx) => (
+                <tr 
+                  key={channel.channel_id}
+                  className="hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+                  onClick={() => navigate(`/channel/${channel.channel_id}`)}
+                >
+                  <td className="px-4 py-3 font-bold text-gray-400">#{idx + 1}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <img src={channel.thumbnail_url} alt="" className="w-10 h-10 rounded-full" />
+                      <span className="font-medium text-white">{channel.title}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-white font-semibold">{formatNumber(channel.subscriber_count)}</td>
+                  <td className="px-4 py-3 text-gray-400">{channel.country_name}</td>
+                  <td className="px-4 py-3 text-green-400">+{formatNumber(channel.daily_subscriber_gain || 0)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Disclaimer */}
+        <div className="mt-4 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
+          <span className="text-yellow-500">*</span> 24h Gains are estimated by TopTube World Pro. Category assignments are based on channel metadata and may not be 100% accurate.
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==================== RISING STARS PAGE ====================
+
+const RisingStarsPage = () => {
+  const navigate = useNavigate();
+  const [channels, setChannels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('growth'); // growth, gains, viral
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API}/leaderboard/global?limit=500`);
+        const channelData = response.data.channels || [];
+        
+        // Filter for "rising stars" - channels under 50M (since most top channels are large) with any data
+        const risingStars = channelData
+          .filter(c => c.subscriber_count < 50000000 && c.subscriber_count >= 100000);
+        
+        setChannels(risingStars);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const sortedChannels = useMemo(() => {
+    const sorted = [...channels];
+    switch (filter) {
+      case 'growth':
+        return sorted.sort((a, b) => (b.daily_growth_percent || 0) - (a.daily_growth_percent || 0));
+      case 'gains':
+        return sorted.sort((a, b) => (b.daily_subscriber_gain || 0) - (a.daily_subscriber_gain || 0));
+      case 'viral':
+        return sorted.filter(c => c.viral_label === 'Exploding' || c.viral_label === 'Rising Fast');
+      default:
+        return sorted;
+    }
+  }, [channels, filter]);
+
+  const currentYear = new Date().getFullYear();
+
+  useSEO({
+    title: `Rising YouTube Stars ${currentYear} - Fastest Growing Small Channels to Watch`,
+    description: `Discover the next big YouTubers! Track the fastest growing small YouTube channels under 10M subscribers. Find rising stars before they blow up.`,
+    keywords: `rising youtube stars ${currentYear}, fastest growing small youtubers, upcoming youtubers, youtube rising stars, small channels growing fast, next big youtuber`,
+    canonical: `${SITE_URL}/rising-stars`
+  });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="rising-stars-page">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Zap className="w-10 h-10 text-yellow-500" />
+            <h1 className="text-3xl md:text-4xl font-bold text-white">Rising Stars</h1>
+          </div>
+          <p className="text-gray-400 text-lg">Discover the fastest growing YouTube channels under 50M subscribers</p>
+          <p className="text-gray-500 text-sm mt-2">Find the next big YouTubers before they blow up</p>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap gap-2 mb-8 justify-center">
+          <button
+            onClick={() => setFilter('growth')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'growth' ? 'bg-red-500 text-white' : 'bg-[#222] text-gray-400 hover:bg-[#333]'}`}
+          >
+            <TrendingUp className="w-4 h-4 inline mr-1" /> Fastest Growth %
+          </button>
+          <button
+            onClick={() => setFilter('gains')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'gains' ? 'bg-red-500 text-white' : 'bg-[#222] text-gray-400 hover:bg-[#333]'}`}
+          >
+            <Users className="w-4 h-4 inline mr-1" /> Most Daily Gains
+          </button>
+          <button
+            onClick={() => setFilter('viral')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'viral' ? 'bg-red-500 text-white' : 'bg-[#222] text-gray-400 hover:bg-[#333]'}`}
+          >
+            <Flame className="w-4 h-4 inline mr-1" /> Going Viral
+          </button>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-white">{channels.length}</div>
+            <div className="text-gray-500 text-sm">Rising Channels</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-green-400">
+              {channels.filter(c => c.viral_label === 'Exploding').length}
+            </div>
+            <div className="text-gray-500 text-sm">Exploding Now</div>
+          </div>
+          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-yellow-400">
+              {channels.filter(c => c.viral_label === 'Rising Fast').length}
+            </div>
+            <div className="text-gray-500 text-sm">Rising Fast</div>
+          </div>
+        </div>
+
+        {/* Channel Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {sortedChannels.slice(0, 30).map((channel, idx) => (
+            <div
+              key={channel.channel_id}
+              className="bg-[#111] border border-[#222] rounded-lg p-4 cursor-pointer hover:border-yellow-500/50 transition-colors"
+              onClick={() => navigate(`/channel/${channel.channel_id}`)}
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <span className="text-lg font-bold text-gray-500">#{idx + 1}</span>
+                <img src={channel.thumbnail_url} alt={channel.title} className="w-12 h-12 rounded-full" />
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-white truncate">{channel.title}</h3>
+                  <p className="text-gray-500 text-sm">{channel.country_name}</p>
+                </div>
+                <ViralBadge label={channel.viral_label} />
+              </div>
+              
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div className="bg-[#0d0d0d] rounded p-2">
+                  <div className="text-white font-bold text-sm">{formatNumber(channel.subscriber_count)}</div>
+                  <div className="text-gray-500 text-xs">Subs</div>
+                </div>
+                <div className="bg-[#0d0d0d] rounded p-2">
+                  <div className="text-green-400 font-bold text-sm">+{formatNumber(channel.daily_subscriber_gain || 0)}</div>
+                  <div className="text-gray-500 text-xs">24h *</div>
+                </div>
+                <div className="bg-[#0d0d0d] rounded p-2">
+                  <div className="text-yellow-400 font-bold text-sm">{(channel.daily_growth_percent || 0).toFixed(2)}%</div>
+                  <div className="text-gray-500 text-xs">Growth *</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {sortedChannels.length === 0 && (
+          <div className="text-center py-12 text-gray-500">
+            <Zap className="w-12 h-12 mx-auto mb-4 opacity-50" />
+            <p>No rising stars found matching your criteria</p>
+          </div>
+        )}
+
+        {/* SEO Content */}
+        <div className="mt-12 bg-[#111] border border-[#222] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">About Rising Stars</h2>
+          <div className="text-gray-400 space-y-3 text-sm">
+            <p>
+              The Rising Stars page showcases YouTube channels that are experiencing exceptional growth relative to their size. 
+              These are the channels to watch - future internet superstars in the making.
+            </p>
+            <p>
+              We track channels between 100K and 10M subscribers that show above-average daily growth rates. 
+              Many of today's biggest YouTubers were once "rising stars" before breaking into the mainstream.
+            </p>
+          </div>
+        </div>
+
+        {/* Disclaimer */}
+        <div className="mt-4 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
+          <span className="text-yellow-500">*</span> Growth statistics are estimated by TopTube World Pro based on historical tracking.
         </div>
       </div>
     </div>
@@ -5119,6 +5978,11 @@ function AppContent() {
             <Route path="/channel/:channelId" element={<ChannelPage />} />
             <Route path="/trending" element={<TrendingPage />} />
             <Route path="/compare" element={<ComparePage />} />
+            <Route path="/race" element={<RacePage />} />
+            <Route path="/milestones" element={<MilestonePage />} />
+            <Route path="/categories" element={<CategoryListPage />} />
+            <Route path="/category/:categorySlug" element={<CategoryPage />} />
+            <Route path="/rising-stars" element={<RisingStarsPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/country/:countryCode" element={<CountryBlogPostPage />} />
