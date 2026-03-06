@@ -73,6 +73,11 @@ import { ThemeProvider, useTheme } from './context/ThemeContext';
 // Import auth context
 import { AuthProvider, useAuth } from './context/AuthContext';
 
+// Import i18n
+import { useTranslation } from 'react-i18next';
+import './i18n';
+import { SUPPORTED_LANGUAGES } from './i18n';
+
 // Loading fallback component
 const LoadingFallback = memo(() => (
   <div className="flex items-center justify-center p-8">
@@ -1678,6 +1683,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSearch = async (query) => {
     setSearchQuery(query);
@@ -1714,22 +1720,22 @@ const Header = () => {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-home">
-              Home
+              {t('common.home')}
             </Link>
             <Link to="/leaderboard" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-leaderboard">
-              Leaderboard
+              {t('common.leaderboard')}
             </Link>
             <Link to="/countries" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-countries">
-              Countries
+              {t('common.countries')}
             </Link>
             <Link to="/trending" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-trending">
-              Trending
+              {t('common.trending')}
             </Link>
             <Link to="/compare" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-compare">
-              Compare
+              {t('common.compare')}
             </Link>
             <Link to="/blog" className="text-gray-300 hover:text-white transition-colors" data-testid="nav-blog">
-              Blog
+              {t('common.blog')}
             </Link>
           </nav>
           
@@ -1780,6 +1786,9 @@ const Header = () => {
                 </div>
               )}
             </div>
+
+            {/* Language Selector */}
+            <LanguageSelector />
 
             {/* User Menu */}
             <UserMenu />
@@ -1964,6 +1973,7 @@ const ChannelCard = ({ channel, rank, onClick }) => (
 // Home Page
 const HomePage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [mapData, setMapData] = useState([]);
   const [globalTop, setGlobalTop] = useState([]);
@@ -2007,17 +2017,17 @@ const HomePage = () => {
       <section className="bg-gradient-to-b from-[#111] to-[#0a0a0a] py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Global YouTube Channel Rankings
+            {t('home.title')}
           </h1>
           <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-            Track, analyze, and predict the most subscribed YouTube channels across {stats?.total_countries || 0} countries in real-time.
+            {t('home.subtitle', { count: stats?.total_countries || 0 })}
           </p>
           <div className="flex justify-center gap-4">
             <Link to="/leaderboard" className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors" data-testid="cta-leaderboard">
-              View Leaderboard
+              {t('home.viewLeaderboard')}
             </Link>
             <Link to="/countries" className="bg-[#222] px-6 py-3 rounded-lg font-semibold hover:bg-[#333] transition-colors" style={{color: 'white'}} data-testid="cta-countries">
-              Browse Countries
+              {t('home.browseCountries')}
             </Link>
           </div>
         </div>
@@ -2029,19 +2039,19 @@ const HomePage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
               <div className="text-3xl font-bold text-white">{stats?.total_countries || 0}</div>
-              <div className="text-gray-500 text-sm">Countries</div>
+              <div className="text-gray-500 text-sm">{t('home.countriesTracked')}</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-white">{stats?.total_channels || 0}</div>
-              <div className="text-gray-500 text-sm">Channels Tracked</div>
+              <div className="text-gray-500 text-sm">{t('home.channelsTracked')}</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-white">{formatNumber(stats?.total_stats_records || 0)}</div>
-              <div className="text-gray-500 text-sm">Data Points</div>
+              <div className="text-gray-500 text-sm">{t('home.dataPoints')}</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-green-400">Live</div>
-              <div className="text-gray-500 text-sm">Real-time Updates</div>
+              <div className="text-3xl font-bold text-green-400">{t('common.live')}</div>
+              <div className="text-gray-500 text-sm">{t('home.realTimeUpdates')}</div>
             </div>
           </div>
         </div>
@@ -2050,8 +2060,8 @@ const HomePage = () => {
       {/* World Map Section */}
       <section className="py-12">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-2">Top Channels by Country</h2>
-          <p className="text-gray-500 mb-6">Click on a highlighted country to view its top YouTube channels</p>
+          <h2 className="text-2xl font-bold text-white mb-2">{t('home.topChannelsByCountry')}</h2>
+          <p className="text-gray-500 mb-6">{t('home.clickCountry')}</p>
           <Suspense fallback={<LoadingFallback />}>
             <LazyWorldMap mapData={mapData} onCountryClick={(code) => navigate(`/country/${code}`)} />
           </Suspense>
@@ -4606,6 +4616,56 @@ const AuthCallbackPage = () => {
         <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
         <p className="text-gray-400">Signing you in...</p>
       </div>
+    </div>
+  );
+};
+
+// ==================== LANGUAGE SELECTOR COMPONENT ====================
+
+const LanguageSelector = () => {
+  const { i18n } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const currentLanguage = SUPPORTED_LANGUAGES.find(lang => lang.code === i18n.language) || SUPPORTED_LANGUAGES[0];
+
+  const changeLanguage = (langCode) => {
+    i18n.changeLanguage(langCode);
+    localStorage.setItem('toptube_language', langCode);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-1 px-2 py-1 bg-[#222] hover:bg-[#333] rounded-lg text-sm transition-colors"
+        title="Change Language"
+      >
+        <span className="text-lg">{currentLanguage.flag}</span>
+        <span className="hidden md:inline text-gray-300">{currentLanguage.code.toUpperCase()}</span>
+        <ChevronDown className="w-3 h-3 text-gray-400" />
+      </button>
+
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+          <div className="absolute right-0 top-10 w-40 bg-[#111] border border-[#333] rounded-lg shadow-xl z-50 overflow-hidden">
+            {SUPPORTED_LANGUAGES.map(lang => (
+              <button
+                key={lang.code}
+                onClick={() => changeLanguage(lang.code)}
+                className={`w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-[#222] transition-colors ${
+                  currentLanguage.code === lang.code ? 'bg-[#222] text-white' : 'text-gray-300'
+                }`}
+              >
+                <span className="text-lg">{lang.flag}</span>
+                <span>{lang.name}</span>
+                {currentLanguage.code === lang.code && <Check className="w-4 h-4 ml-auto text-green-500" />}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

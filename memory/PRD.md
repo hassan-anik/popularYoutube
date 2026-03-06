@@ -360,3 +360,44 @@
    - Channels under 50M subscribers with growth potential
    - Filter by: Fastest Growth %, Most Daily Gains, Going Viral
    - SEO: "rising youtube stars", "next big youtubers"
+
+
+### User Engagement Features Added (Mar 6, 2026):
+1. **User Accounts with Google OAuth**
+   - Emergent Google Auth integration
+   - Sign In button in header
+   - User menu dropdown (My Favorites, Request Channel, Prediction Polls, Sign Out)
+   - Session persistence with httpOnly cookies (7 days)
+
+2. **Channel Request Form** (`/request-channel`)
+   - Form to submit YouTube channel URLs for tracking
+   - Fields: Channel URL, Name, Country, Reason
+   - Popular Requests section with voting system
+   - Anonymous submissions allowed, voting requires login
+
+3. **Prediction Polls** (`/polls`)
+   - Interactive voting polls (e.g., "Who will gain more subscribers?")
+   - Visual progress bars showing vote percentages
+   - Requires login to vote
+   - Poll end dates with automatic expiration
+   - Admin endpoint to create new polls: POST /api/admin/polls
+
+### Multi-Language Support Added (Mar 6, 2026):
+**Languages Supported:**
+- 🇺🇸 English (default)
+- 🇪🇸 Español (Spanish)
+- 🇮🇳 हिन्दी (Hindi)
+- 🇧🇷 Português (Portuguese)
+
+**Implementation:**
+- i18next + react-i18next for internationalization
+- Language detection from browser, URL param (?lang=es), or localStorage
+- Language selector dropdown in header
+- Translations for navigation, homepage, stats, common UI elements
+
+**Files Created:**
+- `/app/frontend/src/i18n.js` - i18n configuration
+- `/app/frontend/src/locales/en.json` - English translations
+- `/app/frontend/src/locales/es.json` - Spanish translations
+- `/app/frontend/src/locales/hi.json` - Hindi translations
+- `/app/frontend/src/locales/pt.json` - Portuguese translations
