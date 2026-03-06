@@ -459,6 +459,439 @@ async def get_ranking_changes(limit: int = Query(default=20, le=100)):
     return {"changes": changes}
 
 
+# ==================== USER AUTHENTICATION (Emergent Google OAuth) ====================
+
+class UserResponse(BaseModel):
+    user_id: str
+    email: str
+    name: str
+    picture: Optional[str] = None
+    created_at: str
+
+class SessionRequest(BaseModel):
+    session_id: str
+
+@api_router.post("/auth/session")
+async def create_session(request: SessionRequest, response: Response):
+    """Exchange session_id for session_token after Google OAuth"""
+    import httpx
+    
+    try:
+        # Call Emergent Auth to get user data
+        async with httpx.AsyncClient() as client:
+            auth_response = await client.get(
+                "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+                headers={"X-Session-ID": request.session_id}
+            )
+            
+            if auth_response.status_code != 200:
+                raise HTTPException(status_code=401, detail="Invalid session")
+            
+            user_data = auth_response.json()
+        
+        # Check if user exists
+        existing_user = await db.users.find_one({"email": user_data["email"]}, {"_id": 0})
+        
+        if existing_user:
+            user_id = existing_user["user_id"]
+            # Update user data if needed
+            await db.users.update_one(
+                {"email": user_data["email"]},
+                {"$set": {
+                    "name": user_data["name"],
+                    "picture": user_data.get("picture", ""),
+                    "last_login": datetime.now(timezone.utc).isoformat()
+                }}
+            )
+        else:
+            # Create new user with custom user_id
+            user_id = f"user_{uuid.uuid4().hex[:12]}"
+            await db.users.insert_one({
+                "user_id": user_id,
+                "email": user_data["email"],
+                "name": user_data["name"],
+                "picture": user_data.get("picture", ""),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "last_login": datetime.now(timezone.utc).isoformat()
+            })
+        
+        # Create session
+        session_token = user_data.get("session_token") or f"session_{uuid.uuid4().hex}"
+        expires_at = datetime.now(timezone.utc) + timedelta(days=7)
+        
+        await db.user_sessions.insert_one({
+            "user_id": user_id,
+            "session_token": session_token,
+            "expires_at": expires_at.isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+        
+        # Set cookie
+        response.set_cookie(
+            key="session_token",
+            value=session_token,
+            httponly=True,
+            secure=True,
+            samesite="none",
+            max_age=7*24*60*60,
+            path="/"
+        )
+        
+        # Get user data to return
+        user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+        
+        return {
+            "success": True,
+            "user": user
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Session creation error: {e}")
+        raise HTTPException(status_code=500, detail="Authentication failed")
+
+async def get_current_user(request: Request) -> Optional[dict]:
+    """Helper to get current user from session token"""
+    # Check cookie first
+    session_token = request.cookies.get("session_token")
+    
+    # Fallback to Authorization header
+    if not session_token:
+        auth_header = request.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
+            session_token = auth_header[7:]
+    
+    if not session_token:
+        return None
+    
+    # Find session
+    session = await db.user_sessions.find_one({"session_token": session_token}, {"_id": 0})
+    if not session:
+        return None
+    
+    # Check expiry
+    expires_at = session.get("expires_at")
+    if isinstance(expires_at, str):
+        expires_at = datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    
+    if expires_at < datetime.now(timezone.utc):
+        return None
+    
+    # Get user
+    user = await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
+    return user
+
+@api_router.get("/auth/me")
+async def get_me(request: Request):
+    """Get current authenticated user"""
+    user = await get_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    return user
+
+@api_router.post("/auth/logout")
+async def logout(request: Request, response: Response):
+    """Logout user and clear session"""
+    session_token = request.cookies.get("session_token")
+    
+    if session_token:
+        await db.user_sessions.delete_one({"session_token": session_token})
+    
+    response.delete_cookie(key="session_token", path="/")
+    return {"success": True}
+
+
+# ==================== CHANNEL REQUEST FORM ====================
+
+class ChannelRequestCreate(BaseModel):
+    channel_url: str
+    channel_name: Optional[str] = None
+    country_code: Optional[str] = None
+    reason: Optional[str] = None
+
+@api_router.post("/channel-requests")
+async def submit_channel_request(request_data: ChannelRequestCreate, request: Request):
+    """Submit a channel request to be tracked"""
+    user = await get_current_user(request)
+    
+    # Extract channel ID from URL if possible
+    channel_id = None
+    url = request_data.channel_url
+    if "youtube.com/channel/" in url:
+        channel_id = url.split("youtube.com/channel/")[1].split("/")[0].split("?")[0]
+    elif "youtube.com/@" in url:
+        channel_id = url.split("youtube.com/@")[1].split("/")[0].split("?")[0]
+    
+    # Check if already requested
+    existing = await db.channel_requests.find_one({
+        "$or": [
+            {"channel_url": request_data.channel_url},
+            {"channel_id": channel_id} if channel_id else {"channel_url": "impossible"}
+        ]
+    })
+    
+    if existing:
+        return {"success": False, "message": "This channel has already been requested"}
+    
+    # Create request
+    channel_request = {
+        "request_id": f"req_{uuid.uuid4().hex[:12]}",
+        "channel_url": request_data.channel_url,
+        "channel_id": channel_id,
+        "channel_name": request_data.channel_name,
+        "country_code": request_data.country_code,
+        "reason": request_data.reason,
+        "submitted_by": user["user_id"] if user else "anonymous",
+        "submitted_by_email": user["email"] if user else None,
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "votes": 1
+    }
+    
+    await db.channel_requests.insert_one(channel_request)
+    
+    return {
+        "success": True,
+        "message": "Channel request submitted successfully!",
+        "request_id": channel_request["request_id"]
+    }
+
+@api_router.get("/channel-requests")
+async def get_channel_requests(
+    status: str = "pending",
+    limit: int = 20
+):
+    """Get channel requests"""
+    requests = await db.channel_requests.find(
+        {"status": status},
+        {"_id": 0}
+    ).sort("votes", -1).limit(limit).to_list(limit)
+    
+    return {"requests": requests}
+
+@api_router.post("/channel-requests/{request_id}/vote")
+async def vote_channel_request(request_id: str, request: Request):
+    """Vote for a channel request"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required to vote")
+    
+    # Check if user already voted
+    existing_vote = await db.channel_request_votes.find_one({
+        "request_id": request_id,
+        "user_id": user["user_id"]
+    })
+    
+    if existing_vote:
+        return {"success": False, "message": "You have already voted for this request"}
+    
+    # Record vote
+    await db.channel_request_votes.insert_one({
+        "request_id": request_id,
+        "user_id": user["user_id"],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    # Increment vote count
+    await db.channel_requests.update_one(
+        {"request_id": request_id},
+        {"$inc": {"votes": 1}}
+    )
+    
+    return {"success": True, "message": "Vote recorded!"}
+
+
+# ==================== PREDICTION POLLS ====================
+
+class PollCreate(BaseModel):
+    question: str
+    channel_a_id: str
+    channel_b_id: str
+    prediction_type: str = "monthly_gains"  # monthly_gains, overtake, milestone
+    end_date: Optional[str] = None
+
+class PollVote(BaseModel):
+    choice: str  # "a" or "b"
+
+@api_router.get("/polls")
+async def get_polls(
+    status: str = "active",
+    limit: int = 10
+):
+    """Get prediction polls"""
+    now = datetime.now(timezone.utc).isoformat()
+    
+    if status == "active":
+        polls = await db.polls.find(
+            {"end_date": {"$gt": now}},
+            {"_id": 0}
+        ).sort("created_at", -1).limit(limit).to_list(limit)
+    else:
+        polls = await db.polls.find(
+            {"end_date": {"$lte": now}},
+            {"_id": 0}
+        ).sort("end_date", -1).limit(limit).to_list(limit)
+    
+    # Enrich with channel data
+    for poll in polls:
+        channel_a = await db.channels.find_one({"channel_id": poll["channel_a_id"]}, {"_id": 0, "title": 1, "thumbnail_url": 1, "subscriber_count": 1})
+        channel_b = await db.channels.find_one({"channel_id": poll["channel_b_id"]}, {"_id": 0, "title": 1, "thumbnail_url": 1, "subscriber_count": 1})
+        poll["channel_a"] = channel_a
+        poll["channel_b"] = channel_b
+        
+        # Calculate vote percentages
+        total_votes = poll.get("votes_a", 0) + poll.get("votes_b", 0)
+        poll["total_votes"] = total_votes
+        poll["percent_a"] = round((poll.get("votes_a", 0) / total_votes * 100) if total_votes > 0 else 50, 1)
+        poll["percent_b"] = round((poll.get("votes_b", 0) / total_votes * 100) if total_votes > 0 else 50, 1)
+    
+    return {"polls": polls}
+
+@api_router.post("/polls/{poll_id}/vote")
+async def vote_poll(poll_id: str, vote: PollVote, request: Request):
+    """Vote in a prediction poll"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required to vote")
+    
+    # Check if poll exists and is active
+    poll = await db.polls.find_one({"poll_id": poll_id}, {"_id": 0})
+    if not poll:
+        raise HTTPException(status_code=404, detail="Poll not found")
+    
+    end_date = datetime.fromisoformat(poll["end_date"].replace("Z", "+00:00"))
+    if end_date < datetime.now(timezone.utc):
+        raise HTTPException(status_code=400, detail="Poll has ended")
+    
+    # Check if user already voted
+    existing_vote = await db.poll_votes.find_one({
+        "poll_id": poll_id,
+        "user_id": user["user_id"]
+    })
+    
+    if existing_vote:
+        return {"success": False, "message": "You have already voted in this poll"}
+    
+    # Record vote
+    await db.poll_votes.insert_one({
+        "poll_id": poll_id,
+        "user_id": user["user_id"],
+        "choice": vote.choice,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    # Update poll counts
+    vote_field = "votes_a" if vote.choice == "a" else "votes_b"
+    await db.polls.update_one(
+        {"poll_id": poll_id},
+        {"$inc": {vote_field: 1}}
+    )
+    
+    return {"success": True, "message": "Vote recorded!"}
+
+@api_router.post("/admin/polls")
+async def create_poll(poll_data: PollCreate, request: Request):
+    """Create a new prediction poll (admin only)"""
+    # For now, allow creation without admin check for simplicity
+    
+    # Default end date is end of current month
+    if not poll_data.end_date:
+        now = datetime.now(timezone.utc)
+        if now.month == 12:
+            end_date = datetime(now.year + 1, 1, 1, tzinfo=timezone.utc)
+        else:
+            end_date = datetime(now.year, now.month + 1, 1, tzinfo=timezone.utc)
+        end_date_str = end_date.isoformat()
+    else:
+        end_date_str = poll_data.end_date
+    
+    poll = {
+        "poll_id": f"poll_{uuid.uuid4().hex[:12]}",
+        "question": poll_data.question,
+        "channel_a_id": poll_data.channel_a_id,
+        "channel_b_id": poll_data.channel_b_id,
+        "prediction_type": poll_data.prediction_type,
+        "votes_a": 0,
+        "votes_b": 0,
+        "end_date": end_date_str,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.polls.insert_one(poll)
+    
+    return {"success": True, "poll_id": poll["poll_id"]}
+
+
+# ==================== USER FAVORITES (Synced) ====================
+
+@api_router.get("/user/favorites")
+async def get_user_favorites(request: Request):
+    """Get user's synced favorites"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required")
+    
+    favorites = await db.user_favorites.find(
+        {"user_id": user["user_id"]},
+        {"_id": 0}
+    ).to_list(100)
+    
+    # Get channel details
+    channel_ids = [f["channel_id"] for f in favorites]
+    channels = await db.channels.find(
+        {"channel_id": {"$in": channel_ids}},
+        {"_id": 0}
+    ).to_list(100)
+    
+    return {"favorites": channels}
+
+@api_router.post("/user/favorites/{channel_id}")
+async def add_user_favorite(channel_id: str, request: Request):
+    """Add a channel to user's favorites"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required")
+    
+    # Check if already favorited
+    existing = await db.user_favorites.find_one({
+        "user_id": user["user_id"],
+        "channel_id": channel_id
+    })
+    
+    if existing:
+        return {"success": True, "message": "Already in favorites"}
+    
+    await db.user_favorites.insert_one({
+        "user_id": user["user_id"],
+        "channel_id": channel_id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {"success": True, "message": "Added to favorites"}
+
+@api_router.delete("/user/favorites/{channel_id}")
+async def remove_user_favorite(channel_id: str, request: Request):
+    """Remove a channel from user's favorites"""
+    user = await get_current_user(request)
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required")
+    
+    await db.user_favorites.delete_one({
+        "user_id": user["user_id"],
+        "channel_id": channel_id
+    })
+    
+    return {"success": True, "message": "Removed from favorites"}
+
+
 # ==================== ADMIN ====================
 
 @api_router.get("/admin/stats")

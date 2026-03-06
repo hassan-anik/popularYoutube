@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo, lazy, Suspense, memo } from "react";
-import { BrowserRouter, Routes, Route, Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -49,7 +49,13 @@ import {
   Home,
   ChevronDown,
   Trophy,
-  HelpCircle
+  HelpCircle,
+  LogIn,
+  LogOut,
+  User,
+  Vote,
+  ThumbsUp,
+  LinkIcon
 } from "lucide-react";
 import "@/App.css";
 
@@ -63,6 +69,9 @@ import { formatNumber, formatDate, formatShortDate } from './utils/format';
 
 // Import theme context
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+
+// Import auth context
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Loading fallback component
 const LoadingFallback = memo(() => (
@@ -1771,6 +1780,9 @@ const Header = () => {
                 </div>
               )}
             </div>
+
+            {/* User Menu */}
+            <UserMenu />
 
             {/* Mobile Menu Button */}
             <button 
@@ -4543,6 +4555,530 @@ const ComparePage = () => {
   );
 };
 
+// ==================== AUTH CALLBACK PAGE ====================
+
+const AuthCallbackPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const hasProcessed = useRef(false);
+  const { setUser, setIsAuthenticated, checkAuth } = useAuth();
+
+  useEffect(() => {
+    // Prevent double processing in StrictMode
+    if (hasProcessed.current) return;
+    hasProcessed.current = true;
+
+    const processAuth = async () => {
+      const hash = location.hash;
+      const sessionId = hash.split('session_id=')[1]?.split('&')[0];
+      
+      if (!sessionId) {
+        navigate('/');
+        return;
+      }
+
+      try {
+        const response = await axios.post(`${API}/auth/session`, 
+          { session_id: sessionId },
+          { withCredentials: true }
+        );
+        
+        if (response.data.success) {
+          setUser(response.data.user);
+          setIsAuthenticated(true);
+          // Clear the hash and redirect to home
+          navigate('/', { replace: true, state: { user: response.data.user } });
+        } else {
+          navigate('/');
+        }
+      } catch (error) {
+        console.error('Auth error:', error);
+        navigate('/');
+      }
+    };
+
+    processAuth();
+  }, [location.hash, navigate, setUser, setIsAuthenticated]);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-gray-400">Signing you in...</p>
+      </div>
+    </div>
+  );
+};
+
+// ==================== USER MENU COMPONENT ====================
+
+const UserMenu = () => {
+  const { user, isAuthenticated, login, logout, loading } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  if (loading) {
+    return <div className="w-8 h-8 bg-[#222] rounded-full animate-pulse"></div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <button
+        onClick={login}
+        className="flex items-center gap-2 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-colors"
+      >
+        <LogIn className="w-4 h-4" />
+        <span className="hidden md:inline">Sign In</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="flex items-center gap-2 p-1 rounded-full hover:bg-[#222] transition-colors"
+      >
+        {user?.picture ? (
+          <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full" />
+        ) : (
+          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
+            {user?.name?.[0]?.toUpperCase() || 'U'}
+          </div>
+        )}
+      </button>
+
+      {menuOpen && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+          <div className="absolute right-0 top-12 w-56 bg-[#111] border border-[#333] rounded-lg shadow-xl z-50 overflow-hidden">
+            <div className="p-3 border-b border-[#333]">
+              <p className="font-medium text-white truncate">{user?.name}</p>
+              <p className="text-gray-500 text-sm truncate">{user?.email}</p>
+            </div>
+            <div className="py-1">
+              <button
+                onClick={() => { navigate('/favorites'); setMenuOpen(false); }}
+                className="w-full px-4 py-2 text-left text-gray-300 hover:bg-[#222] flex items-center gap-2"
+              >
+                <Heart className="w-4 h-4" /> My Favorites
+              </button>
+              <button
+                onClick={() => { navigate('/request-channel'); setMenuOpen(false); }}
+                className="w-full px-4 py-2 text-left text-gray-300 hover:bg-[#222] flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" /> Request Channel
+              </button>
+              <button
+                onClick={() => { navigate('/polls'); setMenuOpen(false); }}
+                className="w-full px-4 py-2 text-left text-gray-300 hover:bg-[#222] flex items-center gap-2"
+              >
+                <Vote className="w-4 h-4" /> Prediction Polls
+              </button>
+            </div>
+            <div className="border-t border-[#333] py-1">
+              <button
+                onClick={() => { logout(); setMenuOpen(false); }}
+                className="w-full px-4 py-2 text-left text-red-400 hover:bg-[#222] flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" /> Sign Out
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// ==================== CHANNEL REQUEST PAGE ====================
+
+const ChannelRequestPage = () => {
+  const { isAuthenticated, login } = useAuth();
+  const [formData, setFormData] = useState({
+    channel_url: '',
+    channel_name: '',
+    country_code: '',
+    reason: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [requests, setRequests] = useState([]);
+  const [countries, setCountries] = useState([]);
+
+  useSEO({
+    title: "Request a Channel - TopTube World Pro",
+    description: "Submit a YouTube channel to be tracked on TopTube World Pro. Help us expand our database with channels from your country.",
+    canonical: `${SITE_URL}/request-channel`
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [requestsRes, countriesRes] = await Promise.all([
+          axios.get(`${API}/channel-requests?limit=10`),
+          axios.get(`${API}/countries`)
+        ]);
+        setRequests(requestsRes.data.requests || []);
+        setCountries(countriesRes.data || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const response = await axios.post(`${API}/channel-requests`, formData, {
+        withCredentials: true
+      });
+      
+      if (response.data.success) {
+        setSubmitted(true);
+        setFormData({ channel_url: '', channel_name: '', country_code: '', reason: '' });
+      }
+    } catch (error) {
+      console.error('Submit error:', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleVote = async (requestId) => {
+    if (!isAuthenticated) {
+      login();
+      return;
+    }
+
+    try {
+      await axios.post(`${API}/channel-requests/${requestId}/vote`, {}, {
+        withCredentials: true
+      });
+      // Refresh requests
+      const response = await axios.get(`${API}/channel-requests?limit=10`);
+      setRequests(response.data.requests || []);
+    } catch (error) {
+      console.error('Vote error:', error);
+    }
+  };
+
+  return (
+    <div className="py-8" data-testid="channel-request-page">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Plus className="w-10 h-10 text-green-500" />
+            <h1 className="text-3xl md:text-4xl font-bold text-white">Request a Channel</h1>
+          </div>
+          <p className="text-gray-400">Help us expand our database! Submit channels you'd like us to track.</p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Submit Form */}
+          <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <LinkIcon className="w-5 h-5 text-green-500" />
+              Submit a Channel
+            </h2>
+
+            {submitted ? (
+              <div className="text-center py-8">
+                <Check className="w-12 h-12 text-green-500 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-white mb-2">Request Submitted!</h3>
+                <p className="text-gray-400 mb-4">We'll review your request and add the channel if it meets our criteria.</p>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg"
+                >
+                  Submit Another
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-gray-400 text-sm mb-1">Channel URL *</label>
+                  <input
+                    type="url"
+                    required
+                    value={formData.channel_url}
+                    onChange={(e) => setFormData({ ...formData, channel_url: e.target.value })}
+                    placeholder="https://youtube.com/@channelname"
+                    className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-green-500 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-400 text-sm mb-1">Channel Name (optional)</label>
+                  <input
+                    type="text"
+                    value={formData.channel_name}
+                    onChange={(e) => setFormData({ ...formData, channel_name: e.target.value })}
+                    placeholder="MrBeast"
+                    className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-green-500 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-400 text-sm mb-1">Country</label>
+                  <select
+                    value={formData.country_code}
+                    onChange={(e) => setFormData({ ...formData, country_code: e.target.value })}
+                    className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-green-500 focus:outline-none"
+                  >
+                    <option value="">Select country...</option>
+                    {countries.map(c => (
+                      <option key={c.code} value={c.code}>{c.flag_emoji} {c.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-gray-400 text-sm mb-1">Why should we track this channel?</label>
+                  <textarea
+                    value={formData.reason}
+                    onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                    placeholder="This channel is growing fast and represents..."
+                    rows={3}
+                    className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-green-500 focus:outline-none resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full py-3 bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white font-medium rounded-lg flex items-center justify-center gap-2"
+                >
+                  {submitting ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Submit Request
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+          </div>
+
+          {/* Popular Requests */}
+          <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <ThumbsUp className="w-5 h-5 text-yellow-500" />
+              Popular Requests
+            </h2>
+            <p className="text-gray-500 text-sm mb-4">Vote for channels you want us to add!</p>
+
+            {requests.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <Plus className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p>No pending requests yet</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {requests.map(req => (
+                  <div key={req.request_id} className="bg-[#0d0d0d] rounded-lg p-3 flex items-center justify-between">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-medium truncate">{req.channel_name || req.channel_url}</p>
+                      <p className="text-gray-500 text-sm truncate">{req.channel_url}</p>
+                    </div>
+                    <button
+                      onClick={() => handleVote(req.request_id)}
+                      className="flex items-center gap-1 px-3 py-1 bg-[#222] hover:bg-[#333] rounded-lg text-sm ml-2"
+                    >
+                      <ThumbsUp className="w-4 h-4 text-green-500" />
+                      <span className="text-white">{req.votes || 0}</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==================== PREDICTION POLLS PAGE ====================
+
+const PollsPage = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated, login } = useAuth();
+  const [polls, setPolls] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [votedPolls, setVotedPolls] = useState(new Set());
+
+  useSEO({
+    title: "Prediction Polls - Who Will Gain More Subscribers? | TopTube World Pro",
+    description: "Vote in YouTube channel prediction polls! Guess which channels will gain more subscribers this month and see how your predictions compare.",
+    keywords: "youtube predictions, subscriber predictions, channel polls, who will gain more subscribers",
+    canonical: `${SITE_URL}/polls`
+  });
+
+  useEffect(() => {
+    const fetchPolls = async () => {
+      try {
+        const response = await axios.get(`${API}/polls?status=active`);
+        setPolls(response.data.polls || []);
+      } catch (error) {
+        console.error('Error fetching polls:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPolls();
+  }, []);
+
+  const handleVote = async (pollId, choice) => {
+    if (!isAuthenticated) {
+      login();
+      return;
+    }
+
+    try {
+      await axios.post(`${API}/polls/${pollId}/vote`, { choice }, {
+        withCredentials: true
+      });
+      setVotedPolls(prev => new Set([...prev, pollId]));
+      // Refresh polls
+      const response = await axios.get(`${API}/polls?status=active`);
+      setPolls(response.data.polls || []);
+    } catch (error) {
+      console.error('Vote error:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-8" data-testid="polls-page">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Vote className="w-10 h-10 text-purple-500" />
+            <h1 className="text-3xl md:text-4xl font-bold text-white">Prediction Polls</h1>
+          </div>
+          <p className="text-gray-400">Vote on which YouTube channels will perform better!</p>
+          {!isAuthenticated && (
+            <button
+              onClick={login}
+              className="mt-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg inline-flex items-center gap-2"
+            >
+              <LogIn className="w-4 h-4" />
+              Sign in to vote
+            </button>
+          )}
+        </div>
+
+        {polls.length === 0 ? (
+          <div className="text-center py-12 bg-[#111] border border-[#222] rounded-lg">
+            <Vote className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">No Active Polls</h2>
+            <p className="text-gray-500">Check back soon for new prediction polls!</p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {polls.map(poll => (
+              <div key={poll.poll_id} className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+                <div className="p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-b border-[#222]">
+                  <h2 className="text-lg font-bold text-white">{poll.question}</h2>
+                  <p className="text-gray-500 text-sm">
+                    Ends: {new Date(poll.end_date).toLocaleDateString()} • {poll.total_votes} votes
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4 p-4">
+                  {/* Option A */}
+                  <div
+                    className={`bg-[#0d0d0d] rounded-lg p-4 cursor-pointer border-2 transition-colors ${
+                      votedPolls.has(poll.poll_id) ? 'border-[#333] cursor-default' : 'border-transparent hover:border-purple-500/50'
+                    }`}
+                    onClick={() => !votedPolls.has(poll.poll_id) && handleVote(poll.poll_id, 'a')}
+                  >
+                    {poll.channel_a && (
+                      <div className="flex items-center gap-3 mb-3">
+                        <img src={poll.channel_a.thumbnail_url} alt="" className="w-12 h-12 rounded-full" />
+                        <div>
+                          <h3 className="font-semibold text-white">{poll.channel_a.title}</h3>
+                          <p className="text-gray-500 text-sm">{formatNumber(poll.channel_a.subscriber_count)} subs</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="relative h-8 bg-[#222] rounded-full overflow-hidden">
+                      <div
+                        className="absolute left-0 top-0 bottom-0 bg-purple-500 rounded-full transition-all"
+                        style={{ width: `${poll.percent_a}%` }}
+                      />
+                      <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">
+                        {poll.percent_a}%
+                      </span>
+                    </div>
+                    <p className="text-center text-gray-500 text-sm mt-2">{poll.votes_a || 0} votes</p>
+                  </div>
+
+                  {/* Option B */}
+                  <div
+                    className={`bg-[#0d0d0d] rounded-lg p-4 cursor-pointer border-2 transition-colors ${
+                      votedPolls.has(poll.poll_id) ? 'border-[#333] cursor-default' : 'border-transparent hover:border-pink-500/50'
+                    }`}
+                    onClick={() => !votedPolls.has(poll.poll_id) && handleVote(poll.poll_id, 'b')}
+                  >
+                    {poll.channel_b && (
+                      <div className="flex items-center gap-3 mb-3">
+                        <img src={poll.channel_b.thumbnail_url} alt="" className="w-12 h-12 rounded-full" />
+                        <div>
+                          <h3 className="font-semibold text-white">{poll.channel_b.title}</h3>
+                          <p className="text-gray-500 text-sm">{formatNumber(poll.channel_b.subscriber_count)} subs</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="relative h-8 bg-[#222] rounded-full overflow-hidden">
+                      <div
+                        className="absolute left-0 top-0 bottom-0 bg-pink-500 rounded-full transition-all"
+                        style={{ width: `${poll.percent_b}%` }}
+                      />
+                      <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">
+                        {poll.percent_b}%
+                      </span>
+                    </div>
+                    <p className="text-center text-gray-500 text-sm mt-2">{poll.votes_b || 0} votes</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* SEO Content */}
+        <div className="mt-12 bg-[#111] border border-[#222] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">About Prediction Polls</h2>
+          <div className="text-gray-400 space-y-3 text-sm">
+            <p>
+              Test your YouTube knowledge with our prediction polls! Vote on which channels you think will 
+              perform better - whether it's gaining more subscribers, reaching a milestone first, or growing faster.
+            </p>
+            <p>
+              New polls are added regularly based on upcoming YouTube milestones and trending channel rivalries.
+              Sign in to vote and track your prediction accuracy!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ==================== FAVORITES PAGE ====================
 
 const FavoritesPage = () => {
@@ -5983,6 +6519,9 @@ function AppContent() {
             <Route path="/categories" element={<CategoryListPage />} />
             <Route path="/category/:categorySlug" element={<CategoryPage />} />
             <Route path="/rising-stars" element={<RisingStarsPage />} />
+            <Route path="/request-channel" element={<ChannelRequestPage />} />
+            <Route path="/polls" element={<PollsPage />} />
+            <Route path="/auth/callback" element={<AuthCallbackPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/country/:countryCode" element={<CountryBlogPostPage />} />
@@ -6007,7 +6546,9 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </ThemeProvider>
   );
 }

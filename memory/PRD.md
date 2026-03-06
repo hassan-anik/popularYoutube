@@ -213,6 +213,22 @@
 - `POST /api/newsletter/subscribe` - Newsletter signup
 - `DELETE /api/admin/remove-placeholder-channels` - Remove fake data
 
+### Authentication (Emergent Google OAuth)
+- `POST /api/auth/session` - Exchange session_id for session_token
+- `GET /api/auth/me` - Get current authenticated user
+- `POST /api/auth/logout` - Logout and clear session
+
+### User Engagement
+- `POST /api/channel-requests` - Submit channel request
+- `GET /api/channel-requests` - Get pending requests
+- `POST /api/channel-requests/{id}/vote` - Vote for a request
+- `GET /api/polls` - Get active prediction polls
+- `POST /api/polls/{id}/vote` - Vote in a poll
+- `POST /api/admin/polls` - Create new poll
+- `GET /api/user/favorites` - Get user's synced favorites
+- `POST /api/user/favorites/{channel_id}` - Add to favorites
+- `DELETE /api/user/favorites/{channel_id}` - Remove from favorites
+
 ## Data Quality
 - Removed 108 placeholder/fake channel entries (MrBeast was used as placeholder for 70+ countries)
 - Countries without real data now show "No Data Available" message
