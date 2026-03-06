@@ -310,3 +310,14 @@
 
 ### Admin Action Required:
 - User must respond to YouTube's email confirming whether they use one or multiple API project numbers
+
+### New Methodology Page Created (Mar 6, 2026):
+- **URL:** `/methodology`
+- **Content:** Comprehensive explanation of data sources and calculation methods
+- **Sections:**
+  - Official YouTube Data (Subscribers, Views, Video Count, Creation Date)
+  - Estimated Metrics with formulas (24h Growth, 7/30-Day Growth, Viral Status, Viral Score)
+  - How We Collect Data (API requests, storage, refresh schedule)
+  - Accuracy & Limitations (YouTube rounding, timing delays, growth estimates)
+  - YouTube API Compliance (ToS and Privacy Policy links)
+- **SEO Value:** Targets "YouTube analytics methodology" keywords

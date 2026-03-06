@@ -1035,6 +1035,233 @@ const AboutPage = () => {
   );
 };
 
+// Data Sources & Methodology Page
+const MethodologyPage = () => {
+  useSEO({
+    title: "Data Sources & Methodology - How We Track YouTube Rankings",
+    description: "Learn how TopTube World Pro collects, calculates, and displays YouTube channel statistics. Understand our data sources, methodology, and the difference between official YouTube data and our estimates.",
+    keywords: "YouTube analytics methodology, how YouTube stats work, YouTube subscriber tracking, YouTube data API, channel growth calculation",
+    canonical: `${SITE_URL}/methodology`
+  });
+
+  return (
+    <div className="py-12" data-testid="methodology-page">
+      <div className="max-w-4xl mx-auto px-4">
+        <h1 className="text-4xl font-bold text-white mb-4">Data Sources & Methodology</h1>
+        <p className="text-gray-400 mb-8">How TopTube World Pro tracks and analyzes YouTube channel statistics</p>
+        
+        <div className="bg-[#111] border border-[#222] rounded-lg p-8 space-y-8">
+          
+          {/* Official YouTube Data */}
+          <section>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                <PlayCircle className="w-6 h-6 text-red-500" />
+              </div>
+              <h2 className="text-2xl font-semibold text-white">Official YouTube Data</h2>
+            </div>
+            <p className="text-gray-300 leading-relaxed mb-4">
+              TopTube World Pro uses the <strong>YouTube Data API v3</strong> to fetch publicly available channel statistics. 
+              The following metrics come directly from YouTube and are displayed exactly as provided:
+            </p>
+            <div className="bg-[#0d0d0d] rounded-lg p-4">
+              <ul className="text-gray-300 space-y-3">
+                <li className="flex items-start gap-3">
+                  <Users className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <strong className="text-white">Subscriber Count</strong>
+                    <p className="text-sm text-gray-400">The total number of subscribers as reported by YouTube. Note: YouTube may round this number for channels with over 1,000 subscribers.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Eye className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <strong className="text-white">Total Views</strong>
+                    <p className="text-sm text-gray-400">The cumulative view count across all videos on the channel.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <PlayCircle className="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <strong className="text-white">Video Count</strong>
+                    <p className="text-sm text-gray-400">The total number of public videos uploaded to the channel.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CalendarDays className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <strong className="text-white">Channel Creation Date</strong>
+                    <p className="text-sm text-gray-400">When the YouTube channel was created.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Estimated/Calculated Data */}
+          <section>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-yellow-500" />
+              </div>
+              <h2 className="text-2xl font-semibold text-white">Estimated Metrics <span className="text-yellow-500">*</span></h2>
+            </div>
+            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-4">
+              <p className="text-yellow-200/90 text-sm">
+                <strong>Important:</strong> The following metrics are independently calculated by TopTube World Pro based on our historical tracking data. 
+                They are NOT provided by YouTube and should be considered estimates for informational purposes only.
+              </p>
+            </div>
+            <div className="bg-[#0d0d0d] rounded-lg p-4">
+              <ul className="text-gray-300 space-y-4">
+                <li className="flex items-start gap-3">
+                  <TrendingUp className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <strong className="text-white">24-Hour Growth / Daily Subscriber Gain</strong>
+                    <p className="text-sm text-gray-400 mb-2">Calculated by comparing the current subscriber count to the count we recorded approximately 24 hours ago.</p>
+                    <code className="text-xs bg-[#1a1a1a] px-2 py-1 rounded text-gray-400">Daily Gain = Current Subscribers - Subscribers 24h Ago</code>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <TrendingUp className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <strong className="text-white">7-Day / 30-Day Growth Percentage</strong>
+                    <p className="text-sm text-gray-400 mb-2">Calculated by comparing the current subscriber count to historical snapshots from 7 or 30 days ago.</p>
+                    <code className="text-xs bg-[#1a1a1a] px-2 py-1 rounded text-gray-400">Growth % = ((Current - Previous) / Previous) × 100</code>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Flame className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <strong className="text-white">Viral Status (Exploding, Rising Fast, Stable, Slowing)</strong>
+                    <p className="text-sm text-gray-400 mb-2">A categorical label based on our analysis of recent growth patterns:</p>
+                    <ul className="text-xs text-gray-500 space-y-1 ml-4">
+                      <li><span className="text-red-400">Exploding</span>: Daily growth rate significantly above channel average</li>
+                      <li><span className="text-green-400">Rising Fast</span>: Consistent above-average daily growth</li>
+                      <li><span className="text-blue-400">Stable</span>: Normal growth within expected range</li>
+                      <li><span className="text-yellow-400">Slowing</span>: Growth rate declining compared to recent average</li>
+                    </ul>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Zap className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <strong className="text-white">Viral Score</strong>
+                    <p className="text-sm text-gray-400">A numerical score (0-100) representing the channel's growth momentum based on multiple factors including daily gains, growth rate, and trend direction.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <strong className="text-white">Overtake Predictions</strong>
+                    <p className="text-sm text-gray-400">Estimates of when one channel might surpass another based on current growth rates. These are speculative projections, not guarantees.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Data Collection Process */}
+          <section>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <RefreshCw className="w-6 h-6 text-blue-500" />
+              </div>
+              <h2 className="text-2xl font-semibold text-white">How We Collect Data</h2>
+            </div>
+            <div className="bg-[#0d0d0d] rounded-lg p-4">
+              <ol className="text-gray-300 space-y-4 list-decimal list-inside">
+                <li>
+                  <strong className="text-white">API Requests</strong>
+                  <p className="text-sm text-gray-400 ml-5">We make authorized requests to the YouTube Data API v3 to fetch channel statistics.</p>
+                </li>
+                <li>
+                  <strong className="text-white">Data Storage</strong>
+                  <p className="text-sm text-gray-400 ml-5">Each data fetch is stored as a historical snapshot with a timestamp, allowing us to track changes over time.</p>
+                </li>
+                <li>
+                  <strong className="text-white">Periodic Refresh</strong>
+                  <p className="text-sm text-gray-400 ml-5">Channel data is refreshed automatically every 6 hours. Rankings are recalculated every 10 minutes.</p>
+                </li>
+                <li>
+                  <strong className="text-white">Growth Calculation</strong>
+                  <p className="text-sm text-gray-400 ml-5">Our system compares current data with historical snapshots to calculate growth metrics.</p>
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          {/* Accuracy & Limitations */}
+          <section>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center">
+                <HelpCircle className="w-6 h-6 text-orange-500" />
+              </div>
+              <h2 className="text-2xl font-semibold text-white">Accuracy & Limitations</h2>
+            </div>
+            <div className="bg-[#0d0d0d] rounded-lg p-4">
+              <ul className="text-gray-300 space-y-3">
+                <li className="flex items-start gap-3">
+                  <span className="text-orange-500 mt-1">•</span>
+                  <p><strong className="text-white">YouTube Rounding:</strong> YouTube rounds subscriber counts for privacy. Channels with 1K-10K subscribers are rounded to the nearest 10; larger channels to nearest 100, 1K, 10K, etc.</p>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-orange-500 mt-1">•</span>
+                  <p><strong className="text-white">Refresh Timing:</strong> Our data may be up to 6 hours behind real-time YouTube figures due to our refresh schedule.</p>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-orange-500 mt-1">•</span>
+                  <p><strong className="text-white">Growth Estimates:</strong> Daily/weekly/monthly growth calculations depend on the availability of historical data. New channels may show "0" growth until sufficient data is collected.</p>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-orange-500 mt-1">•</span>
+                  <p><strong className="text-white">Country Attribution:</strong> Channel country assignments are based on available metadata and may not always reflect the creator's actual location.</p>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          {/* YouTube API Compliance */}
+          <section>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                <Check className="w-6 h-6 text-green-500" />
+              </div>
+              <h2 className="text-2xl font-semibold text-white">YouTube API Compliance</h2>
+            </div>
+            <p className="text-gray-300 leading-relaxed mb-4">
+              TopTube World Pro operates in compliance with YouTube's API Terms of Service. By using our service:
+            </p>
+            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+              <ul className="text-gray-300 space-y-2">
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  You agree to the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline">YouTube Terms of Service</a>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  You acknowledge the <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline">Google Privacy Policy</a>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  You understand that growth metrics marked with * are our estimates, not YouTube data
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Contact */}
+          <section className="border-t border-[#222] pt-6">
+            <p className="text-gray-400 text-sm">
+              Have questions about our methodology? <Link to="/contact" className="text-red-500 hover:text-red-400">Contact us</Link> and we'll be happy to explain further.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Privacy Policy Page
 const PrivacyPage = () => {
   useSEO({
@@ -1617,6 +1844,7 @@ const Footer = () => (
             <li><Link to="/blog" className="text-gray-400 hover:text-white">Blog & Insights</Link></li>
             <li><Link to="/favorites" className="text-gray-400 hover:text-white">My Favorites</Link></li>
             <li><Link to="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
+            <li><Link to="/methodology" className="text-gray-400 hover:text-white">Data & Methodology</Link></li>
             <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
             <li><Link to="/privacy" className="text-gray-400 hover:text-white">Privacy Policy</Link></li>
             <li><Link to="/terms" className="text-gray-400 hover:text-white">Terms of Service</Link></li>
@@ -4897,6 +5125,7 @@ function AppContent() {
             <Route path="/blog/:slug" element={<BlogPostPage />} />
             <Route path="/admin/blog" element={<BlogAdminPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/methodology" element={<MethodologyPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/contact" element={<ContactPage />} />
