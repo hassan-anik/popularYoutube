@@ -233,6 +233,14 @@ async def get_channel(channel_id: str):
     if not channel:
         raise HTTPException(status_code=404, detail="Channel not found")
     
+    # Normalize channel data - ensure title and country_name exist
+    if "title" not in channel and "name" in channel:
+        channel["title"] = channel["name"]
+    if "country_name" not in channel and "country_code" in channel:
+        # Look up country name from country code
+        country = await db.countries.find_one({"code": channel["country_code"]}, {"_id": 0, "name": 1})
+        channel["country_name"] = country["name"] if country else channel["country_code"]
+    
     # Get growth history
     growth_history = await growth_analyzer.get_growth_history(channel_id, days=30)
     

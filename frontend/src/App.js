@@ -662,9 +662,11 @@ const CountrySEO = ({ country, channels }) => {
 // Channel Page SEO
 const ChannelSEO = ({ channel }) => {
   const currentYear = new Date().getFullYear();
-  const title = channel ? `${channel.title} YouTube Stats ${currentYear} - ${formatNumber(channel.subscriber_count)} Subscribers Live Count` : "";
-  const description = channel ? `${channel.title} live subscriber count: ${formatNumber(channel.subscriber_count)} subs, ${formatNumber(channel.view_count)} views, ${channel.video_count} videos. Ranked #${channel.current_rank || '?'} in ${channel.country_name}. Real-time ${channel.title} YouTube stats ${currentYear}.` : "";
-  const keywords = channel ? `${channel.title} youtube stats, ${channel.title} subscribers ${currentYear}, ${channel.title} subscriber count, ${channel.title} total views, ${channel.title} youtube channel, ${channel.country_name.toLowerCase()} youtuber` : "";
+  const channelTitle = channel?.title || channel?.name || 'Unknown Channel';
+  const countryName = channel?.country_name || 'Unknown';
+  const title = channel ? `${channelTitle} YouTube Stats ${currentYear} - ${formatNumber(channel.subscriber_count)} Subscribers Live Count` : "";
+  const description = channel ? `${channelTitle} live subscriber count: ${formatNumber(channel.subscriber_count)} subs, ${formatNumber(channel.view_count)} views, ${channel.video_count} videos. Ranked #${channel.current_rank || '?'} in ${countryName}. Real-time ${channelTitle} YouTube stats ${currentYear}.` : "";
+  const keywords = channel ? `${channelTitle} youtube stats, ${channelTitle} subscribers ${currentYear}, ${channelTitle} subscriber count, ${channelTitle} total views, ${channelTitle} youtube channel, ${countryName.toLowerCase()} youtuber` : "";
   const pageUrl = channel ? `${SITE_URL}/channel/${channel.channel_id}` : "";
   
   useSEO({
@@ -682,9 +684,9 @@ const ChannelSEO = ({ channel }) => {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": channel.title,
+    "name": channelTitle,
     "url": `https://youtube.com/channel/${channel.channel_id}`,
-    "description": channel.description?.substring(0, 500) || `YouTube channel from ${channel.country_name}`,
+    "description": channel.description?.substring(0, 500) || `YouTube channel from ${countryName}`,
     "image": channel.thumbnail_url,
     "sameAs": [
       `https://youtube.com/channel/${channel.channel_id}`
