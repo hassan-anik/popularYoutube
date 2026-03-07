@@ -2,7 +2,7 @@
 TopTube World Pro - Main FastAPI Server
 Tracks, ranks, and predicts the most subscribed YouTube channels per country
 """
-from fastapi import FastAPI, APIRouter, HTTPException, BackgroundTasks, Query, Response, Request
+from fastapi import FastAPI, APIRouter, HTTPException, BackgroundTasks, Query, Response, Request, Body
 from fastapi.responses import PlainTextResponse, JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -2517,6 +2517,47 @@ async def admin_upload_image(admin_key: str = Query(...)):
             {"name": "Unsplash", "url": "https://unsplash.com/"}
         ],
         "instructions": "Upload your image to one of these services and paste the URL in the image field"
+    }
+
+
+@api_router.post("/admin/blog/import")
+async def admin_import_blog_posts(admin_key: str = Query(...), posts: List[Dict] = Body(...)):
+    """Admin: Import blog posts from JSON - useful for syncing between environments"""
+    verify_admin_key(admin_key)
+    
+    imported_count = 0
+    skipped_count = 0
+    
+    for post in posts:
+        # Check if post already exists by slug
+        existing = await db.blog_posts.find_one({"slug": post.get("slug")})
+        if existing:
+            skipped_count += 1
+            continue
+        
+        # Insert the post
+        await db.blog_posts.insert_one(post)
+        imported_count += 1
+    
+    return {
+        "message": "Import complete",
+        "imported": imported_count,
+        "skipped": skipped_count,
+        "total_processed": len(posts)
+    }
+
+
+@api_router.get("/admin/blog/export")
+async def admin_export_blog_posts(admin_key: str = Query(...)):
+    """Admin: Export all blog posts as JSON - useful for backup and syncing"""
+    verify_admin_key(admin_key)
+    
+    posts = await db.blog_posts.find({}, {"_id": 0}).to_list(length=None)
+    
+    return {
+        "posts": posts,
+        "total": len(posts),
+        "exported_at": datetime.now(timezone.utc).isoformat()
     }
 
 

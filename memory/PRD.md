@@ -457,7 +457,11 @@
   - YouTube Milestones: The Race to 500 Million Subscribers
   - Understanding Viral Score: How We Predict YouTube Growth
   - Kids Content on YouTube: The Billion-View Phenomenon
-- **Total Blog Posts Now**: 15 (4 existing + 11 new)
+- **Total Blog Posts Now**: 16 on production (11 new imported + 5 existing)
+- **Created Import/Export Tools**:
+  - `/app/backend/blog_posts_export.json` - Exported blog posts
+  - `/app/backend/sync_blog_to_production.py` - Script to sync to production
+  - Added `/api/admin/blog/import` and `/api/admin/blog/export` endpoints
 
 ### Data Issues Fixed ✓
 - **Triggered growth metrics calculation** - Data was showing zeros because the scheduler job hadn't calculated growth metrics
