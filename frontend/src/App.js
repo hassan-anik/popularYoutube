@@ -1952,6 +1952,35 @@ const Top100Page = () => {
           </div>
         </div>
 
+        {/* Editorial Content Section */}
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-white mb-4">About the Top 100 YouTube Channels</h2>
+          <div className="text-gray-300 text-sm space-y-3">
+            <p>
+              The Top 100 Most Subscribed YouTube Channels represents the elite tier of content creators on the world's largest 
+              video platform. These channels have achieved subscriber counts that would rival the populations of small countries, 
+              with the top channels exceeding hundreds of millions of subscribers each.
+            </p>
+            <p>
+              This list includes a diverse mix of content types: individual creators like MrBeast who built personal brands, 
+              music labels like T-Series that aggregate vast catalogs, entertainment networks, children's content providers, 
+              and sports organizations. The variety reflects YouTube's evolution from a platform for amateur videos to a 
+              global entertainment hub.
+            </p>
+            <h3 className="text-lg font-semibold text-white mt-4">What It Takes to Reach the Top 100</h3>
+            <p>
+              Breaking into the Top 100 requires tens of millions of subscribers - a threshold that continues to rise as 
+              YouTube's audience grows. Success typically comes from a combination of factors: consistent high-quality content, 
+              strategic upload schedules, audience engagement, and often, diversification across multiple content formats 
+              including YouTube Shorts.
+            </p>
+            <p className="text-xs text-gray-500 pt-2 border-t border-[#222]">
+              <em>Subscriber counts are sourced from the YouTube Data API. Growth metrics are calculated by TopTube World Pro 
+              based on our historical tracking data and are estimates.</em>
+            </p>
+          </div>
+        </div>
+
         {/* FAQ Section */}
         {faqs.length > 0 && (
           <FAQSection faqs={faqs} title="Frequently Asked Questions about Top 100 YouTubers" />
@@ -2005,10 +2034,48 @@ const CountriesPage = () => {
       <CountriesListSEO totalCountries={countries.length} />
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Countries</h1>
-          <p className="text-gray-500">Explore YouTube rankings by country</p>
+          <h1 className="text-3xl font-bold text-white mb-2">YouTube Rankings by Country</h1>
+          <p className="text-gray-400 max-w-3xl">
+            Explore the most subscribed YouTube channels across {countries.length} countries worldwide. 
+            Each country page features detailed rankings, growth statistics, and insights into local YouTube markets.
+          </p>
         </div>
 
+        {/* Editorial Introduction */}
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-white mb-3">Global YouTube Coverage</h2>
+          <div className="text-gray-300 text-sm space-y-3">
+            <p>
+              YouTube's reach spans every corner of the globe, with content creators building audiences in virtually every country. 
+              Our country-by-country rankings provide insights into regional content preferences, top creators, and market dynamics.
+            </p>
+            <p>
+              Each country profile includes subscriber counts sourced from the YouTube Data API, along with our calculated growth 
+              metrics and trending indicators. Whether you're researching markets for content strategy, looking for regional 
+              influencers, or simply curious about YouTube's global landscape, these rankings offer valuable insights.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-[#222]">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white">{countries.length}</div>
+                <div className="text-xs text-gray-500">Countries Tracked</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white">{countries.reduce((sum, c) => sum + (c.channel_count || 0), 0).toLocaleString()}</div>
+                <div className="text-xs text-gray-500">Total Channels</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white">Daily</div>
+                <div className="text-xs text-gray-500">Data Updates</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white">Free</div>
+                <div className="text-xs text-gray-500">Access</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 className="text-lg font-semibold text-white mb-4">Browse All Countries</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {countries.map(country => (
             <div
@@ -3227,12 +3294,32 @@ const MilestonePage = () => {
     <div className="py-8" data-testid="milestone-page">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Star className="w-10 h-10 text-yellow-500" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Milestone Tracker</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">YouTube Milestone Tracker</h1>
           </div>
           <p className="text-gray-400 text-lg">Track channels approaching and achieving major subscriber milestones</p>
+        </div>
+
+        {/* Editorial Introduction */}
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-white mb-3">Understanding YouTube Milestones</h2>
+          <div className="text-gray-300 text-sm space-y-3">
+            <p>
+              YouTube subscriber milestones have become cultural moments in the digital age. When MrBeast hit 100 million subscribers 
+              or T-Series became the first channel to reach 200 million, these achievements made headlines worldwide. Our milestone 
+              tracker lets you follow these exciting races in real-time.
+            </p>
+            <p>
+              We track channels approaching key thresholds: 50 million, 100 million, 200 million, and beyond. Using our growth data, 
+              we estimate when channels might reach their next milestone – though these predictions can change dramatically based on 
+              viral content or algorithm shifts.
+            </p>
+            <p className="text-xs text-gray-500 pt-2 border-t border-[#222]">
+              <em>Estimated arrival times are calculated by TopTube World Pro based on current growth rates and are speculative projections.</em>
+            </p>
+          </div>
         </div>
 
         {/* Upcoming Milestones */}
@@ -3418,11 +3505,35 @@ const CategoryListPage = () => {
   return (
     <div className="py-8" data-testid="categories-page">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Browse by Category</h1>
-          <p className="text-gray-400 text-lg">Explore top YouTube channels across different content categories</p>
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">YouTube Channel Categories</h1>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            Discover top YouTube creators organized by content type - from Gaming and Music to Education and Technology
+          </p>
         </div>
 
+        {/* Editorial Introduction */}
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-white mb-3">Explore YouTube by Content Type</h2>
+          <div className="text-gray-300 text-sm space-y-3">
+            <p>
+              YouTube hosts an incredible diversity of content, from music videos and gaming streams to educational tutorials 
+              and news coverage. Our category rankings help you discover the top creators in each content vertical, making it 
+              easier to find channels that match your interests or research needs.
+            </p>
+            <p>
+              Channels are categorized using keyword analysis of their titles and descriptions. Each category page shows 
+              subscriber rankings, growth trends, and detailed statistics. Note that some channels may appear in multiple 
+              categories if their content spans different topics.
+            </p>
+            <p className="text-xs text-gray-500 pt-2 border-t border-[#222]">
+              <em>Category assignments are automated based on channel metadata and may not perfectly reflect all content types 
+              covered by a channel.</em>
+            </p>
+          </div>
+        </div>
+
+        <h3 className="text-lg font-semibold text-white mb-4">All Categories</h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {categoryStats.map(cat => (
             <div
@@ -3613,6 +3724,33 @@ const CategoryPage = () => {
         {/* Disclaimer */}
         <div className="mt-4 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
           <span className="text-yellow-500">*</span> 24h Gains are estimated by TopTube World Pro. Category assignments are based on channel metadata and may not be 100% accurate.
+        </div>
+
+        {/* Editorial Content */}
+        <div className="mt-8 bg-[#111] border border-[#222] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">About {category?.name} Channels on YouTube</h2>
+          <div className="text-gray-300 text-sm space-y-3">
+            <p>
+              The {category?.name?.toLowerCase()} category represents one of the most {channels.length > 100 ? 'popular' : 'diverse'} content 
+              verticals on YouTube. With {channels.length} channels tracked in our database, this category showcases creators ranging from 
+              emerging talents to established industry leaders with hundreds of millions of subscribers.
+            </p>
+            <p>
+              {category?.name} content on YouTube has evolved significantly over the years, with top creators developing increasingly 
+              sophisticated production values and content strategies. The category's top channel boasts {formatNumber(channels[0]?.subscriber_count || 0)} subscribers, 
+              demonstrating the massive audience potential in this space.
+            </p>
+            <h3 className="text-lg font-semibold text-white mt-4">Key Insights</h3>
+            <ul className="list-disc list-inside text-gray-400 space-y-1">
+              <li>Total channels tracked: <span className="text-white">{channels.length}</span></li>
+              <li>Combined subscribers: <span className="text-white">{formatNumber(channels.reduce((sum, c) => sum + (c.subscriber_count || 0), 0))}</span></li>
+              <li>Top country representation: <span className="text-white">{channels[0]?.country_name || 'Various'}</span></li>
+            </ul>
+            <p className="text-xs text-gray-500 pt-2 border-t border-[#222]">
+              <em>Channels are categorized using automated keyword analysis of titles and descriptions. Some channels may appear in 
+              multiple categories if their content spans different topics.</em>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -4022,10 +4160,72 @@ const ComparePage = () => {
         </div>
 
         {channels.length === 0 ? (
-          <div className="text-center py-16">
-            <BarChart3 className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">No channels selected</h2>
-            <p className="text-gray-500">Search and add channels above to compare them</p>
+          <div className="space-y-8">
+            {/* Empty State with Instructions */}
+            <div className="text-center py-12 bg-[#111] border border-[#222] rounded-lg">
+              <BarChart3 className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-white mb-2">Compare YouTube Channels Side by Side</h2>
+              <p className="text-gray-500 mb-6">Search and add up to 4 channels above to compare their statistics</p>
+              
+              {/* Quick Start Suggestions */}
+              <div className="max-w-2xl mx-auto">
+                <p className="text-sm text-gray-400 mb-3">Popular comparisons:</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  <button 
+                    onClick={() => setSearchParams({ ids: 'UCX6OQ3DkcsbYNE6H8uQQuVA,UCq-Fj5jknLsUf-MWSy4_brA' })}
+                    className="px-3 py-1 bg-[#222] hover:bg-[#333] rounded text-sm text-gray-300"
+                  >
+                    MrBeast vs T-Series
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Educational Content */}
+            <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+              <h2 className="text-xl font-bold text-white mb-4">How to Use the Channel Comparison Tool</h2>
+              <div className="text-gray-300 text-sm space-y-4">
+                <p>
+                  Our free YouTube channel comparison tool lets you analyze multiple channels side by side. Whether you're 
+                  researching competitors, scouting influencers for partnerships, or simply curious about how your favorite 
+                  creators stack up, this tool provides valuable insights.
+                </p>
+                
+                <h3 className="text-lg font-semibold text-white mt-4">What You Can Compare</h3>
+                <ul className="list-disc list-inside space-y-1 text-gray-400">
+                  <li><strong className="text-white">Subscriber Counts:</strong> See exact subscriber numbers side by side</li>
+                  <li><strong className="text-white">Total Views:</strong> Compare cumulative view counts across all videos</li>
+                  <li><strong className="text-white">Video Output:</strong> See how many videos each channel has published</li>
+                  <li><strong className="text-white">Growth Metrics:</strong> Compare daily subscriber gains and growth rates</li>
+                  <li><strong className="text-white">Viral Status:</strong> See which channels are experiencing momentum</li>
+                  <li><strong className="text-white">Growth Charts:</strong> Visualize subscriber trends over the past 30 days</li>
+                </ul>
+
+                <h3 className="text-lg font-semibold text-white mt-4">Use Cases</h3>
+                <div className="grid md:grid-cols-2 gap-4 mt-2">
+                  <div className="bg-[#0d0d0d] rounded p-3">
+                    <h4 className="font-medium text-white mb-1">For Content Creators</h4>
+                    <p className="text-xs text-gray-500">Benchmark against competitors in your niche. Understand what growth rates are realistic and identify successful strategies.</p>
+                  </div>
+                  <div className="bg-[#0d0d0d] rounded p-3">
+                    <h4 className="font-medium text-white mb-1">For Marketers</h4>
+                    <p className="text-xs text-gray-500">Evaluate potential influencer partners. Compare reach, engagement, and growth trends before making partnership decisions.</p>
+                  </div>
+                  <div className="bg-[#0d0d0d] rounded p-3">
+                    <h4 className="font-medium text-white mb-1">For Researchers</h4>
+                    <p className="text-xs text-gray-500">Analyze platform dynamics and creator economics. Study how different content types and strategies perform.</p>
+                  </div>
+                  <div className="bg-[#0d0d0d] rounded p-3">
+                    <h4 className="font-medium text-white mb-1">For Fans</h4>
+                    <p className="text-xs text-gray-500">Follow the subscriber races between your favorite creators. Share comparisons with friends and communities.</p>
+                  </div>
+                </div>
+
+                <p className="text-xs text-gray-500 mt-4 pt-4 border-t border-[#222]">
+                  <em>Data sourced from YouTube Data API. Growth metrics are calculated by TopTube World Pro based on historical tracking and are estimates.</em>
+                </p>
+              </div>
+            </div>
           </div>
         ) : (
           <>
