@@ -1663,6 +1663,52 @@ async def export_channels():
     }
 
 
+@api_router.post("/admin/normalize-channels")
+async def normalize_channels():
+    """Normalize all channel data - add title from name and country_name from country_code"""
+    
+    # Get all countries for lookup
+    countries = await db.countries.find({}, {"_id": 0, "code": 1, "name": 1}).to_list(length=None)
+    country_map = {c["code"]: c["name"] for c in countries}
+    
+    # Find channels missing title (have name instead)
+    title_update_count = 0
+    channels_missing_title = await db.channels.find(
+        {"name": {"$exists": True}, "title": {"$exists": False}},
+        {"_id": 0, "channel_id": 1, "name": 1}
+    ).to_list(length=None)
+    
+    for channel in channels_missing_title:
+        await db.channels.update_one(
+            {"channel_id": channel["channel_id"]},
+            {"$set": {"title": channel["name"]}}
+        )
+        title_update_count += 1
+    
+    # Find channels missing country_name (have country_code instead)
+    country_name_update_count = 0
+    channels_missing_country = await db.channels.find(
+        {"country_code": {"$exists": True}, "country_name": {"$exists": False}},
+        {"_id": 0, "channel_id": 1, "country_code": 1}
+    ).to_list(length=None)
+    
+    for channel in channels_missing_country:
+        country_code = channel.get("country_code")
+        country_name = country_map.get(country_code, country_code)
+        await db.channels.update_one(
+            {"channel_id": channel["channel_id"]},
+            {"$set": {"country_name": country_name}}
+        )
+        country_name_update_count += 1
+    
+    return {
+        "message": "Channel normalization complete",
+        "title_updates": title_update_count,
+        "country_name_updates": country_name_update_count,
+        "total_channels_fixed": title_update_count + country_name_update_count
+    }
+
+
 @api_router.post("/admin/search-and-add-country-channels/{country_code}")
 async def search_and_add_country_channels(country_code: str, background_tasks: BackgroundTasks):
     """Search YouTube for popular channels in a country and add them"""
