@@ -1480,6 +1480,42 @@ const HomePage = () => {
         </div>
       </section>
       
+      {/* Editorial Content Section - Required for AdSense */}
+      <section className="py-12 bg-[#0d0d0d]">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-2xl font-bold text-white mb-6">Understanding YouTube Channel Rankings</h2>
+          <div className="prose prose-invert max-w-none">
+            <p className="text-gray-300 mb-4">
+              The YouTube landscape is constantly evolving, with creators from around the world competing for subscribers and views. 
+              TopTube World Pro provides comprehensive analytics and real-time tracking of the most subscribed YouTube channels across 
+              197 countries, helping content creators, marketers, and enthusiasts understand the dynamics of the platform.
+            </p>
+            <p className="text-gray-300 mb-4">
+              Our platform tracks key metrics including subscriber counts, view statistics, and growth rates. We calculate daily, 
+              weekly, and monthly growth percentages to identify trending channels and predict future milestones. This data helps 
+              content creators benchmark their performance against competitors and identify successful content strategies.
+            </p>
+            <h3 className="text-xl font-semibold text-white mt-6 mb-3">How We Track YouTube Channels</h3>
+            <p className="text-gray-300 mb-4">
+              We use the official YouTube Data API v3 to fetch publicly available channel statistics. Our systems refresh data 
+              multiple times daily and store historical snapshots to calculate growth trends. This approach ensures accuracy while 
+              providing valuable insights that aren't available on YouTube itself.
+            </p>
+            <p className="text-gray-300 mb-4">
+              <strong className="text-yellow-400">Important Note:</strong> Growth statistics, viral scores, and predictions are 
+              calculated by TopTube World Pro based on historical data analysis. These are estimates and should not be confused 
+              with official YouTube metrics. For more details, visit our <Link to="/methodology" className="text-red-400 hover:text-red-300">Data Sources & Methodology</Link> page.
+            </p>
+            <h3 className="text-xl font-semibold text-white mt-6 mb-3">Why Channel Rankings Matter</h3>
+            <p className="text-gray-300 mb-4">
+              Understanding channel rankings provides valuable insights for multiple purposes: content creators can identify 
+              trends and successful niches, marketers can find influencers for campaigns, researchers can study digital media 
+              patterns, and fans can follow their favorite creators' growth journeys.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Newsletter Signup */}
       <section className="py-12 bg-[#0a0a0a]">
         <div className="max-w-2xl mx-auto px-4">
@@ -1700,6 +1736,40 @@ const LeaderboardPage = () => {
         {/* Estimated Data Disclaimer */}
         <div className="mt-4 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
           <span className="text-yellow-500">*</span> 24h Gains, Growth %, and Status are estimated by TopTube World Pro based on historical tracking. These metrics are not provided by YouTube.
+        </div>
+        
+        {/* Editorial Content Section for AdSense Compliance */}
+        <div className="mt-8 bg-[#111] border border-[#222] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">About This YouTube Leaderboard</h2>
+          <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
+            <p>
+              This global YouTube leaderboard ranks the world's most subscribed channels in real-time. The rankings are updated 
+              automatically based on subscriber counts fetched from the YouTube Data API. Our system tracks over 800 channels 
+              across 197 countries, providing a comprehensive view of YouTube's global landscape.
+            </p>
+            <p>
+              The leaderboard includes important metrics such as current subscriber count, rank changes from the previous day, 
+              daily subscriber gains, and our proprietary viral status indicator. These insights help viewers understand not 
+              just who has the most subscribers, but which channels are experiencing significant growth or momentum shifts.
+            </p>
+            <h3 className="text-lg font-semibold text-white mt-4">How to Use This Leaderboard</h3>
+            <p>
+              <strong>For Content Creators:</strong> Benchmark your channel against top performers in your category. Study the 
+              growth patterns of successful channels to identify content strategies that drive subscriber growth.
+            </p>
+            <p>
+              <strong>For Marketers:</strong> Identify potential influencer partners by analyzing subscriber counts, growth rates, 
+              and geographic reach. Our country filter allows you to find top creators in specific markets.
+            </p>
+            <p>
+              <strong>For Researchers:</strong> Track the evolution of digital media by monitoring how creator rankings change 
+              over time. Our historical data enables longitudinal studies of platform dynamics.
+            </p>
+            <p className="text-xs text-gray-500 mt-4">
+              <em>Note: This data is provided for informational purposes only. Growth metrics are estimates based on our tracking 
+              methodology and may differ from official YouTube statistics. See our <Link to="/methodology" className="text-red-400 hover:text-red-300">Methodology page</Link> for details.</em>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -2223,6 +2293,43 @@ const CountryPage = () => {
             </section>
           )}
 
+          {/* Editorial Content Section for AdSense Compliance */}
+          {country.channels && country.channels.length > 0 && (
+            <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="country-editorial">
+              <h2 className="text-xl font-bold text-white mb-4">YouTube in {country.name}: Market Overview</h2>
+              <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
+                <p>
+                  {country.name} {country.flag_emoji} represents a {country.channels.length > 50 ? 'significant' : 
+                  country.channels.length > 20 ? 'growing' : 'developing'} YouTube market with 
+                  <strong className="text-white"> {country.channels.length}</strong> notable channels tracked in our database.
+                  The leading creator, <strong className="text-white">{country.channels[0]?.title}</strong>, has accumulated 
+                  <strong className="text-white"> {formatNumber(country.channels[0]?.subscriber_count)}</strong> subscribers, 
+                  showcasing the country's digital content ecosystem.
+                </p>
+                
+                <p>
+                  The YouTube landscape in {country.name} reflects both global trends and local content preferences. 
+                  {country.channels.length > 10 ? ` With ${country.channels.length} channels being tracked, there's a diverse 
+                  range of content categories represented, from entertainment and music to education and gaming.` : 
+                  ` As the market continues to develop, we expect to see more creators emerge from this region.`}
+                </p>
+
+                <h3 className="text-lg font-semibold text-white mt-4">Key Statistics</h3>
+                <ul className="list-disc list-inside space-y-1 text-gray-400">
+                  <li>Total channels tracked: <span className="text-white">{country.channels.length}</span></li>
+                  <li>Combined subscribers: <span className="text-white">{formatNumber(country.channels.reduce((sum, ch) => sum + (ch.subscriber_count || 0), 0))}</span></li>
+                  <li>Average subscribers per channel: <span className="text-white">{formatNumber(Math.round(country.channels.reduce((sum, ch) => sum + (ch.subscriber_count || 0), 0) / country.channels.length))}</span></li>
+                  <li>Top channel growth: <span className="text-green-400">+{formatNumber(country.channels[0]?.daily_subscriber_gain || 0)}</span> daily subscribers</li>
+                </ul>
+
+                <p className="text-xs text-gray-500 mt-4 border-t border-[#222] pt-4">
+                  <em>Data sourced from YouTube Data API. Growth statistics and rankings are calculated by TopTube World Pro 
+                  and may vary from other sources. Last updated based on our automated refresh schedule.</em>
+                </p>
+              </div>
+            </section>
+          )}
+
           {/* FAQ Section */}
           {countryFaqs.length > 0 && (
             <FAQSection faqs={countryFaqs} title={`FAQs: YouTube in ${country.name}`} />
@@ -2501,6 +2608,51 @@ const ChannelPage = () => {
             </Suspense>
           </div>
         )}
+        
+        {/* Editorial Channel Analysis Section - Required for AdSense */}
+        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-white mb-4">Channel Analysis</h2>
+          <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
+            <p>
+              <strong className="text-white">{channel.title || channel.name}</strong> is a YouTube channel from {channel.country_name} 
+              with <strong className="text-white">{formatNumber(channel.subscriber_count)}</strong> subscribers, making it 
+              {channel.current_rank ? ` ranked #${channel.current_rank} in ${channel.country_name}` : ' one of the top channels in its region'}.
+              The channel has accumulated <strong className="text-white">{formatNumber(channel.view_count)}</strong> total views 
+              across <strong className="text-white">{channel.video_count}</strong> videos.
+            </p>
+            
+            {channel.daily_subscriber_gain > 0 && (
+              <p>
+                In terms of growth, {channel.title || channel.name} is gaining approximately <strong className="text-green-400">
+                {formatNumber(channel.daily_subscriber_gain)}</strong> subscribers per day, 
+                representing a daily growth rate of <strong className="text-green-400">{channel.daily_growth_percent?.toFixed(2) || 0}%</strong>. 
+                This growth pattern indicates {channel.viral_label === 'Exploding' ? 'exceptional viral momentum' : 
+                channel.viral_label === 'Rising Fast' ? 'strong upward trajectory' : 
+                channel.viral_label === 'Stable' ? 'consistent and steady performance' : 'fluctuating growth patterns'}.
+              </p>
+            )}
+            
+            <p>
+              The channel's viral score of <strong className="text-yellow-400">{channel.viral_prediction?.viral_score || 0}</strong> reflects 
+              our algorithm's assessment of its current growth momentum and potential for continued expansion. This score is calculated 
+              based on multiple factors including subscriber growth velocity, engagement patterns, and historical performance trends.
+            </p>
+            
+            <h3 className="text-lg font-semibold text-white mt-4">Performance Context</h3>
+            <p>
+              With an average of <strong className="text-white">{channel.video_count > 0 ? formatNumber(Math.round(channel.view_count / channel.video_count)) : 0}</strong> views 
+              per video, {channel.title || channel.name} demonstrates {channel.view_count / channel.video_count > 1000000 ? 'exceptional' : 
+              channel.view_count / channel.video_count > 100000 ? 'strong' : 'moderate'} content engagement relative to its subscriber base.
+              This metric helps contextualize the channel's performance beyond raw subscriber numbers.
+            </p>
+            
+            <p className="text-xs text-gray-500 mt-4 border-t border-[#222] pt-4">
+              <em><strong>Disclaimer:</strong> Growth statistics, viral scores, and predictions displayed on this page are independently 
+              calculated by TopTube World Pro based on our historical tracking data. These metrics are estimates and are not provided 
+              by or endorsed by YouTube. Subscriber counts and view statistics are sourced from the YouTube Data API.</em>
+            </p>
+          </div>
+        </div>
 
         {/* Top Videos */}
         {channel.top_videos?.length > 0 && (
@@ -2731,6 +2883,44 @@ const TrendingPage = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+        
+        {/* Editorial Content Section for AdSense Compliance */}
+        <div className="mt-8 bg-[#111] border border-[#222] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">Understanding YouTube Growth Trends</h2>
+          <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
+            <p>
+              YouTube growth is influenced by numerous factors including content quality, upload consistency, algorithm changes, 
+              and viral moments. This trending page showcases channels experiencing significant momentum, whether through percentage 
+              growth rates or absolute subscriber gains.
+            </p>
+            
+            <h3 className="text-lg font-semibold text-white mt-4">Fastest Growing vs. Biggest Gains</h3>
+            <p>
+              <strong className="text-white">Fastest Growing (by percentage)</strong> highlights channels with the highest 
+              daily growth rate relative to their current size. A smaller channel gaining 10,000 subscribers from 100,000 shows 
+              a 10% growth rate, while a mega-channel gaining 100,000 from 100 million shows only 0.1%. This metric helps 
+              identify emerging creators with viral momentum.
+            </p>
+            <p>
+              <strong className="text-white">Biggest 24h Gains (absolute numbers)</strong> shows channels gaining the most 
+              subscribers in raw numbers. This metric typically favors established creators who maintain consistent audience 
+              growth through their massive reach and content output.
+            </p>
+            
+            <h3 className="text-lg font-semibold text-white mt-4">What Drives YouTube Growth?</h3>
+            <p>
+              Several factors contribute to rapid channel growth: viral videos that appear in recommendations, collaborations 
+              with other popular creators, trending topics or news events, algorithm-friendly content formats, and consistent 
+              audience engagement. Understanding these patterns helps creators optimize their content strategy.
+            </p>
+            
+            <p className="text-xs text-gray-500 mt-4 border-t border-[#222] pt-4">
+              <em><strong>Disclaimer:</strong> All growth metrics shown are estimated by TopTube World Pro based on our 
+              historical tracking data. These calculations compare current subscriber counts with stored historical values 
+              and may differ from actual YouTube analytics. Growth trends can change rapidly.</em>
+            </p>
           </div>
         </div>
       </div>
