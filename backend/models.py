@@ -70,10 +70,7 @@ class UserResponse(BaseModel):
     login_count: int = 1
 
 class SessionRequest(BaseModel):
-    token: str
-    email: str
-    name: str
-    picture: str = ""
+    session_id: str
 
 class ChannelRequestCreate(BaseModel):
     channel_url: str
