@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://leaderboard-beta.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://channel-rank-staging.preview.emergentagent.com').rstrip('/')
 BLOG_ADMIN_KEY = "toptube2024admin"
 
 class TestHealthAndRoot:

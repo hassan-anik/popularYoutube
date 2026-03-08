@@ -137,7 +137,7 @@ declare -x base_url="https://demobackend.emergentagent.com"
 declare -x code_server_password="c9608c52"
 declare -x integration_proxy_url="https://integrations.emergentagent.com"
 declare -x monitor_polling_interval="1"
-declare -x preview_endpoint="https://leaderboard-beta.preview.emergentagent.com"
+declare -x preview_endpoint="https://channel-rank-staging.preview.emergentagent.com"
 declare -x run_id="4c9c3ff7-c3fe-42f2-847f-2db32153878d" and  API endpoints for blog posts.
     -   Successfully used these endpoints to sync 11 new blog posts to the live production database, resolving the user's issue.
 -   **Bug Fixes:**

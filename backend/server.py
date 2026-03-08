@@ -62,7 +62,7 @@ async def root_sitemap():
 # Root-level robots.txt
 @app.get("/robots.txt", response_class=PlainTextResponse)
 async def root_robots():
-    base_url = os.environ.get('SITE_URL', 'https://leaderboard-beta.preview.emergentagent.com')
+    base_url = os.environ.get('SITE_URL', 'https://channel-rank-staging.preview.emergentagent.com')
     return f"""User-agent: *
 Allow: /
 
