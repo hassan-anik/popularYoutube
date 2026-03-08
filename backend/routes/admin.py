@@ -15,6 +15,7 @@ growth_analyzer = get_growth_analyzer(db)
 
 logger = logging.getLogger(__name__)
 
+@router.get("/admin/stats")
 async def get_admin_stats():
     """Get admin dashboard statistics"""
     total_countries = await db.countries.count_documents({})
