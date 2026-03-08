@@ -131,11 +131,14 @@ table {
   animation: spin 1s linear infinite;
 }
 
-/* Smooth transitions for theme switching */
-* {
-  transition-property: color, background-color, border-color, opacity;
-  transition-duration: 150ms;
-  transition-timing-function: ease-in-out;
+/* Theme transition on key elements only */
+body,
+header,
+main,
+footer,
+nav,
+.App {
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 
 /* Remove transition from animations */
