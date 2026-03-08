@@ -73,6 +73,7 @@ Build a production-ready SaaS platform named "TopTube World Pro" to track, rank,
 
 ### Completed (March 2026)
 - [x] **SEO Overhaul**: ItemList structured data, SEO intro content on leaderboard, 4 landing pages, updated sitemap
+- [x] **Light/Dark Mode Fix**: Replaced ~1000 hardcoded dark colors with CSS variables across 38 files, both themes fully functional
 - [x] **Frontend Refactoring**: App.js 6991→109 lines (98.4% reduction), 16 page files
 - [x] **Backend Refactoring**: server.py 3099→194 lines (93.7% reduction), 7 route modules
 - [x] **AdSense Compliance**: Editorial content on all data pages, 11+ blog posts
@@ -90,6 +91,7 @@ Build a production-ready SaaS platform named "TopTube World Pro" to track, rank,
 - None currently blocking
 
 ## P1 - Next Priority
+- Leaderboard data freshness: subscriber counts may be stale, needs YouTube API refresh
 - Route ordering: `/api/blog/posts/auto-generated` shadowed by `/{slug}` pattern
 - Historical growth charts: Wire up GrowthChart component on channel pages
 - Automatic sitemap regeneration as scheduled job
