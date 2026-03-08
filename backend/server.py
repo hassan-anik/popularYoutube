@@ -2579,12 +2579,24 @@ async def get_sitemap():
     static_pages = [
         ('', '1.0', 'daily'),  # Homepage
         ('/leaderboard', '0.9', 'hourly'),
+        ('/top-youtube-channels', '0.9', 'daily'),
+        ('/most-subscribed-youtube-channels', '0.9', 'daily'),
+        ('/youtube-subscriber-ranking', '0.9', 'daily'),
+        ('/top-youtube-channels-by-country', '0.9', 'daily'),
         ('/countries', '0.8', 'daily'),
         ('/trending', '0.9', 'hourly'),
+        ('/top-100', '0.8', 'daily'),
+        ('/categories', '0.8', 'weekly'),
+        ('/rising-stars', '0.8', 'daily'),
+        ('/race', '0.7', 'daily'),
+        ('/milestones', '0.7', 'daily'),
         ('/compare', '0.7', 'weekly'),
         ('/blog', '0.8', 'daily'),
+        ('/methodology', '0.5', 'monthly'),
         ('/about', '0.3', 'monthly'),
         ('/contact', '0.3', 'monthly'),
+        ('/privacy', '0.2', 'monthly'),
+        ('/terms', '0.2', 'monthly'),
     ]
     
     for path, priority, freq in static_pages:
@@ -2947,7 +2959,7 @@ async def root_sitemap():
 @app.get("/robots.txt", response_class=PlainTextResponse)
 async def root_robots():
     """Serve robots.txt at root level"""
-    base_url = os.environ.get('SITE_URL', 'https://leaderboard-test-1.preview.emergentagent.com')
+    base_url = os.environ.get('SITE_URL', 'https://leaderboard-beta.preview.emergentagent.com')
     return f"""User-agent: *
 Allow: /
 

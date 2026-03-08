@@ -91,6 +91,12 @@ import { SUPPORTED_LANGUAGES } from './i18n';
 
 // Import modular pages
 import { AboutPage, MethodologyPage, PrivacyPage, TermsPage, ContactPage } from './pages';
+import { 
+  TopYouTubeChannelsPage,
+  MostSubscribedYouTubeChannelsPage,
+  YouTubeSubscriberRankingPage,
+  TopYouTubeChannelsByCountryPage
+} from './pages';
 
 // Loading fallback component
 const LoadingFallback = memo(() => (
@@ -725,27 +731,47 @@ const ChannelSEO = ({ channel }) => {
   return <JsonLd data={schemaData} />;
 };
 
-// Leaderboard Page SEO
-const LeaderboardSEO = ({ totalChannels }) => {
+// Leaderboard Page SEO with ItemList Schema
+const LeaderboardSEO = ({ channels, totalChannels }) => {
   const currentYear = new Date().getFullYear();
-  const title = `YouTube Rankings ${currentYear} - Most Subscribed Channels Live Leaderboard`;
-  const description = `Live YouTube rankings ${currentYear}: MrBeast vs T-Series subscriber battle! Track ${totalChannels || 100}+ most subscribed YouTube channels with real-time counts, daily growth & viral status.`;
+  const title = `Top 100 Most Subscribed YouTube Channels (Live Leaderboard ${currentYear})`;
+  const description = `Discover the most subscribed YouTube channels in the world. Live ranking of the top ${totalChannels || 100} YouTube creators based on subscriber count and popularity. Updated every 10 minutes.`;
   const pageUrl = `${SITE_URL}/leaderboard`;
   
   useSEO({
     title,
     description,
-    keywords: `youtube ranking ${currentYear}, most subscribed youtube channels ${currentYear}, youtube leaderboard ${currentYear}, top youtubers worldwide, mrbeast subscribers, t-series subscribers, pewdiepie youtube stats`,
+    keywords: `most subscribed youtube channels, top youtube channels, youtube subscriber leaderboard, youtube channel ranking, most subscribed youtubers ${currentYear}, youtube rankings ${currentYear}, top youtubers worldwide, mrbeast subscribers, t-series subscribers`,
     canonical: pageUrl
   });
   
+  // ItemList structured data for rankings
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": `YouTube Channel Rankings ${currentYear}`,
+    "name": `Most Subscribed YouTube Channels ${currentYear}`,
     "description": description,
     "url": pageUrl,
-    "numberOfItems": totalChannels || 100
+    "numberOfItems": channels?.length || totalChannels || 100,
+    "itemListOrder": "https://schema.org/ItemListOrderDescending",
+    "itemListElement": (channels || []).slice(0, 100).map((channel, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": channel.title || channel.name,
+      "url": `https://youtube.com/channel/${channel.channel_id}`,
+      "item": {
+        "@type": "Organization",
+        "name": channel.title || channel.name,
+        "url": `https://youtube.com/channel/${channel.channel_id}`,
+        "description": `YouTube channel with ${formatNumber(channel.subscriber_count)} subscribers`,
+        "image": channel.thumbnail_url,
+        "interactionStatistic": {
+          "@type": "InteractionCounter",
+          "interactionType": "https://schema.org/SubscribeAction",
+          "userInteractionCount": channel.subscriber_count
+        }
+      }
+    }))
   };
   
   return <JsonLd data={schemaData} />;
@@ -1522,6 +1548,27 @@ const HomePage = () => {
               trends and successful niches, marketers can find influencers for campaigns, researchers can study digital media 
               patterns, and fans can follow their favorite creators' growth journeys.
             </p>
+            
+            {/* SEO Internal Links */}
+            <h3 className="text-xl font-semibold text-white mt-6 mb-3">Explore YouTube Rankings</h3>
+            <div className="grid md:grid-cols-2 gap-3 mt-4">
+              <Link to="/leaderboard" className="flex items-center gap-3 p-3 bg-[#111] border border-[#222] rounded-lg hover:border-red-500/50 transition-colors">
+                <Crown className="w-6 h-6 text-yellow-500" />
+                <span className="text-gray-300 hover:text-white">Most Subscribed YouTube Channels Leaderboard</span>
+              </Link>
+              <Link to="/top-youtube-channels" className="flex items-center gap-3 p-3 bg-[#111] border border-[#222] rounded-lg hover:border-red-500/50 transition-colors">
+                <TrendingUp className="w-6 h-6 text-green-500" />
+                <span className="text-gray-300 hover:text-white">Top YouTube Channels {new Date().getFullYear()}</span>
+              </Link>
+              <Link to="/most-subscribed-youtube-channels" className="flex items-center gap-3 p-3 bg-[#111] border border-[#222] rounded-lg hover:border-red-500/50 transition-colors">
+                <Users className="w-6 h-6 text-blue-500" />
+                <span className="text-gray-300 hover:text-white">Most Subscribed YouTube Channels</span>
+              </Link>
+              <Link to="/top-youtube-channels-by-country" className="flex items-center gap-3 p-3 bg-[#111] border border-[#222] rounded-lg hover:border-red-500/50 transition-colors">
+                <Globe className="w-6 h-6 text-purple-500" />
+                <span className="text-gray-300 hover:text-white">Top YouTube Channels by Country</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -1621,14 +1668,109 @@ const LeaderboardPage = () => {
     );
   }
 
+  const year = new Date().getFullYear();
+
   return (
     <div className="py-8" data-testid="leaderboard-page">
-      <LeaderboardSEO totalChannels={channels.length} />
+      <LeaderboardSEO channels={filteredChannels} totalChannels={channels.length} />
       <div className="max-w-6xl mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Global Leaderboard</h1>
-          <p className="text-gray-500">All tracked YouTube channels worldwide, ranked by subscribers</p>
-        </div>
+        {/* SEO-Optimized Header */}
+        <header className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+            Top 100 Most Subscribed YouTube Channels (Live Leaderboard)
+          </h1>
+          <p className="text-gray-400 text-lg">
+            Real-time YouTube subscriber leaderboard tracking the world's most popular channels. Updated every 10 minutes.
+          </p>
+        </header>
+
+        {/* SEO Introduction Section */}
+        <section className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-white mb-4">Most Subscribed YouTube Channels {year}</h2>
+          <div className="text-gray-300 text-sm leading-relaxed space-y-4">
+            <p>
+              Welcome to the definitive <strong>YouTube subscriber leaderboard</strong> – your source for tracking the 
+              <strong> most subscribed YouTube channels</strong> in real-time. This live ranking displays the <strong>top YouTube channels</strong> worldwide, 
+              sorted by their total subscriber count. Whether you're a content creator benchmarking your growth, a marketer 
+              researching influencers, or simply curious about YouTube's biggest stars, our <strong>YouTube channel ranking</strong> provides 
+              comprehensive, up-to-date statistics.
+            </p>
+            <p>
+              Currently, <Link to="/channel/UCX6OQ3DkcsbYNE6H8uQQuVA" className="text-red-400 hover:text-red-300">MrBeast</Link> leads 
+              the global rankings with over 460 million subscribers, followed by Indian music giant T-Series. The battle for 
+              YouTube supremacy continues as creators worldwide compete for the top positions on this <strong>YouTube subscriber leaderboard</strong>.
+            </p>
+          </div>
+        </section>
+
+        {/* How Ranking Works Section */}
+        <section className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-white mb-4">How the Ranking System Works</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-2">Data Collection</h3>
+              <p className="text-gray-400 text-sm">
+                Our system fetches subscriber counts directly from the official YouTube Data API v3. This ensures accuracy 
+                and reliability for all <strong>top YouTube channels</strong> displayed in our rankings.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-2">Ranking Methodology</h3>
+              <p className="text-gray-400 text-sm">
+                Channels are ranked purely by total subscriber count. We track over {channels.length} channels across 197 
+                countries, making this one of the most comprehensive <strong>YouTube channel rankings</strong> available.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-2">Growth Metrics</h3>
+              <p className="text-gray-400 text-sm">
+                Daily subscriber gains and growth percentages are calculated by comparing current counts with our historical 
+                snapshots. These metrics help identify which <strong>most subscribed YouTube channels</strong> are trending.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-2">Viral Status</h3>
+              <p className="text-gray-400 text-sm">
+                Our proprietary algorithm assigns viral status labels (Exploding, Rising Fast, Stable, Slowing) based on 
+                recent growth patterns, helping you identify momentum in the <strong>YouTube subscriber leaderboard</strong>.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Update Frequency Section */}
+        <section className="bg-gradient-to-r from-red-500/10 to-transparent border border-red-500/20 rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-white mb-3">How Often Subscriber Counts Update</h2>
+          <div className="flex flex-wrap gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
+                <RefreshCw className="w-6 h-6 text-red-400" />
+              </div>
+              <div>
+                <div className="text-white font-semibold">Every 10 Minutes</div>
+                <div className="text-gray-500 text-sm">Ranking updates</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 text-green-400" />
+              </div>
+              <div>
+                <div className="text-white font-semibold">Hourly</div>
+                <div className="text-gray-500 text-sm">Growth calculations</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-blue-400" />
+              </div>
+              <div>
+                <div className="text-white font-semibold">Every 6 Hours</div>
+                <div className="text-gray-500 text-sm">Full data refresh</div>
+              </div>
+            </div>
+          </div>
+        </section>
         
         {/* Search and Filter Bar */}
         <div className="bg-[#111] border border-[#222] rounded-lg p-4 mb-6">
@@ -1748,39 +1890,71 @@ const LeaderboardPage = () => {
           <span className="text-yellow-500">*</span> 24h Gains, Growth %, and Status are estimated by TopTube World Pro based on historical tracking. These metrics are not provided by YouTube.
         </div>
         
-        {/* Editorial Content Section for AdSense Compliance */}
-        <div className="mt-8 bg-[#111] border border-[#222] rounded-lg p-6">
-          <h2 className="text-xl font-bold text-white mb-4">About This YouTube Leaderboard</h2>
+        {/* Most Popular YouTube Channels Section */}
+        <section className="mt-8 bg-[#111] border border-[#222] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-white mb-4">Most Popular YouTube Channels Worldwide</h2>
           <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
             <p>
-              This global YouTube leaderboard ranks the world's most subscribed channels in real-time. The rankings are updated 
-              automatically based on subscriber counts fetched from the YouTube Data API. Our system tracks over 800 channels 
-              across 197 countries, providing a comprehensive view of YouTube's global landscape.
+              The <strong>most subscribed YouTube channels</strong> represent the pinnacle of digital content creation. These channels 
+              have attracted hundreds of millions of subscribers through exceptional content, consistent uploads, and strong audience 
+              engagement. From entertainment giants to educational powerhouses, the <strong>top YouTube channels</strong> span every 
+              content category imaginable.
             </p>
-            <p>
-              The leaderboard includes important metrics such as current subscriber count, rank changes from the previous day, 
-              daily subscriber gains, and our proprietary viral status indicator. These insights help viewers understand not 
-              just who has the most subscribers, but which channels are experiencing significant growth or momentum shifts.
-            </p>
-            <h3 className="text-lg font-semibold text-white mt-4">How to Use This Leaderboard</h3>
-            <p>
-              <strong>For Content Creators:</strong> Benchmark your channel against top performers in your category. Study the 
-              growth patterns of successful channels to identify content strategies that drive subscriber growth.
-            </p>
-            <p>
-              <strong>For Marketers:</strong> Identify potential influencer partners by analyzing subscriber counts, growth rates, 
-              and geographic reach. Our country filter allows you to find top creators in specific markets.
-            </p>
-            <p>
-              <strong>For Researchers:</strong> Track the evolution of digital media by monitoring how creator rankings change 
-              over time. Our historical data enables longitudinal studies of platform dynamics.
-            </p>
-            <p className="text-xs text-gray-500 mt-4">
-              <em>Note: This data is provided for informational purposes only. Growth metrics are estimates based on our tracking 
-              methodology and may differ from official YouTube statistics. See our <Link to="/methodology" className="text-red-400 hover:text-red-300">Methodology page</Link> for details.</em>
+            
+            <h3 className="text-lg font-semibold text-white mt-6 mb-3">What Makes These Channels Popular?</h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-[#0d0d0d] rounded-lg p-4">
+                <h4 className="font-medium text-white mb-2">Content Quality</h4>
+                <p className="text-xs text-gray-400">
+                  The <strong>most subscribed YouTube channels</strong> consistently produce high-quality content that resonates with 
+                  global audiences. Production values range from professional studio setups to authentic personal vlogs.
+                </p>
+              </div>
+              <div className="bg-[#0d0d0d] rounded-lg p-4">
+                <h4 className="font-medium text-white mb-2">Upload Consistency</h4>
+                <p className="text-xs text-gray-400">
+                  Regular upload schedules keep audiences engaged. Top creators on this <strong>YouTube channel ranking</strong> often 
+                  post multiple times per week to maintain algorithmic visibility.
+                </p>
+              </div>
+              <div className="bg-[#0d0d0d] rounded-lg p-4">
+                <h4 className="font-medium text-white mb-2">Audience Engagement</h4>
+                <p className="text-xs text-gray-400">
+                  Building community through comments, live streams, and social media interaction helps 
+                  <strong> top YouTube channels</strong> convert viewers into loyal subscribers.
+                </p>
+              </div>
+              <div className="bg-[#0d0d0d] rounded-lg p-4">
+                <h4 className="font-medium text-white mb-2">Global Appeal</h4>
+                <p className="text-xs text-gray-400">
+                  Many channels on the <strong>YouTube subscriber leaderboard</strong> create content that transcends language barriers, 
+                  including music, gaming, and visual entertainment.
+                </p>
+              </div>
+            </div>
+
+            <h3 className="text-lg font-semibold text-white mt-6 mb-3">Related Rankings</h3>
+            <div className="flex flex-wrap gap-3">
+              <Link to="/top-100" className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm transition-colors">
+                Top 100 YouTubers
+              </Link>
+              <Link to="/trending" className="px-4 py-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 rounded-lg text-green-400 text-sm transition-colors">
+                Fastest Growing Channels
+              </Link>
+              <Link to="/countries" className="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-400 text-sm transition-colors">
+                Rankings by Country
+              </Link>
+              <Link to="/categories" className="px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 rounded-lg text-purple-400 text-sm transition-colors">
+                Rankings by Category
+              </Link>
+            </div>
+            
+            <p className="text-xs text-gray-500 mt-6 pt-4 border-t border-[#222]">
+              <em>Data for this <strong>YouTube subscriber leaderboard</strong> is sourced from the YouTube Data API. Growth statistics 
+              and viral predictions are calculated by TopTube World Pro. See our <Link to="/methodology" className="text-red-400 hover:text-red-300">Methodology</Link> page for details.</em>
             </p>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
@@ -6763,6 +6937,11 @@ function AppContent() {
             <Route path="/" element={<HomePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/top-100" element={<Top100Page />} />
+            {/* SEO Landing Pages */}
+            <Route path="/top-youtube-channels" element={<TopYouTubeChannelsPage />} />
+            <Route path="/most-subscribed-youtube-channels" element={<MostSubscribedYouTubeChannelsPage />} />
+            <Route path="/youtube-subscriber-ranking" element={<YouTubeSubscriberRankingPage />} />
+            <Route path="/top-youtube-channels-by-country" element={<TopYouTubeChannelsByCountryPage />} />
             <Route path="/countries" element={<CountriesPage />} />
             <Route path="/country/:countryCode" element={<CountryPage />} />
             <Route path="/channel/:channelId" element={<ChannelPage />} />

@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://leaderboard-test-1.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://leaderboard-beta.preview.emergentagent.com')
 
 # Test data - known channels and countries
 TEST_CHANNEL_ID = "UCBnZ16ahKA2DZ_T5W0FPUXg"  # ChuChu TV from India
