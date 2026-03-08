@@ -24,3 +24,4 @@ export { ComparePage } from './ComparePage';
 export { AuthCallbackPage, ChannelRequestPage, PollsPage, AlertsPage, FavoritesPage } from './UserPages';
 export { BlogPage, BlogPostPage, CountryBlogPostPage } from './BlogPages';
 export { BlogAdminPage, AdminPage } from './AdminPages';
+export { WidgetPage } from './WidgetPage';

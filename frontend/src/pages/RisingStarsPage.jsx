@@ -171,11 +171,136 @@ const RisingStarsPage = () => {
               These are the channels to watch - future internet superstars in the making.
             </p>
             <p>
-              We track channels between 100K and 10M subscribers that show above-average daily growth rates. 
+              We track channels between 100K and 50M subscribers that show above-average daily growth rates. 
               Many of today's biggest YouTubers were once "rising stars" before breaking into the mainstream.
             </p>
           </div>
         </div>
+
+        {/* Comprehensive Rising Stars Guide */}
+        <section className="mt-8 bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg p-6">
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">The Complete Guide to YouTube Rising Stars</h2>
+          
+          <article className="space-y-6 text-[var(--text-secondary)] text-sm leading-relaxed">
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">What Makes a Rising Star?</h3>
+              <p className="mb-4">
+                A "rising star" on YouTube is a channel experiencing exceptional growth relative to its current size. While established channels with 100 million subscribers might add millions of new subscribers daily, that represents a small percentage of their base. A rising star channel might add tens of thousands of subscribers daily, but from a much smaller base—representing percentage growth rates that signal breakout potential.
+              </p>
+              <p className="mb-4">
+                We identify rising stars by analyzing growth patterns across hundreds of channels under 50 million subscribers. Channels that show consistent above-average daily growth, high engagement rates, or sudden viral momentum are flagged as potential rising stars worth watching. These creators are often on the cusp of mainstream breakthrough.
+              </p>
+              <p>
+                The rising star designation isn't permanent—it reflects current growth momentum. Some channels sustain their trajectory and become major players. Others experience temporary viral growth before returning to baseline. Understanding this dynamic helps viewers and industry observers interpret what they see on this page.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Why Rising Stars Matter</h3>
+              <p className="mb-4">
+                Every YouTube giant started as a small channel. MrBeast was once a rising star himself, gaining recognition through creative content before achieving the scale he has today. PewDiePie, T-Series, Cocomelon—all experienced rising star phases where they grew faster than typical channels before reaching massive scale.
+              </p>
+              <p className="mb-4">
+                For viewers, rising stars represent an opportunity to discover quality content before it becomes mainstream. Following a creator during their growth phase creates a sense of connection and participation in their journey. Many dedicated fan communities form during this rising star phase when creators are more accessible and communities more intimate.
+              </p>
+              <p className="mb-4">
+                For marketers and brands, rising stars offer partnership opportunities at favorable economics. Sponsorship rates correlate with subscriber counts, so partnering with rising stars before they reach premium scale can deliver exceptional value. The audience growth means campaign reach often expands beyond initial projections.
+              </p>
+              <p>
+                For aspiring creators, studying rising stars provides insight into what content strategies and formats currently resonate with YouTube audiences. The tactics that drive rising star growth often represent the cutting edge of YouTube content strategy.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Understanding the Metrics</h3>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Growth Percentage:</strong> This metric shows daily subscriber growth as a percentage of total subscribers. A 0.5% daily growth rate is exceptional—it would mean doubling subscribers in about 140 days. Rising stars often show growth rates multiple times higher than category averages, sometimes exceeding 1-2% daily during peak periods.
+              </p>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Daily Gains:</strong> The absolute number of subscribers added in the last 24 hours. While percentage growth provides normalized comparison, absolute gains show scale of impact. A channel gaining 50,000 subscribers daily is adding significant audience regardless of its current size.
+              </p>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Viral Status:</strong> Our classification system categorizes channels based on growth momentum. "Exploding" channels show exceptional recent growth that stands out even among rising stars. "Rising Fast" channels demonstrate strong, sustained growth above typical patterns. These labels help quickly identify the most dynamic channels.
+              </p>
+              <p>
+                All growth metrics are estimates calculated by TopTube World Pro based on our historical tracking data. We compare current subscriber counts with stored historical values to calculate changes. These estimates may differ from YouTube's internal analytics but provide reliable directional indicators.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Common Rising Star Patterns</h3>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Viral Video Breakthrough:</strong> Many rising stars emerge when a single video achieves viral status. The algorithm promotes the content to massive new audiences, driving subscription spikes. The key question afterward is whether the creator can convert viral viewers into sustained audience through subsequent content.
+              </p>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Shorts Success:</strong> YouTube Shorts has created a new pathway to rising star status. Creators who master the short-form format can build subscriber bases rapidly, then potentially transition viewers to long-form content. Many current rising stars have leveraged Shorts as their primary growth engine.
+              </p>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Collaboration Effect:</strong> Collaborations with established creators can launch rising star trajectories. When a major YouTuber features a smaller creator, the exposure can drive significant subscription growth. Smart rising stars seek collaboration opportunities strategically.
+              </p>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Algorithm Discovery:</strong> Sometimes YouTube's algorithm begins heavily promoting a creator's content for reasons that aren't immediately apparent. These algorithm-driven growth spurts can transform small channels into rising stars within weeks. Understanding this phenomenon helps contextualize sudden growth patterns.
+              </p>
+              <p>
+                <strong className="text-[var(--text-primary)]">Trend Riding:</strong> Creators who successfully create content around trending topics, news events, or viral moments can experience rising star growth. The key is moving quickly while maintaining content quality—first-mover advantage in trending content can drive substantial subscriber gains.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Categories That Produce Rising Stars</h3>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Gaming:</strong> New game releases and gaming trends regularly produce rising stars. Creators who are early to cover popular new games, provide exceptional guides, or offer unique entertainment perspectives can experience rapid growth. The gaming community actively seeks new voices.
+              </p>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Entertainment and Commentary:</strong> Commentary channels that offer fresh perspectives on pop culture, internet drama, or current events can achieve rising star status when their takes resonate with audiences. The format's low production barrier enables rapid content creation around trending topics.
+              </p>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">Educational Content:</strong> Creators who explain complex topics accessibly can build dedicated audiences relatively quickly. Once YouTube's algorithm recognizes a channel as a quality educational resource, it may promote content to viewers searching for related information.
+              </p>
+              <p>
+                <strong className="text-[var(--text-primary)]">Challenge and Experiment Content:</strong> Channels creating unique challenges, experiments, or stunts can achieve viral momentum that drives rising star growth. This category requires creativity and often investment, but successful execution can yield outsized subscriber gains.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">From Rising Star to Established Creator</h3>
+              <p className="mb-4">
+                The transition from rising star to established creator represents a critical phase in channel development. Not all rising stars maintain their trajectory—some plateau after viral growth fades, while others build upon their momentum to achieve lasting success.
+              </p>
+              <p className="mb-4">
+                Successful transitions typically require adapting content strategy as audience size increases. What works for a channel of 500,000 subscribers may not scale to 5 million. Rising stars who recognize this evolution and adjust accordingly tend to sustain their growth trajectories.
+              </p>
+              <p className="mb-4">
+                Building team support becomes necessary as channels scale. Rising stars often operate solo or with minimal help, but sustained growth requires delegation of editing, management, and business functions. Channels that successfully build teams can handle increased content demands without sacrificing quality.
+              </p>
+              <p>
+                Diversifying content and revenue streams helps rising stars weather the transition. Dependency on a single content format or revenue source creates vulnerability. Successful rising stars typically expand their approaches as they grow, building more resilient businesses.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Using This Data</h3>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">For Viewers:</strong> Discover tomorrow's stars today. Following rising stars during their growth phase provides access to quality content before mainstream attention arrives. You might find your next favorite creator among the channels listed here.
+              </p>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">For Creators:</strong> Study what's working for rising stars in your category. Their success indicates current audience preferences and effective content strategies. Learning from rising stars can inform your own content development.
+              </p>
+              <p className="mb-4">
+                <strong className="text-[var(--text-primary)]">For Marketers:</strong> Identify partnership opportunities before rising stars reach premium pricing. The channels on this page represent potential influencer partners with strong growth trajectories and engaged audiences.
+              </p>
+              <p>
+                <strong className="text-[var(--text-primary)]">For Analysts:</strong> Track emerging trends in YouTube content through rising star patterns. The creators experiencing exceptional growth often represent the vanguard of content trends that will shape the broader platform.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-[var(--border)]">
+              <p className="text-xs text-[var(--text-dim)]">
+                <em>Rising star status is determined by TopTube World Pro based on growth metrics and viral indicators. All statistics are estimates calculated from our historical tracking data. Rising star designation reflects current momentum and does not guarantee future growth. The YouTube landscape changes rapidly, and channel trajectories can shift based on content, algorithm changes, and external factors.</em>
+              </p>
+            </div>
+          </article>
+        </section>
 
         {/* Disclaimer */}
         <div className="mt-4 p-3 bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg text-xs text-[var(--text-dim)]">

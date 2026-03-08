@@ -28,6 +28,8 @@ import {
   BlogPage, BlogPostPage, CountryBlogPostPage, BlogAdminPage,
   // Admin
   AdminPage,
+  // Widget
+  WidgetPage,
 } from './pages';
 
 import './i18n';
@@ -80,6 +82,7 @@ function AppContent() {
             <Route path="/blog/country/:countryCode" element={<CountryBlogPostPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
             <Route path="/admin/blog" element={<BlogAdminPage />} />
+            <Route path="/widgets" element={<WidgetPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/methodology" element={<MethodologyPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />

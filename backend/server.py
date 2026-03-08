@@ -24,6 +24,7 @@ from routes.admin import router as admin_router
 from routes.contact import router as contact_router
 from routes.blog import router as blog_router
 from routes.seo import router as seo_router
+from routes.widgets import router as widgets_router
 
 # Configure logging
 logging.basicConfig(
@@ -51,6 +52,7 @@ app.include_router(admin_router)
 app.include_router(contact_router)
 app.include_router(blog_router)
 app.include_router(seo_router)
+app.include_router(widgets_router)
 
 # Root-level sitemap (for Google Search Console - must be at /sitemap.xml)
 @app.get("/sitemap.xml", response_class=PlainTextResponse)
