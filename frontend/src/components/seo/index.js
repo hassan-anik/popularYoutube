@@ -1,5 +1,3 @@
-export { Breadcrumb } from './Breadcrumb';
-export { FAQSchema, FAQSection } from './FAQSection';
 export { CountrySlugRedirect, HreflangTags } from './SEOHelpers';
 export {
   HomeSEO,
@@ -8,5 +6,7 @@ export {
   LeaderboardSEO,
   CountriesListSEO,
   TrendingSEO,
-  Top100SEO
+  Top100SEO,
+  Breadcrumb,
+  FAQSection
 } from './SEOComponents';

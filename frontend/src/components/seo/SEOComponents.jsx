@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
-import { useSEO, JsonLd } from '../hooks/useSEO';
-import { SITE_NAME, SITE_URL } from '../utils/constants';
-import { formatNumber } from '../utils/format';
+import { ChevronRight, Home, ChevronDown, HelpCircle } from 'lucide-react';
+import { useSEO, JsonLd } from '../../hooks/useSEO';
+import { SITE_NAME, SITE_URL } from '../../utils/constants';
+import { formatNumber } from '../../utils/format';
 
 export const HomeSEO = () => {
   const currentYear = new Date().getFullYear();
@@ -124,26 +124,45 @@ export const ChannelSEO = ({ channel }) => {
   return <JsonLd data={schemaData} />;
 };
 
-export const LeaderboardSEO = ({ totalChannels }) => {
+export const LeaderboardSEO = ({ channels, totalChannels }) => {
   const currentYear = new Date().getFullYear();
-  const title = `YouTube Rankings ${currentYear} - Most Subscribed Channels Live Leaderboard`;
-  const description = `Live YouTube rankings ${currentYear}: MrBeast vs T-Series subscriber battle! Track ${totalChannels || 100}+ most subscribed YouTube channels with real-time counts, daily growth & viral status.`;
+  const title = `Top 100 Most Subscribed YouTube Channels (Live Leaderboard ${currentYear})`;
+  const description = `Discover the most subscribed YouTube channels in the world. Live ranking of the top ${totalChannels || 100} YouTube creators based on subscriber count and popularity. Updated every 10 minutes.`;
   const pageUrl = `${SITE_URL}/leaderboard`;
   
   useSEO({
     title,
     description,
-    keywords: `youtube ranking ${currentYear}, most subscribed youtube channels ${currentYear}, youtube leaderboard ${currentYear}, top youtubers worldwide, mrbeast subscribers, t-series subscribers, pewdiepie youtube stats`,
+    keywords: `most subscribed youtube channels, top youtube channels, youtube subscriber leaderboard, youtube channel ranking, most subscribed youtubers ${currentYear}, youtube rankings ${currentYear}, top youtubers worldwide, mrbeast subscribers, t-series subscribers`,
     canonical: pageUrl
   });
   
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": `YouTube Channel Rankings ${currentYear}`,
+    "name": `Most Subscribed YouTube Channels ${currentYear}`,
     "description": description,
     "url": pageUrl,
-    "numberOfItems": totalChannels || 100
+    "numberOfItems": channels?.length || totalChannels || 100,
+    "itemListOrder": "https://schema.org/ItemListOrderDescending",
+    "itemListElement": (channels || []).slice(0, 100).map((channel, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": channel.title || channel.name,
+      "url": `https://youtube.com/channel/${channel.channel_id}`,
+      "item": {
+        "@type": "Organization",
+        "name": channel.title || channel.name,
+        "url": `https://youtube.com/channel/${channel.channel_id}`,
+        "description": `YouTube channel with ${formatNumber(channel.subscriber_count)} subscribers`,
+        "image": channel.thumbnail_url,
+        "interactionStatistic": {
+          "@type": "InteractionCounter",
+          "interactionType": "https://schema.org/SubscribeAction",
+          "userInteractionCount": channel.subscriber_count
+        }
+      }
+    }))
   };
   
   return <JsonLd data={schemaData} />;
@@ -223,13 +242,11 @@ export const Breadcrumb = ({ items }) => {
         "position": idx + 1,
         "name": item.label
       };
-      
       if (!isLastItem && item.href) {
         listItem.item = `${SITE_URL}${item.href}`;
       } else if (!isLastItem) {
         listItem.item = SITE_URL;
       }
-      
       return listItem;
     })
   };
@@ -248,6 +265,7 @@ export const Breadcrumb = ({ items }) => {
                   className="hover:text-white transition-colors"
                   title={item.label}
                 >
+                  {idx === 0 && <Home className="w-4 h-4 inline mr-1" />}
                   {item.label}
                 </Link>
               ) : (
@@ -261,7 +279,7 @@ export const Breadcrumb = ({ items }) => {
   );
 };
 
-export const FAQSection = ({ faqs, title = "Frequently Asked Questions" }) => {
+const FAQSchema = ({ faqs }) => {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -274,25 +292,36 @@ export const FAQSection = ({ faqs, title = "Frequently Asked Questions" }) => {
       }
     }))
   };
+  return <JsonLd data={schemaData} />;
+};
+
+export const FAQSection = ({ faqs, title = "Frequently Asked Questions" }) => {
+  const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <section className="mt-12" data-testid="faq-section">
-      <JsonLd data={schemaData} />
-      <h2 className="text-2xl font-bold text-white mb-6">{title}</h2>
-      <div className="space-y-4">
+    <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="faq-section">
+      <FAQSchema faqs={faqs} />
+      <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <HelpCircle className="w-5 h-5 text-red-500" />
+        {title}
+      </h2>
+      <div className="space-y-3">
         {faqs.map((faq, idx) => (
-          <details 
-            key={idx}
-            className="bg-[#111] border border-[#222] rounded-lg overflow-hidden group"
-          >
-            <summary className="px-4 py-3 cursor-pointer text-white font-medium hover:bg-[#1a1a1a] transition-colors flex items-center justify-between">
-              {faq.question}
-              <ChevronRight className="w-4 h-4 transform group-open:rotate-90 transition-transform" />
-            </summary>
-            <div className="px-4 pb-4 text-gray-400">
-              {faq.answer}
-            </div>
-          </details>
+          <div key={idx} className="border border-[#222] rounded-lg overflow-hidden">
+            <button
+              onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+              className="w-full flex items-center justify-between p-4 text-left hover:bg-[#1a1a1a] transition-colors"
+              aria-expanded={openIndex === idx}
+            >
+              <span className="font-medium text-white pr-4">{faq.question}</span>
+              <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openIndex === idx ? 'rotate-180' : ''}`} />
+            </button>
+            {openIndex === idx && (
+              <div className="px-4 pb-4 text-gray-400 text-sm leading-relaxed">
+                {faq.answer}
+              </div>
+            )}
+          </div>
         ))}
       </div>
     </section>
