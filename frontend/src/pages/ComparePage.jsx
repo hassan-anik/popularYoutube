@@ -295,6 +295,187 @@ const ComparePage = () => {
                 </p>
               </div>
             </div>
+
+            {/* Comprehensive Compare Guide */}
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">The Complete Guide to YouTube Channel Comparison</h2>
+              
+              <article className="space-y-6 text-[var(--text-secondary)] text-sm leading-relaxed">
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Why Compare YouTube Channels?</h3>
+                  <p className="mb-4">
+                    Comparing YouTube channels side by side provides insights that raw numbers alone cannot deliver. Whether you're a content creator benchmarking against competitors, a marketer evaluating influencer partnerships, or simply a YouTube enthusiast following your favorite creator rivalries, comparative analysis reveals patterns and context that single-channel views obscure.
+                  </p>
+                  <p className="mb-4">
+                    Our channel comparison tool allows you to analyze up to four YouTube channels simultaneously across multiple dimensions: subscriber counts, view totals, video output, growth rates, and trend indicators. This multi-dimensional comparison helps you understand not just who's "bigger," but who's growing faster, who's more efficient, and who might represent the best opportunities for various purposes.
+                  </p>
+                  <p>
+                    The tool also provides historical growth charts that visualize how channels' subscriber counts have changed over time. These visualizations can reveal growth patterns that aren't apparent from current statistics alone—showing which channels are accelerating, plateauing, or experiencing volatility.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Understanding Comparison Metrics</h3>
+                  <p className="mb-4">
+                    Each metric in our comparison table tells a different story about channel performance. Understanding these metrics helps you extract meaningful insights from the data.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Subscriber Count:</strong> The total number of channel subscribers represents overall audience size and social proof. However, subscriber counts alone don't tell the full story—a channel with 10 million subscribers might have less engaged audiences than one with 1 million highly active subscribers.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Total Views:</strong> Cumulative view counts across all videos show historical content performance. High view counts relative to subscriber counts suggest strong content discoverability and replay value. Views also directly correlate with advertising revenue potential.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Video Count:</strong> The total number of published videos indicates content output and channel maturity. Some channels succeed with high-volume strategies (multiple uploads daily), while others build audiences with fewer, higher-quality productions. Neither approach is inherently superior—it depends on the content category and creator resources.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">24-Hour Growth:</strong> Daily subscriber gains show current momentum. This metric helps identify which channels are "hot" right now, regardless of their total size. A smaller channel gaining 50,000 subscribers daily might represent a more interesting growth story than a massive channel adding 100,000 from a much larger base.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Growth Rate:</strong> The percentage growth rate normalizes daily gains by channel size, allowing fair comparison between channels of different scales. A 1% daily growth rate is exceptional for any channel—it would mean doubling subscribers in about 70 days.
+                  </p>
+                  <p>
+                    <strong className="text-[var(--text-primary)]">Viral Status:</strong> Our proprietary classification indicates each channel's growth trajectory. "Exploding" channels show exceptional momentum, "Rising Fast" channels demonstrate strong growth, "Stable" channels maintain consistent positions, and "Slowing" channels show declining growth rates.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Common Comparison Scenarios</h3>
+                  <p className="mb-4">
+                    Different users approach channel comparisons with different goals. Here are some common scenarios and what to look for in each.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Creator Competitive Analysis:</strong> Content creators often compare their channels against competitors in their niche. Look beyond raw subscriber counts to growth rates and engagement patterns. A competitor growing faster than you might be worth studying—what content are they creating? How often do they upload? What's different about their approach?
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Influencer Marketing Evaluation:</strong> Marketers comparing potential influencer partners should consider multiple factors. Total subscribers indicate reach, but growth rates suggest momentum. View counts per video (total views divided by video count) reveal typical content performance. Channels with strong growth rates may offer better value as their influence expands post-partnership.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Subscriber Race Tracking:</strong> YouTube subscriber races between popular creators generate significant community interest. Our comparison tool lets you track these races with real-time data and historical charts. Compare current standings, daily gains, and growth trajectories to see who's closing gaps or pulling ahead.
+                  </p>
+                  <p>
+                    <strong className="text-[var(--text-primary)]">Category Benchmarking:</strong> Comparing top channels within a category reveals what "success" looks like in that space. Gaming channel metrics differ significantly from music channel metrics differ from children's content metrics. Understanding category-specific benchmarks helps contextualize individual channel performance.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Reading Growth Charts</h3>
+                  <p className="mb-4">
+                    The subscriber growth chart provides visual representation of how channels' audiences have evolved over time. Understanding how to read these charts helps you extract deeper insights from the comparison.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Trend Direction:</strong> Is the line going up, staying flat, or declining? Upward trends indicate healthy growth. Flat lines suggest stagnation—the channel isn't losing subscribers, but isn't gaining either. Declining lines are rare (YouTube doesn't remove subscribers often) but can indicate problems.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Slope Steepness:</strong> Steeper upward slopes indicate faster growth. Compare slopes between channels to see who's growing more rapidly. A channel with a steeper recent slope might be gaining momentum that could continue.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Inflection Points:</strong> Look for sudden changes in trajectory—points where growth suddenly accelerated or slowed. These inflection points often correspond to specific events: viral videos, controversies, algorithm changes, or external coverage. Identifying what caused these changes can provide insights into growth drivers.
+                  </p>
+                  <p>
+                    <strong className="text-[var(--text-primary)]">Convergence and Divergence:</strong> When comparing multiple channels, watch for lines that are converging (getting closer together) or diverging (spreading apart). Convergence suggests the smaller channel is gaining ground; divergence suggests the larger channel is extending its lead.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Limitations of Channel Comparisons</h3>
+                  <p className="mb-4">
+                    While our comparison tool provides valuable insights, it's important to understand its limitations and avoid drawing conclusions that the data doesn't support.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Different Categories, Different Norms:</strong> Comparing channels across different content categories can be misleading. A children's content channel with 50 million subscribers operates very differently from a tech review channel with 50 million subscribers. View patterns, engagement styles, and monetization differ significantly. Compare within categories for meaningful insights.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Subscribers ≠ Views ≠ Revenue:</strong> Subscriber count doesn't directly correlate with views or revenue. A channel with fewer subscribers but highly engaged audiences might generate more views per video and higher advertising revenue than a larger channel with dormant subscribers. Our tool shows multiple metrics to provide fuller context.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Historical Data Limitations:</strong> Our growth charts show data from our tracking period, which may not extend to a channel's full history. Channels we started tracking recently will show shorter histories. This doesn't affect current metrics but limits historical analysis.
+                  </p>
+                  <p>
+                    <strong className="text-[var(--text-primary)]">Estimated Metrics:</strong> Growth calculations are based on our historical tracking and represent estimates, not official YouTube data. While we strive for accuracy, our figures may differ from YouTube's internal analytics. Treat growth metrics as indicative rather than definitive.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Famous YouTube Channel Rivalries</h3>
+                  <p className="mb-4">
+                    Some YouTube channel comparisons have become cultural phenomena, attracting millions of viewers who follow subscriber races and compare their favorite creators. These rivalries demonstrate the platform's unique ability to create competitive narratives around content creation.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">PewDiePie vs T-Series:</strong> The legendary battle for YouTube's most-subscribed channel captivated millions. PewDiePie, representing individual creators, faced off against T-Series, representing corporate media. The race produced viral songs, coordinated subscriber campaigns, and global media coverage before T-Series ultimately claimed the top spot—only to later be surpassed by MrBeast.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">MrBeast vs T-Series:</strong> The current race for #1 pits MrBeast's blockbuster entertainment format against T-Series's music content factory. MrBeast's overtaking of T-Series represented a symbolic victory for individual creators and demonstrated that a single person's vision could compete with corporate resources.
+                  </p>
+                  <p>
+                    <strong className="text-[var(--text-primary)]">Children's Content Battle:</strong> Cocomelon, Vlad and Niki, Kids Diana Show, and Like Nastya compete for the children's content crown. These channels' growth trajectories and competitive dynamics reveal much about how families consume YouTube content and how the platform serves young audiences.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Tips for Effective Channel Comparisons</h3>
+                  <p className="mb-4">
+                    To get the most value from our comparison tool, follow these best practices.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Compare Similar Channels:</strong> The most meaningful comparisons involve channels in similar categories, target demographics, or content styles. Comparing a gaming channel to a music channel produces data but limited insights.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Look at Multiple Metrics:</strong> Don't focus on a single number. A channel might lead in subscribers but trail in growth rate. Another might have fewer subscribers but higher views per video. Multi-dimensional analysis reveals fuller pictures.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Consider Time Periods:</strong> Current standings matter, but so do trends. A channel that's #2 but growing faster than #1 might overtake soon. Use our growth charts to understand trajectories, not just current positions.
+                  </p>
+                  <p>
+                    <strong className="text-[var(--text-primary)]">Save and Share:</strong> Use the share link feature to bookmark comparisons or share them with others. The URL encodes your selected channels, so you can return to the same comparison later or discuss it with colleagues.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Advanced Comparison Strategies</h3>
+                  <p className="mb-4">
+                    Beyond basic metric comparisons, sophisticated users can extract deeper insights by considering context and derived metrics.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Views Per Video Analysis:</strong> Divide total views by video count to estimate average video performance. This derived metric reveals content efficiency—how many views each piece of content generates on average. Channels with high views-per-video may create fewer but more impactful pieces, while high-volume channels might succeed through quantity.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Subscriber-to-View Ratio:</strong> Compare total subscribers to total views. Some channels have many subscribers but relatively low view counts—potentially indicating dormant subscribers or declining engagement. Others have fewer subscribers but exceptional view totals—suggesting strong content discoverability or viral hits.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Growth Efficiency:</strong> Consider how quickly channels have reached their current subscriber levels. A channel that achieved 10 million subscribers in 2 years demonstrates different efficiency than one that took 10 years. While our tool doesn't show channel age directly, you can research this context externally.
+                  </p>
+                  <p>
+                    <strong className="text-[var(--text-primary)]">Momentum Comparison:</strong> Use viral status indicators to compare growth momentum. A "Stable" channel with 50 million subscribers might be less interesting than a "Rising Fast" channel with 10 million, depending on your analysis goals.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Comparison Data in Business Contexts</h3>
+                  <p className="mb-4">
+                    Channel comparison data serves practical business purposes beyond casual interest. Here's how professionals use this information.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Influencer Marketing ROI:</strong> Marketers compare potential partners' metrics to estimate partnership value. Subscriber counts indicate reach, but growth rates suggest momentum that could amplify campaign impact. Views per video help estimate actual content exposure beyond subscriber counts.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Competitive Benchmarking:</strong> Brands and creators use comparisons to benchmark their own performance against competitors. Understanding where you stand relative to similar channels helps set realistic goals and identify improvement opportunities.
+                  </p>
+                  <p className="mb-4">
+                    <strong className="text-[var(--text-primary)]">Investment Due Diligence:</strong> Investors evaluating creator-economy opportunities use comparison data to assess market positions and growth potential. Understanding how a creator compares to peers informs valuation and risk assessment.
+                  </p>
+                  <p>
+                    <strong className="text-[var(--text-primary)]">Partnership Negotiations:</strong> When negotiating collaborations or sponsorships, both parties benefit from objective data. Comparisons provide common ground for discussions about reach, engagement, and value exchange.
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-[var(--border)]">
+                  <p className="text-xs text-[var(--text-dim)]">
+                    <em>All data displayed in channel comparisons is sourced from the YouTube Data API for subscriber counts, view counts, and video counts. Growth metrics and viral status indicators are independently calculated by TopTube World Pro based on our historical tracking data. These calculations are estimates and may differ from YouTube's internal analytics. For methodology details, visit our dedicated Methodology page.</em>
+                  </p>
+                </div>
+              </article>
+            </div>
           </div>
         ) : (
           <>

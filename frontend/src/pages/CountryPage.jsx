@@ -297,6 +297,161 @@ const CountryPage = () => {
             <FAQSection faqs={countryFaqs} title={`FAQs: YouTube in ${country.name}`} />
           )}
 
+          {/* Comprehensive Country YouTube Guide */}
+          <section className="bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg p-6" data-testid="country-guide">
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">Complete Guide: YouTube in {country.name}</h2>
+            
+            <article className="space-y-6 text-[var(--text-secondary)] text-sm leading-relaxed">
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">The YouTube Landscape in {country.name}</h3>
+                <p className="mb-4">
+                  {country.name} represents a {country.channels?.length > 100 ? 'major' : country.channels?.length > 30 ? 'significant' : country.channels?.length > 10 ? 'growing' : 'developing'} market in the global YouTube ecosystem. With {country.channels?.length || 0} channels currently tracked in our database, the country's creator community reflects both local content preferences and global YouTube trends. Understanding this market provides valuable insights for creators, marketers, and researchers interested in regional content dynamics.
+                </p>
+                <p className="mb-4">
+                  YouTube's presence in {country.name} is shaped by multiple factors including internet penetration rates, smartphone adoption, local content preferences, and advertising market conditions. {country.region === 'Asia' ? 'As one of Asia\'s digital markets, ' : country.region === 'Europe' ? 'As a European market, ' : country.region === 'Americas' ? 'In the Americas region, ' : 'In this region, '}{country.name} contributes to YouTube's global diversity of content and creators.
+                </p>
+                <p>
+                  The channels tracked from {country.name} span various content categories, from entertainment and music to education and lifestyle. Each successful creator has found ways to connect with both local audiences and, in many cases, international viewers who discover their content through YouTube's global recommendation system.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Leading Creators from {country.name}</h3>
+                <p className="mb-4">
+                  {country.channels && country.channels.length > 0 ? 
+                    `At the top of ${country.name}'s YouTube rankings, ${country.channels[0]?.title} leads with ${formatNumber(country.channels[0]?.subscriber_count)} subscribers. This achievement places them among the most successful creators from the country, demonstrating the potential reach of ${country.name}-based content on the global platform.` :
+                    `As ${country.name}'s YouTube ecosystem develops, we continue monitoring for notable creators to add to our tracking database.`}
+                </p>
+                <p className="mb-4">
+                  {country.channels && country.channels.length > 1 ? 
+                    `The second-ranked channel, ${country.channels[1]?.title}, has accumulated ${formatNumber(country.channels[1]?.subscriber_count)} subscribers, while ${country.channels[2] ? `${country.channels[2]?.title} follows with ${formatNumber(country.channels[2]?.subscriber_count)} subscribers` : 'other creators continue building their audiences'}. This competitive landscape reflects the opportunities and challenges facing content creators in this market.` :
+                    `As more creators from ${country.name} reach significant scale, our database will expand to include additional channels.`}
+                </p>
+                <p>
+                  The growth patterns of top {country.name} creators reveal insights into what content resonates with local audiences. {country.channels && country.channels[0]?.daily_subscriber_gain > 10000 ? 
+                    `The leading channel's daily growth of ${formatNumber(country.channels[0]?.daily_subscriber_gain || 0)} subscribers indicates strong ongoing momentum and successful content strategy.` :
+                    `Understanding these patterns helps aspiring creators develop effective strategies for building audiences in this market.`}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Content Categories and Trends</h3>
+                <p className="mb-4">
+                  YouTube content preferences in {country.name} reflect both global trends and local cultural factors. While international content categories like gaming, music, and entertainment resonate worldwide, creators from {country.name} often find success by blending global formats with local relevance.
+                </p>
+                <p className="mb-4">
+                  Language plays a significant role in shaping content strategy for {country.name}-based creators. Those creating content in local languages build strong connections with domestic audiences, while English-language content can access broader international viewership. Many successful creators navigate both approaches, sometimes creating content in multiple languages or using visual formats that transcend language barriers.
+                </p>
+                <p>
+                  The evolution of YouTube features like Shorts, Live streaming, and Community posts creates new opportunities for creators in {country.name}. Early adoption of these features can provide competitive advantages, as the algorithm often promotes content that utilizes new platform capabilities.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Economic Factors and Monetization</h3>
+                <p className="mb-4">
+                  YouTube monetization in {country.name} depends on local advertising market conditions, viewer demographics, and content type. CPM (cost per thousand impressions) rates vary significantly by country, affecting how many subscribers and views a creator needs to generate meaningful revenue.
+                </p>
+                <p className="mb-4">
+                  Creators from {country.name} can diversify revenue beyond advertising through brand partnerships, merchandise, channel memberships, and Super Chat donations. Those who build dedicated audiences often find these alternative revenue streams more lucrative than advertising alone, especially in markets with lower CPM rates.
+                </p>
+                <p>
+                  The growth of {country.name}'s digital economy creates opportunities for YouTube creators to participate in the broader creator economy. Successful channels can leverage their audiences for business opportunities that extend beyond the YouTube platform itself.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Regional Context: {country.region}</h3>
+                <p className="mb-4">
+                  {country.name} sits within {country.region}'s broader YouTube ecosystem, where creators from neighboring countries may compete for similar audiences while also creating collaboration opportunities. Understanding regional dynamics helps contextualize {country.name}'s position in the global YouTube landscape.
+                </p>
+                <p className="mb-4">
+                  {country.region === 'Asia' ? 
+                    'Asian YouTube markets represent some of the fastest-growing and most competitive in the world. From the K-pop phenomenon in South Korea to India\'s massive music and entertainment industry, Asia drives significant platform growth. Creators in this region operate within a highly dynamic environment.' :
+                    country.region === 'Europe' ? 
+                    'European YouTube markets combine diverse languages and cultures within a relatively affluent advertising environment. Creators from European countries often benefit from strong CPM rates while navigating fragmented linguistic markets.' :
+                    country.region === 'Americas' ? 
+                    'The Americas region spans from the massive U.S. market to rapidly growing Latin American audiences. Spanish and Portuguese content reaches large, linguistically connected populations across multiple countries.' :
+                    country.region === 'Africa' ? 
+                    'African YouTube markets represent significant growth potential as internet access expands across the continent. Creators who establish presence in these emerging markets may benefit from first-mover advantages as audiences grow.' :
+                    'This regional context shapes opportunities and challenges for creators from ' + country.name + '.'}
+                </p>
+                <p>
+                  Cross-border collaboration between creators from {country.name} and neighboring countries can expand audience reach while creating content that resonates across regional boundaries. These collaborations often introduce viewers to new creators and content styles.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Opportunities for Aspiring Creators</h3>
+                <p className="mb-4">
+                  The YouTube landscape in {country.name} presents opportunities for new creators willing to invest in quality content and consistent publishing. While established channels have advantages in subscriber base and algorithmic momentum, the platform's recommendation system continues to surface new voices who create compelling content.
+                </p>
+                <p className="mb-4">
+                  Aspiring creators from {country.name} should study the successful channels tracked on this page to understand what works in this market. Consider content categories with proven demand, optimal upload frequencies, and engagement strategies that build community. The data on this page provides benchmarks for what success looks like in this market.
+                </p>
+                <p>
+                  YouTube Shorts offers particularly accessible entry points for new creators. The short-form format requires less production investment while reaching audiences through dedicated recommendation feeds. Many successful creators now use Shorts to grow their subscriber bases before transitioning to longer-form content.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Using This Data</h3>
+                <p className="mb-4">
+                  The rankings and statistics on this page serve multiple purposes. Creators can benchmark against successful channels in their market. Marketers can identify potential partners for campaigns targeting {country.name} audiences. Researchers can analyze market dynamics and creator economics in this regional context.
+                </p>
+                <p className="mb-4">
+                  Each channel listed includes detailed statistics accessible through their individual profile pages, including subscriber counts, view totals, growth metrics, and viral score indicators. These profiles provide deeper insights than the summary rankings shown here.
+                </p>
+                <p>
+                  Our Compare tool allows side-by-side analysis of multiple channels, useful for understanding competitive dynamics or evaluating partnership options. The data updates regularly as we track changes across the YouTube ecosystem.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">The Future of YouTube in {country.name}</h3>
+                <p className="mb-4">
+                  The YouTube landscape in {country.name} will continue evolving as the platform introduces new features, local creator communities mature, and internet access patterns change. Understanding potential future directions helps creators, marketers, and analysts position themselves strategically.
+                </p>
+                <p className="mb-4">
+                  {country.region === 'Asia' || country.region === 'Africa' ?
+                  `As internet penetration continues expanding in ${country.name} and ${country.region} more broadly, the addressable audience for YouTube content will grow. This expansion creates opportunities for both established creators and newcomers who can serve new viewer segments.` :
+                  `YouTube's mature presence in ${country.name} means growth will likely come from increased engagement depth rather than new user acquisition. Creators who build strong community connections and diversify content offerings may outperform those relying solely on subscriber growth.`}
+                </p>
+                <p className="mb-4">
+                  Platform feature evolution will shape local opportunities. YouTube Shorts, live shopping integrations, membership features, and other new capabilities create differentiation opportunities for creators who adopt them early. {country.name}'s creators who leverage these features strategically may gain competitive advantages.
+                </p>
+                <p>
+                  Competitive pressures from other platforms including TikTok, Instagram, and local alternatives will influence YouTube strategy in {country.name}. Creators who build audiences across multiple platforms while maintaining strong YouTube presence may be best positioned for long-term success regardless of platform shifts.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Building a YouTube Career in {country.name}</h3>
+                <p className="mb-4">
+                  For aspiring creators in {country.name}, the channels on this page represent both inspiration and competitive benchmarks. Building a successful YouTube channel requires understanding local market dynamics while applying universal best practices.
+                </p>
+                <p className="mb-4">
+                  <strong className="text-[var(--text-primary)]">Content Strategy:</strong> Study what works for successful {country.name} creators. What content categories are represented? What formats resonate with local audiences? How do top channels balance local relevance with broader appeal? These patterns can inform your own content decisions.
+                </p>
+                <p className="mb-4">
+                  <strong className="text-[var(--text-primary)]">Consistency and Quality:</strong> The channels ranking highest in {country.name} didn't achieve success overnight. Consistent content publishing over extended periods, combined with continuous quality improvement, builds the foundation for YouTube success. Set realistic expectations for timeline to significant audience building.
+                </p>
+                <p className="mb-4">
+                  <strong className="text-[var(--text-primary)]">Community Building:</strong> Beyond subscriber numbers, successful creators build engaged communities. Comments, social media interaction, and community features help transform passive viewers into active fans who promote content organically.
+                </p>
+                <p>
+                  <strong className="text-[var(--text-primary)]">Monetization Planning:</strong> While advertising revenue varies by market, creators in {country.name} can build sustainable careers through diversified income streams. Plan for brand partnerships, merchandise, memberships, and other revenue sources alongside advertising.
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-[var(--border)]">
+                <p className="text-xs text-[var(--text-dim)]">
+                  <em>All data is sourced from the YouTube Data API and our proprietary tracking systems. Subscriber counts and view totals are provided by YouTube; growth metrics and viral scores are independently calculated by TopTube World Pro. Country assignments reflect each channel's primary geographic association based on available data. This page is updated regularly as our automated systems capture new data.</em>
+                </p>
+              </div>
+            </article>
+          </section>
+
           {/* Site Navigation Links */}
           <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6" data-testid="site-navigation">
             <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">Discover More</h2>
