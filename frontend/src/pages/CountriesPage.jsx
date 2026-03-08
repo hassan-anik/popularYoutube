@@ -39,17 +39,17 @@ const CountriesPage = () => {
       <CountriesListSEO totalCountries={countries.length} />
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">YouTube Rankings by Country</h1>
-          <p className="text-gray-400 max-w-3xl">
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">YouTube Rankings by Country</h1>
+          <p className="text-[var(--text-muted)] max-w-3xl">
             Explore the most subscribed YouTube channels across {countries.length} countries worldwide. 
             Each country page features detailed rankings, growth statistics, and insights into local YouTube markets.
           </p>
         </div>
 
         {/* Editorial Introduction */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-3">Global YouTube Coverage</h2>
-          <div className="text-gray-300 text-sm space-y-3">
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-3">Global YouTube Coverage</h2>
+          <div className="text-[var(--text-secondary)] text-sm space-y-3">
             <p>
               YouTube's reach spans every corner of the globe, with content creators building audiences in virtually every country. 
               Our country-by-country rankings provide insights into regional content preferences, top creators, and market dynamics.
@@ -59,52 +59,52 @@ const CountriesPage = () => {
               metrics and trending indicators. Whether you're researching markets for content strategy, looking for regional 
               influencers, or simply curious about YouTube's global landscape, these rankings offer valuable insights.
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-[#222]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-[var(--border)]">
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">{countries.length}</div>
-                <div className="text-xs text-gray-500">Countries Tracked</div>
+                <div className="text-2xl font-bold text-[var(--text-primary)]">{countries.length}</div>
+                <div className="text-xs text-[var(--text-dim)]">Countries Tracked</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">{countries.reduce((sum, c) => sum + (c.channel_count || 0), 0).toLocaleString()}</div>
-                <div className="text-xs text-gray-500">Total Channels</div>
+                <div className="text-2xl font-bold text-[var(--text-primary)]">{countries.reduce((sum, c) => sum + (c.channel_count || 0), 0).toLocaleString()}</div>
+                <div className="text-xs text-[var(--text-dim)]">Total Channels</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">Daily</div>
-                <div className="text-xs text-gray-500">Data Updates</div>
+                <div className="text-2xl font-bold text-[var(--text-primary)]">Daily</div>
+                <div className="text-xs text-[var(--text-dim)]">Data Updates</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">Free</div>
-                <div className="text-xs text-gray-500">Access</div>
+                <div className="text-2xl font-bold text-[var(--text-primary)]">Free</div>
+                <div className="text-xs text-[var(--text-dim)]">Access</div>
               </div>
             </div>
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold text-white mb-4">Browse All Countries</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Browse All Countries</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {countries.map(country => (
             <div
               key={country.code}
-              className="bg-[#111] border border-[#222] rounded-lg p-5 hover:border-[#333] cursor-pointer transition-colors"
+              className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5 hover:border-[var(--border-hover)] cursor-pointer transition-colors"
               onClick={() => navigate(`/country/${country.code}`)}
               data-testid={`country-card-${country.code}`}
             >
               <div className="flex items-center gap-4">
                 <span className="text-4xl">{country.flag_emoji}</span>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-white text-lg">{country.name}</h3>
-                  <p className="text-gray-500 text-sm">{country.channel_count} channels</p>
+                  <h3 className="font-semibold text-[var(--text-primary)] text-lg">{country.name}</h3>
+                  <p className="text-[var(--text-dim)] text-sm">{country.channel_count} channels</p>
                 </div>
-                <ChevronRight className="w-5 h-5 text-gray-600" />
+                <ChevronRight className="w-5 h-5 text-[var(--text-dim)]" />
               </div>
               {country.top_channel && (
-                <div className="mt-4 pt-4 border-t border-[#222]">
-                  <p className="text-xs text-gray-500 mb-2">Top Channel</p>
+                <div className="mt-4 pt-4 border-t border-[var(--border)]">
+                  <p className="text-xs text-[var(--text-dim)] mb-2">Top Channel</p>
                   <div className="flex items-center gap-2">
                     <img src={country.top_channel.thumbnail_url || "https://via.placeholder.com/32"} alt="" loading="lazy" className="w-8 h-8 rounded-full" />
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm text-white truncate">{country.top_channel.title}</div>
-                      <div className="text-xs text-gray-500">{formatNumber(country.top_channel.subscriber_count)} subs</div>
+                      <div className="text-sm text-[var(--text-primary)] truncate">{country.top_channel.title}</div>
+                      <div className="text-xs text-[var(--text-dim)]">{formatNumber(country.top_channel.subscriber_count)} subs</div>
                     </div>
                   </div>
                 </div>

@@ -71,32 +71,32 @@ const Top100Page = () => {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Trophy className="w-8 h-8 text-yellow-500" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white">
+            <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">
               Top 100 Most Subscribed YouTube Channels {year}
             </h1>
           </div>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[var(--text-muted)] text-lg">
             The definitive list of the world's biggest YouTube channels, updated in real-time
           </p>
         </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-white">{formatNumber(channels.reduce((sum, c) => sum + (c.subscriber_count || 0), 0))}</div>
-            <div className="text-gray-500 text-sm">Combined Subscribers</div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[var(--text-primary)]">{formatNumber(channels.reduce((sum, c) => sum + (c.subscriber_count || 0), 0))}</div>
+            <div className="text-[var(--text-dim)] text-sm">Combined Subscribers</div>
           </div>
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
             <div className="text-2xl font-bold text-green-400">+{formatNumber(channels.reduce((sum, c) => sum + (c.daily_subscriber_gain || 0), 0))}</div>
-            <div className="text-gray-500 text-sm">24h Combined Growth</div>
+            <div className="text-[var(--text-dim)] text-sm">24h Combined Growth</div>
           </div>
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-white">{new Set(channels.map(c => c.country_code)).size}</div>
-            <div className="text-gray-500 text-sm">Countries Represented</div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[var(--text-primary)]">{new Set(channels.map(c => c.country_code)).size}</div>
+            <div className="text-[var(--text-dim)] text-sm">Countries Represented</div>
           </div>
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
             <div className="text-2xl font-bold text-red-400">{channels.filter(c => c.viral_label === 'Exploding').length}</div>
-            <div className="text-gray-500 text-sm">Viral Channels</div>
+            <div className="text-[var(--text-dim)] text-sm">Viral Channels</div>
           </div>
         </div>
 
@@ -123,15 +123,15 @@ const Top100Page = () => {
                   <div className={`absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-lg font-bold ${
                     idx === 0 ? 'bg-yellow-500 text-black' :
                     idx === 1 ? 'bg-gray-400 text-black' :
-                    'bg-orange-600 text-white'
+                    'bg-orange-600 text-[var(--text-primary)]'
                   }`}>
                     {idx + 1}
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h2 className="font-bold text-white text-lg truncate">{channel.title}</h2>
-                  <p className="text-gray-400 text-sm">{channel.country_name}</p>
-                  <p className="text-2xl font-bold text-white">{formatNumber(channel.subscriber_count)}</p>
+                  <h2 className="font-bold text-[var(--text-primary)] text-lg truncate">{channel.title}</h2>
+                  <p className="text-[var(--text-muted)] text-sm">{channel.country_name}</p>
+                  <p className="text-2xl font-bold text-[var(--text-primary)]">{formatNumber(channel.subscriber_count)}</p>
                 </div>
               </div>
             </div>
@@ -139,22 +139,22 @@ const Top100Page = () => {
         </div>
 
         {/* Full List */}
-        <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden mb-8">
-          <div className="px-4 py-3 border-b border-[#222] bg-[#0a0a0a]">
-            <h2 className="font-bold text-white">Complete Top 100 Rankings</h2>
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg overflow-hidden mb-8">
+          <div className="px-4 py-3 border-b border-[var(--border)] bg-[var(--bg-page)]">
+            <h2 className="font-bold text-[var(--text-primary)]">Complete Top 100 Rankings</h2>
           </div>
-          <div className="divide-y divide-[#222]">
+          <div className="divide-y divide-[var(--divide)]">
             {channels.map((channel, idx) => (
               <div
                 key={channel.channel_id}
-                className="px-4 py-4 hover:bg-[#1a1a1a] cursor-pointer flex items-center gap-4 transition-colors"
+                className="px-4 py-4 hover:bg-[var(--bg-hover)] cursor-pointer flex items-center gap-4 transition-colors"
                 onClick={() => navigate(`/channel/${channel.channel_id}`)}
                 data-testid={`rank-${idx + 1}`}
               >
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
                   idx < 3 ? 'bg-gradient-to-br from-yellow-500 to-yellow-700 text-black' :
-                  idx < 10 ? 'bg-gradient-to-br from-red-600 to-red-800 text-white' :
-                  'bg-[#222] text-gray-400'
+                  idx < 10 ? 'bg-gradient-to-br from-red-600 to-red-800 text-[var(--text-primary)]' :
+                  'bg-[var(--border)] text-[var(--text-muted)]'
                 }`}>
                   {idx + 1}
                 </div>
@@ -165,14 +165,14 @@ const Top100Page = () => {
                   loading="lazy"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-white truncate">{channel.title}</div>
-                  <div className="text-sm text-gray-500">{channel.country_name}</div>
+                  <div className="font-medium text-[var(--text-primary)] truncate">{channel.title}</div>
+                  <div className="text-sm text-[var(--text-dim)]">{channel.country_name}</div>
                 </div>
                 <div className="hidden md:block">
                   <ViralBadge label={channel.viral_label} />
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-white">{formatNumber(channel.subscriber_count)}</div>
+                  <div className="font-bold text-[var(--text-primary)]">{formatNumber(channel.subscriber_count)}</div>
                   <div className={`text-sm ${(channel.daily_subscriber_gain || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {channel.daily_subscriber_gain >= 0 ? '+' : ''}{formatNumber(channel.daily_subscriber_gain || 0)}
                   </div>
@@ -183,9 +183,9 @@ const Top100Page = () => {
         </div>
 
         {/* Editorial Content Section */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">About the Top 100 YouTube Channels</h2>
-          <div className="text-gray-300 text-sm space-y-3">
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">About the Top 100 YouTube Channels</h2>
+          <div className="text-[var(--text-secondary)] text-sm space-y-3">
             <p>
               The Top 100 Most Subscribed YouTube Channels represents the elite tier of content creators on the world's largest 
               video platform. These channels have achieved subscriber counts that would rival the populations of small countries, 
@@ -197,14 +197,14 @@ const Top100Page = () => {
               and sports organizations. The variety reflects YouTube's evolution from a platform for amateur videos to a 
               global entertainment hub.
             </p>
-            <h3 className="text-lg font-semibold text-white mt-4">What It Takes to Reach the Top 100</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mt-4">What It Takes to Reach the Top 100</h3>
             <p>
               Breaking into the Top 100 requires tens of millions of subscribers - a threshold that continues to rise as 
               YouTube's audience grows. Success typically comes from a combination of factors: consistent high-quality content, 
               strategic upload schedules, audience engagement, and often, diversification across multiple content formats 
               including YouTube Shorts.
             </p>
-            <p className="text-xs text-gray-500 pt-2 border-t border-[#222]">
+            <p className="text-xs text-[var(--text-dim)] pt-2 border-t border-[var(--border)]">
               <em>Subscriber counts are sourced from the YouTube Data API. Growth metrics are calculated by TopTube World Pro 
               based on our historical tracking data and are estimates.</em>
             </p>
@@ -217,13 +217,13 @@ const Top100Page = () => {
         )}
 
         {/* Internal Links */}
-        <nav className="mt-8 bg-[#111] border border-[#222] rounded-lg p-6" aria-label="Related pages">
-          <h2 className="text-lg font-bold text-white mb-4">Explore More Rankings</h2>
+        <nav className="mt-8 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6" aria-label="Related pages">
+          <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">Explore More Rankings</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Link to="/leaderboard" className="text-gray-300 hover:text-red-400 text-sm">Full Global Leaderboard →</Link>
-            <Link to="/trending" className="text-gray-300 hover:text-red-400 text-sm">Fastest Growing Channels →</Link>
-            <Link to="/countries" className="text-gray-300 hover:text-red-400 text-sm">Rankings by Country →</Link>
-            <Link to="/compare" className="text-gray-300 hover:text-red-400 text-sm">Compare Channels →</Link>
+            <Link to="/leaderboard" className="text-[var(--text-secondary)] hover:text-red-400 text-sm">Full Global Leaderboard →</Link>
+            <Link to="/trending" className="text-[var(--text-secondary)] hover:text-red-400 text-sm">Fastest Growing Channels →</Link>
+            <Link to="/countries" className="text-[var(--text-secondary)] hover:text-red-400 text-sm">Rankings by Country →</Link>
+            <Link to="/compare" className="text-[var(--text-secondary)] hover:text-red-400 text-sm">Compare Channels →</Link>
           </div>
         </nav>
       </div>

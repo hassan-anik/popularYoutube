@@ -63,18 +63,18 @@ export const TopYouTubeChannelsPage = () => {
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
             Top YouTube Channels {year}
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[var(--text-muted)] text-lg">
             The most popular YouTube channels ranked by subscriber count
           </p>
         </header>
 
         {/* SEO Introduction */}
-        <section className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">Most Popular YouTube Channels in {year}</h2>
-          <div className="text-gray-300 text-sm leading-relaxed space-y-4">
+        <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Most Popular YouTube Channels in {year}</h2>
+          <div className="text-[var(--text-secondary)] text-sm leading-relaxed space-y-4">
             <p>
               Looking for the <strong>top YouTube channels</strong>? You've come to the right place. This comprehensive ranking 
               showcases the most popular YouTubers based on their total subscriber count. From entertainment juggernauts like 
@@ -95,42 +95,42 @@ export const TopYouTubeChannelsPage = () => {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-white">{channels.length}</div>
-            <div className="text-xs text-gray-500">Channels Ranked</div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[var(--text-primary)]">{channels.length}</div>
+            <div className="text-xs text-[var(--text-dim)]">Channels Ranked</div>
           </div>
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-white">{formatNumber(channels.reduce((sum, c) => sum + (c.subscriber_count || 0), 0))}</div>
-            <div className="text-xs text-gray-500">Total Subscribers</div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[var(--text-primary)]">{formatNumber(channels.reduce((sum, c) => sum + (c.subscriber_count || 0), 0))}</div>
+            <div className="text-xs text-[var(--text-dim)]">Total Subscribers</div>
           </div>
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
             <div className="text-2xl font-bold text-green-400">+{formatNumber(channels.reduce((sum, c) => sum + (c.daily_subscriber_gain || 0), 0))}</div>
-            <div className="text-xs text-gray-500">Daily Gains</div>
+            <div className="text-xs text-[var(--text-dim)]">Daily Gains</div>
           </div>
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-white">197</div>
-            <div className="text-xs text-gray-500">Countries</div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[var(--text-primary)]">197</div>
+            <div className="text-xs text-[var(--text-dim)]">Countries</div>
           </div>
         </div>
 
         {/* Channel List */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">Top 50 YouTube Channels</h2>
-          <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Top 50 YouTube Channels</h2>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg overflow-hidden">
             {channels.slice(0, 50).map((channel, idx) => (
               <div 
                 key={channel.channel_id}
                 onClick={() => navigate(`/channel/${channel.channel_id}`)}
-                className="flex items-center gap-4 p-4 hover:bg-[#1a1a1a] cursor-pointer border-b border-[#222] last:border-b-0"
+                className="flex items-center gap-4 p-4 hover:bg-[var(--bg-hover)] cursor-pointer border-b border-[var(--border)] last:border-b-0"
               >
-                <div className="w-8 text-center font-bold text-gray-500">#{idx + 1}</div>
+                <div className="w-8 text-center font-bold text-[var(--text-dim)]">#{idx + 1}</div>
                 <img src={channel.thumbnail_url} alt={channel.title} className="w-10 h-10 rounded-full" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-white truncate">{channel.title || channel.name}</div>
-                  <div className="text-xs text-gray-500">{channel.country_name}</div>
+                  <div className="font-medium text-[var(--text-primary)] truncate">{channel.title || channel.name}</div>
+                  <div className="text-xs text-[var(--text-dim)]">{channel.country_name}</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-white">{formatNumber(channel.subscriber_count)}</div>
+                  <div className="font-bold text-[var(--text-primary)]">{formatNumber(channel.subscriber_count)}</div>
                   <div className="text-xs text-green-400">+{formatNumber(channel.daily_subscriber_gain || 0)}/day</div>
                 </div>
               </div>
@@ -139,40 +139,40 @@ export const TopYouTubeChannelsPage = () => {
         </section>
 
         {/* Related Pages */}
-        <section className="bg-[#111] border border-[#222] rounded-lg p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Explore More Rankings</h2>
+        <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Explore More Rankings</h2>
           <div className="grid md:grid-cols-2 gap-4">
-            <Link to="/leaderboard" className="flex items-center gap-3 p-4 bg-[#0d0d0d] rounded-lg hover:bg-[#1a1a1a] transition-colors">
+            <Link to="/leaderboard" className="flex items-center gap-3 p-4 bg-[var(--bg-deep)] rounded-lg hover:bg-[var(--bg-hover)] transition-colors">
               <Crown className="w-8 h-8 text-yellow-500" />
               <div>
-                <div className="font-medium text-white">Most Subscribed YouTube Channels Leaderboard</div>
-                <div className="text-xs text-gray-500">Complete live ranking with filters</div>
+                <div className="font-medium text-[var(--text-primary)]">Most Subscribed YouTube Channels Leaderboard</div>
+                <div className="text-xs text-[var(--text-dim)]">Complete live ranking with filters</div>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-500 ml-auto" />
+              <ChevronRight className="w-5 h-5 text-[var(--text-dim)] ml-auto" />
             </Link>
-            <Link to="/trending" className="flex items-center gap-3 p-4 bg-[#0d0d0d] rounded-lg hover:bg-[#1a1a1a] transition-colors">
+            <Link to="/trending" className="flex items-center gap-3 p-4 bg-[var(--bg-deep)] rounded-lg hover:bg-[var(--bg-hover)] transition-colors">
               <TrendingUp className="w-8 h-8 text-green-500" />
               <div>
-                <div className="font-medium text-white">Fastest Growing YouTube Channels</div>
-                <div className="text-xs text-gray-500">See who's trending now</div>
+                <div className="font-medium text-[var(--text-primary)]">Fastest Growing YouTube Channels</div>
+                <div className="text-xs text-[var(--text-dim)]">See who's trending now</div>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-500 ml-auto" />
+              <ChevronRight className="w-5 h-5 text-[var(--text-dim)] ml-auto" />
             </Link>
-            <Link to="/countries" className="flex items-center gap-3 p-4 bg-[#0d0d0d] rounded-lg hover:bg-[#1a1a1a] transition-colors">
+            <Link to="/countries" className="flex items-center gap-3 p-4 bg-[var(--bg-deep)] rounded-lg hover:bg-[var(--bg-hover)] transition-colors">
               <Globe className="w-8 h-8 text-blue-500" />
               <div>
-                <div className="font-medium text-white">Top YouTube Channels by Country</div>
-                <div className="text-xs text-gray-500">Regional rankings</div>
+                <div className="font-medium text-[var(--text-primary)]">Top YouTube Channels by Country</div>
+                <div className="text-xs text-[var(--text-dim)]">Regional rankings</div>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-500 ml-auto" />
+              <ChevronRight className="w-5 h-5 text-[var(--text-dim)] ml-auto" />
             </Link>
-            <Link to="/top-100" className="flex items-center gap-3 p-4 bg-[#0d0d0d] rounded-lg hover:bg-[#1a1a1a] transition-colors">
+            <Link to="/top-100" className="flex items-center gap-3 p-4 bg-[var(--bg-deep)] rounded-lg hover:bg-[var(--bg-hover)] transition-colors">
               <PlayCircle className="w-8 h-8 text-red-500" />
               <div>
-                <div className="font-medium text-white">Top 100 Most Subscribed YouTubers</div>
-                <div className="text-xs text-gray-500">Elite channel list</div>
+                <div className="font-medium text-[var(--text-primary)]">Top 100 Most Subscribed YouTubers</div>
+                <div className="text-xs text-[var(--text-dim)]">Elite channel list</div>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-500 ml-auto" />
+              <ChevronRight className="w-5 h-5 text-[var(--text-dim)] ml-auto" />
             </Link>
           </div>
         </section>
@@ -247,18 +247,18 @@ export const MostSubscribedYouTubeChannelsPage = () => {
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
             Most Subscribed YouTube Channels {year}
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[var(--text-muted)] text-lg">
             Live subscriber counts for the world's most subscribed YouTubers
           </p>
         </header>
 
         {/* SEO Content */}
-        <section className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">Who Has the Most YouTube Subscribers?</h2>
-          <div className="text-gray-300 text-sm leading-relaxed space-y-4">
+        <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Who Has the Most YouTube Subscribers?</h2>
+          <div className="text-[var(--text-secondary)] text-sm leading-relaxed space-y-4">
             <p>
               As of {year}, <strong>{channels[0]?.title || 'MrBeast'}</strong> holds the title of the <strong>most subscribed YouTube channel</strong> with 
               <strong> {formatNumber(channels[0]?.subscriber_count || 0)} subscribers</strong>. This remarkable achievement represents years of 
@@ -275,14 +275,14 @@ export const MostSubscribedYouTubeChannelsPage = () => {
               you always have access to the most current data. Whether you're tracking your favorite creator's growth or researching 
               the <strong>highest subscribed YouTube channels</strong>, this page provides comprehensive, real-time statistics.
             </p>
-            <h3 className="text-lg font-semibold text-white mt-4">Current Top 5 Most Subscribed</h3>
-            <ol className="list-decimal list-inside space-y-2 text-gray-400">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mt-4">Current Top 5 Most Subscribed</h3>
+            <ol className="list-decimal list-inside space-y-2 text-[var(--text-muted)]">
               {channels.slice(0, 5).map((channel, idx) => (
                 <li key={channel.channel_id}>
                   <Link to={`/channel/${channel.channel_id}`} className="text-red-400 hover:text-red-300">
                     {channel.title || channel.name}
                   </Link>
-                  <span className="text-gray-500"> - {formatNumber(channel.subscriber_count)} subscribers</span>
+                  <span className="text-[var(--text-dim)]"> - {formatNumber(channel.subscriber_count)} subscribers</span>
                 </li>
               ))}
             </ol>
@@ -291,23 +291,23 @@ export const MostSubscribedYouTubeChannelsPage = () => {
 
         {/* Channel Grid */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">Complete List of Most Subscribed Channels</h2>
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Complete List of Most Subscribed Channels</h2>
           <div className="grid gap-2">
             {channels.map((channel, idx) => (
               <div 
                 key={channel.channel_id}
                 onClick={() => navigate(`/channel/${channel.channel_id}`)}
-                className="flex items-center gap-4 p-3 bg-[#111] border border-[#222] rounded-lg hover:bg-[#1a1a1a] cursor-pointer"
+                className="flex items-center gap-4 p-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg hover:bg-[var(--bg-hover)] cursor-pointer"
               >
-                <div className="w-8 text-center font-bold text-gray-500">#{idx + 1}</div>
+                <div className="w-8 text-center font-bold text-[var(--text-dim)]">#{idx + 1}</div>
                 <img src={channel.thumbnail_url} alt="" className="w-10 h-10 rounded-full" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-white truncate">{channel.title || channel.name}</div>
-                  <div className="text-xs text-gray-500">{channel.country_name}</div>
+                  <div className="font-medium text-[var(--text-primary)] truncate">{channel.title || channel.name}</div>
+                  <div className="text-xs text-[var(--text-dim)]">{channel.country_name}</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-white">{formatNumber(channel.subscriber_count)}</div>
-                  <div className="text-xs text-gray-500">subscribers</div>
+                  <div className="font-bold text-[var(--text-primary)]">{formatNumber(channel.subscriber_count)}</div>
+                  <div className="text-xs text-[var(--text-dim)]">subscribers</div>
                 </div>
               </div>
             ))}
@@ -315,8 +315,8 @@ export const MostSubscribedYouTubeChannelsPage = () => {
         </section>
 
         {/* Internal Links */}
-        <section className="bg-[#111] border border-[#222] rounded-lg p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Related Rankings</h2>
+        <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Related Rankings</h2>
           <div className="flex flex-wrap gap-3">
             <Link to="/leaderboard" className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
               Most Subscribed YouTube Channels Leaderboard →
@@ -375,18 +375,18 @@ export const YouTubeSubscriberRankingPage = () => {
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
             YouTube Subscriber Ranking {year}
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[var(--text-muted)] text-lg">
             Complete YouTube channel rankings based on subscriber count
           </p>
         </header>
 
         {/* SEO Content */}
-        <section className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">How YouTube Subscriber Rankings Work</h2>
-          <div className="text-gray-300 text-sm leading-relaxed space-y-4">
+        <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">How YouTube Subscriber Rankings Work</h2>
+          <div className="text-[var(--text-secondary)] text-sm leading-relaxed space-y-4">
             <p>
               The <strong>YouTube subscriber ranking</strong> system provides a comprehensive view of how channels compare based on 
               their total subscriber count. This <strong>YouTube channel ranking</strong> is updated in real-time, reflecting the 
@@ -397,8 +397,8 @@ export const YouTubeSubscriberRankingPage = () => {
               against competitors, marketers identify potential influencer partners, and researchers study platform dynamics. 
               Our <strong>YouTube rankings by subscribers</strong> cover channels from 197 countries across all content categories.
             </p>
-            <h3 className="text-lg font-semibold text-white mt-4">Ranking Methodology</h3>
-            <ul className="list-disc list-inside space-y-1 text-gray-400">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mt-4">Ranking Methodology</h3>
+            <ul className="list-disc list-inside space-y-1 text-[var(--text-muted)]">
               <li>Rankings are based purely on total subscriber count</li>
               <li>Data is sourced from the official YouTube Data API v3</li>
               <li>Rankings update every 10 minutes</li>
@@ -410,15 +410,15 @@ export const YouTubeSubscriberRankingPage = () => {
 
         {/* Top 100 Table */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">YouTube Subscriber Rankings - Top 100</h2>
-          <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">YouTube Subscriber Rankings - Top 100</h2>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg overflow-hidden">
             <table className="w-full">
-              <thead className="bg-[#0d0d0d]">
+              <thead className="bg-[var(--bg-deep)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs text-gray-500 font-medium">Rank</th>
-                  <th className="px-4 py-3 text-left text-xs text-gray-500 font-medium">Channel</th>
-                  <th className="px-4 py-3 text-right text-xs text-gray-500 font-medium">Subscribers</th>
-                  <th className="px-4 py-3 text-right text-xs text-gray-500 font-medium hidden md:table-cell">24h Change</th>
+                  <th className="px-4 py-3 text-left text-xs text-[var(--text-dim)] font-medium">Rank</th>
+                  <th className="px-4 py-3 text-left text-xs text-[var(--text-dim)] font-medium">Channel</th>
+                  <th className="px-4 py-3 text-right text-xs text-[var(--text-dim)] font-medium">Subscribers</th>
+                  <th className="px-4 py-3 text-right text-xs text-[var(--text-dim)] font-medium hidden md:table-cell">24h Change</th>
                 </tr>
               </thead>
               <tbody>
@@ -426,19 +426,19 @@ export const YouTubeSubscriberRankingPage = () => {
                   <tr 
                     key={channel.channel_id}
                     onClick={() => navigate(`/channel/${channel.channel_id}`)}
-                    className="border-t border-[#222] hover:bg-[#1a1a1a] cursor-pointer"
+                    className="border-t border-[var(--border)] hover:bg-[var(--bg-hover)] cursor-pointer"
                   >
-                    <td className="px-4 py-3 text-gray-500 font-bold">#{idx + 1}</td>
+                    <td className="px-4 py-3 text-[var(--text-dim)] font-bold">#{idx + 1}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <img src={channel.thumbnail_url} alt="" className="w-8 h-8 rounded-full" />
                         <div>
-                          <div className="text-white font-medium">{channel.title || channel.name}</div>
-                          <div className="text-xs text-gray-500">{channel.country_name}</div>
+                          <div className="text-[var(--text-primary)] font-medium">{channel.title || channel.name}</div>
+                          <div className="text-xs text-[var(--text-dim)]">{channel.country_name}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-right text-white font-bold">{formatNumber(channel.subscriber_count)}</td>
+                    <td className="px-4 py-3 text-right text-[var(--text-primary)] font-bold">{formatNumber(channel.subscriber_count)}</td>
                     <td className="px-4 py-3 text-right text-green-400 hidden md:table-cell">+{formatNumber(channel.daily_subscriber_gain || 0)}</td>
                   </tr>
                 ))}
@@ -448,16 +448,16 @@ export const YouTubeSubscriberRankingPage = () => {
         </section>
 
         {/* Related Links */}
-        <section className="bg-[#111] border border-[#222] rounded-lg p-6">
-          <h2 className="text-xl font-bold text-white mb-4">More YouTube Rankings</h2>
+        <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">More YouTube Rankings</h2>
           <div className="grid md:grid-cols-2 gap-4">
-            <Link to="/leaderboard" className="block p-4 bg-[#0d0d0d] rounded-lg hover:bg-[#1a1a1a]">
-              <div className="font-medium text-white mb-1">Most Subscribed YouTube Channels Leaderboard</div>
-              <div className="text-xs text-gray-500">Full leaderboard with advanced filters</div>
+            <Link to="/leaderboard" className="block p-4 bg-[var(--bg-deep)] rounded-lg hover:bg-[var(--bg-hover)]">
+              <div className="font-medium text-[var(--text-primary)] mb-1">Most Subscribed YouTube Channels Leaderboard</div>
+              <div className="text-xs text-[var(--text-dim)]">Full leaderboard with advanced filters</div>
             </Link>
-            <Link to="/top-youtube-channels" className="block p-4 bg-[#0d0d0d] rounded-lg hover:bg-[#1a1a1a]">
-              <div className="font-medium text-white mb-1">Top YouTube Channels</div>
-              <div className="text-xs text-gray-500">Most popular YouTubers ranked</div>
+            <Link to="/top-youtube-channels" className="block p-4 bg-[var(--bg-deep)] rounded-lg hover:bg-[var(--bg-hover)]">
+              <div className="font-medium text-[var(--text-primary)] mb-1">Top YouTube Channels</div>
+              <div className="text-xs text-[var(--text-dim)]">Most popular YouTubers ranked</div>
             </Link>
           </div>
         </section>
@@ -510,18 +510,18 @@ export const TopYouTubeChannelsByCountryPage = () => {
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
             Top YouTube Channels by Country {year}
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[var(--text-muted)] text-lg">
             Find the most subscribed YouTubers in any country
           </p>
         </header>
 
         {/* SEO Content */}
-        <section className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">YouTube Rankings by Country</h2>
-          <div className="text-gray-300 text-sm leading-relaxed space-y-4">
+        <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">YouTube Rankings by Country</h2>
+          <div className="text-[var(--text-secondary)] text-sm leading-relaxed space-y-4">
             <p>
               YouTube's global reach means that every country has its own unique creator ecosystem. Our 
               <strong> top YouTube channels by country</strong> rankings let you explore the most popular YouTubers in 
@@ -534,17 +534,17 @@ export const TopYouTubeChannelsByCountryPage = () => {
               Understanding these regional differences is crucial for marketers, researchers, and content creators looking 
               to expand their reach.
             </p>
-            <h3 className="text-lg font-semibold text-white mt-4">Top Countries by Channel Count</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mt-4">Top Countries by Channel Count</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
               {sortedCountries.slice(0, 8).map(country => (
                 <Link 
                   key={country.code}
                   to={`/country/${country.code}`}
-                  className="p-3 bg-[#0d0d0d] rounded-lg hover:bg-[#1a1a1a] text-center"
+                  className="p-3 bg-[var(--bg-deep)] rounded-lg hover:bg-[var(--bg-hover)] text-center"
                 >
                   <div className="text-2xl mb-1">{country.flag_emoji}</div>
-                  <div className="text-white font-medium text-sm">{country.name}</div>
-                  <div className="text-xs text-gray-500">{country.channel_count || 0} channels</div>
+                  <div className="text-[var(--text-primary)] font-medium text-sm">{country.name}</div>
+                  <div className="text-xs text-[var(--text-dim)]">{country.channel_count || 0} channels</div>
                 </Link>
               ))}
             </div>
@@ -553,28 +553,28 @@ export const TopYouTubeChannelsByCountryPage = () => {
 
         {/* Country List */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">All Countries</h2>
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">All Countries</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
             {sortedCountries.map(country => (
               <Link
                 key={country.code}
                 to={`/country/${country.code}`}
-                className="flex items-center gap-3 p-4 bg-[#111] border border-[#222] rounded-lg hover:bg-[#1a1a1a]"
+                className="flex items-center gap-3 p-4 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg hover:bg-[var(--bg-hover)]"
               >
                 <span className="text-2xl">{country.flag_emoji}</span>
                 <div className="flex-1">
-                  <div className="font-medium text-white">{country.name}</div>
-                  <div className="text-xs text-gray-500">{country.channel_count || 0} channels tracked</div>
+                  <div className="font-medium text-[var(--text-primary)]">{country.name}</div>
+                  <div className="text-xs text-[var(--text-dim)]">{country.channel_count || 0} channels tracked</div>
                 </div>
-                <ChevronRight className="w-5 h-5 text-gray-500" />
+                <ChevronRight className="w-5 h-5 text-[var(--text-dim)]" />
               </Link>
             ))}
           </div>
         </section>
 
         {/* Internal Links */}
-        <section className="bg-[#111] border border-[#222] rounded-lg p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Related Rankings</h2>
+        <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Related Rankings</h2>
           <div className="flex flex-wrap gap-3">
             <Link to="/leaderboard" className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
               Most Subscribed YouTube Channels Leaderboard →

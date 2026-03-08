@@ -29,15 +29,15 @@ export const AdBanner = ({ slot = "auto", format = "auto", style = {} }) => {
 };
 
 export const HorizontalAd = () => (
-  <div className="hidden md:block w-full bg-[#0d0d0d] border border-[#222] rounded-lg p-2 my-6">
-    <div className="text-center text-xs text-gray-500 mb-1">Advertisement</div>
+  <div className="hidden md:block w-full bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg p-2 my-6">
+    <div className="text-center text-xs text-[var(--text-dim)] mb-1">Advertisement</div>
     <AdBanner format="horizontal" style={{ minHeight: '90px' }} />
   </div>
 );
 
 export const SidebarAd = () => (
-  <div className="bg-[#0d0d0d] border border-[#222] rounded-lg p-2 sticky top-20">
-    <div className="text-center text-xs text-gray-500 mb-1">Sponsored</div>
+  <div className="bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg p-2 sticky top-20">
+    <div className="text-center text-xs text-[var(--text-dim)] mb-1">Sponsored</div>
     <AdBanner format="rectangle" style={{ minHeight: '250px', width: '300px' }} />
   </div>
 );
@@ -45,9 +45,9 @@ export const SidebarAd = () => (
 export const InFeedAd = ({ index }) => {
   if (index > 0 && index % 20 === 0) {
     return (
-      <tr className="bg-[#0a0a0a] hidden md:table-row">
+      <tr className="bg-[var(--bg-page)] hidden md:table-row">
         <td colSpan="6" className="px-4 py-3">
-          <div className="text-center text-xs text-gray-500 mb-1">Sponsored</div>
+          <div className="text-center text-xs text-[var(--text-dim)] mb-1">Sponsored</div>
           <AdBanner format="fluid" style={{ minHeight: '60px' }} />
         </td>
       </tr>

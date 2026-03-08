@@ -20,11 +20,11 @@ export const Breadcrumb = ({ items }) => {
     <>
       <JsonLd data={schemaData} />
       <nav aria-label="Breadcrumb" className="mb-4">
-        <ol className="flex items-center gap-2 text-sm text-gray-400 flex-wrap">
+        <ol className="flex items-center gap-2 text-sm text-[var(--text-muted)] flex-wrap">
           <li className="flex items-center">
             <Link 
               to="/" 
-              className="hover:text-white transition-colors flex items-center gap-1"
+              className="hover:text-[var(--text-primary)] transition-colors flex items-center gap-1"
               title="Go to homepage"
             >
               <Home className="w-4 h-4" />
@@ -33,17 +33,17 @@ export const Breadcrumb = ({ items }) => {
           </li>
           {items.map((item, index) => (
             <li key={index} className="flex items-center gap-2">
-              <ChevronRight className="w-4 h-4 text-gray-600" />
+              <ChevronRight className="w-4 h-4 text-[var(--text-dim)]" />
               {item.url ? (
                 <Link 
                   to={item.url} 
-                  className="hover:text-white transition-colors"
+                  className="hover:text-[var(--text-primary)] transition-colors"
                   title={`Go to ${item.name}`}
                 >
                   {item.name}
                 </Link>
               ) : (
-                <span className="text-white">{item.name}</span>
+                <span className="text-[var(--text-primary)]">{item.name}</span>
               )}
             </li>
           ))}

@@ -57,7 +57,7 @@ const AuthCallbackPage = () => {
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-gray-400">Signing you in...</p>
+        <p className="text-[var(--text-muted)]">Signing you in...</p>
       </div>
     </div>
   );
@@ -143,15 +143,15 @@ const ChannelRequestPage = () => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Plus className="w-10 h-10 text-green-500" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Request a Channel</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">Request a Channel</h1>
           </div>
-          <p className="text-gray-400">Help us expand our database! Submit channels you'd like us to track.</p>
+          <p className="text-[var(--text-muted)]">Help us expand our database! Submit channels you'd like us to track.</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Submit Form */}
-          <div className="bg-[#111] border border-[#222] rounded-lg p-6">
-            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
               <LinkIcon className="w-5 h-5 text-green-500" />
               Submit a Channel
             </h2>
@@ -159,8 +159,8 @@ const ChannelRequestPage = () => {
             {submitted ? (
               <div className="text-center py-8">
                 <Check className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">Request Submitted!</h3>
-                <p className="text-gray-400 mb-4">We'll review your request and add the channel if it meets our criteria.</p>
+                <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">Request Submitted!</h3>
+                <p className="text-[var(--text-muted)] mb-4">We'll review your request and add the channel if it meets our criteria.</p>
                 <button
                   onClick={() => setSubmitted(false)}
                   className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg"
@@ -171,34 +171,34 @@ const ChannelRequestPage = () => {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">Channel URL *</label>
+                  <label className="block text-[var(--text-muted)] text-sm mb-1">Channel URL *</label>
                   <input
                     type="url"
                     required
                     value={formData.channel_url}
                     onChange={(e) => setFormData({ ...formData, channel_url: e.target.value })}
                     placeholder="https://youtube.com/@channelname"
-                    className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-green-500 focus:outline-none"
+                    className="w-full px-4 py-2 bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg text-[var(--text-primary)] focus:border-green-500 focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">Channel Name (optional)</label>
+                  <label className="block text-[var(--text-muted)] text-sm mb-1">Channel Name (optional)</label>
                   <input
                     type="text"
                     value={formData.channel_name}
                     onChange={(e) => setFormData({ ...formData, channel_name: e.target.value })}
                     placeholder="MrBeast"
-                    className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-green-500 focus:outline-none"
+                    className="w-full px-4 py-2 bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg text-[var(--text-primary)] focus:border-green-500 focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">Country</label>
+                  <label className="block text-[var(--text-muted)] text-sm mb-1">Country</label>
                   <select
                     value={formData.country_code}
                     onChange={(e) => setFormData({ ...formData, country_code: e.target.value })}
-                    className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-green-500 focus:outline-none"
+                    className="w-full px-4 py-2 bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg text-[var(--text-primary)] focus:border-green-500 focus:outline-none"
                   >
                     <option value="">Select country...</option>
                     {countries.map(c => (
@@ -208,20 +208,20 @@ const ChannelRequestPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">Why should we track this channel?</label>
+                  <label className="block text-[var(--text-muted)] text-sm mb-1">Why should we track this channel?</label>
                   <textarea
                     value={formData.reason}
                     onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                     placeholder="This channel is growing fast and represents..."
                     rows={3}
-                    className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-green-500 focus:outline-none resize-none"
+                    className="w-full px-4 py-2 bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg text-[var(--text-primary)] focus:border-green-500 focus:outline-none resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3 bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white font-medium rounded-lg flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-green-500 hover:bg-green-600 disabled:opacity-50 text-[var(--text-primary)] font-medium rounded-lg flex items-center justify-center gap-2"
                 >
                   {submitting ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -237,32 +237,32 @@ const ChannelRequestPage = () => {
           </div>
 
           {/* Popular Requests */}
-          <div className="bg-[#111] border border-[#222] rounded-lg p-6">
-            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
               <ThumbsUp className="w-5 h-5 text-yellow-500" />
               Popular Requests
             </h2>
-            <p className="text-gray-500 text-sm mb-4">Vote for channels you want us to add!</p>
+            <p className="text-[var(--text-dim)] text-sm mb-4">Vote for channels you want us to add!</p>
 
             {requests.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-[var(--text-dim)]">
                 <Plus className="w-8 h-8 mx-auto mb-2 opacity-50" />
                 <p>No pending requests yet</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {requests.map(req => (
-                  <div key={req.request_id} className="bg-[#0d0d0d] rounded-lg p-3 flex items-center justify-between">
+                  <div key={req.request_id} className="bg-[var(--bg-deep)] rounded-lg p-3 flex items-center justify-between">
                     <div className="flex-1 min-w-0">
-                      <p className="text-white font-medium truncate">{req.channel_name || req.channel_url}</p>
-                      <p className="text-gray-500 text-sm truncate">{req.channel_url}</p>
+                      <p className="text-[var(--text-primary)] font-medium truncate">{req.channel_name || req.channel_url}</p>
+                      <p className="text-[var(--text-dim)] text-sm truncate">{req.channel_url}</p>
                     </div>
                     <button
                       onClick={() => handleVote(req.request_id)}
-                      className="flex items-center gap-1 px-3 py-1 bg-[#222] hover:bg-[#333] rounded-lg text-sm ml-2"
+                      className="flex items-center gap-1 px-3 py-1 bg-[var(--border)] hover:bg-[var(--border-hover)] rounded-lg text-sm ml-2"
                     >
                       <ThumbsUp className="w-4 h-4 text-green-500" />
-                      <span className="text-white">{req.votes || 0}</span>
+                      <span className="text-[var(--text-primary)]">{req.votes || 0}</span>
                     </button>
                   </div>
                 ))}
@@ -337,9 +337,9 @@ const PollsPage = () => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Vote className="w-10 h-10 text-purple-500" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Prediction Polls</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">Prediction Polls</h1>
           </div>
-          <p className="text-gray-400">Vote on which YouTube channels will perform better!</p>
+          <p className="text-[var(--text-muted)]">Vote on which YouTube channels will perform better!</p>
           {!isAuthenticated && (
             <button
               onClick={login}
@@ -352,18 +352,18 @@ const PollsPage = () => {
         </div>
 
         {polls.length === 0 ? (
-          <div className="text-center py-12 bg-[#111] border border-[#222] rounded-lg">
-            <Vote className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-white mb-2">No Active Polls</h2>
-            <p className="text-gray-500">Check back soon for new prediction polls!</p>
+          <div className="text-center py-12 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg">
+            <Vote className="w-12 h-12 text-[var(--text-dim)] mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">No Active Polls</h2>
+            <p className="text-[var(--text-dim)]">Check back soon for new prediction polls!</p>
           </div>
         ) : (
           <div className="space-y-6">
             {polls.map(poll => (
-              <div key={poll.poll_id} className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
-                <div className="p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-b border-[#222]">
-                  <h2 className="text-lg font-bold text-white">{poll.question}</h2>
-                  <p className="text-gray-500 text-sm">
+              <div key={poll.poll_id} className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg overflow-hidden">
+                <div className="p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-b border-[var(--border)]">
+                  <h2 className="text-lg font-bold text-[var(--text-primary)]">{poll.question}</h2>
+                  <p className="text-[var(--text-dim)] text-sm">
                     Ends: {new Date(poll.end_date).toLocaleDateString()} • {poll.total_votes} votes
                   </p>
                 </div>
@@ -371,8 +371,8 @@ const PollsPage = () => {
                 <div className="grid md:grid-cols-2 gap-4 p-4">
                   {/* Option A */}
                   <div
-                    className={`bg-[#0d0d0d] rounded-lg p-4 cursor-pointer border-2 transition-colors ${
-                      votedPolls.has(poll.poll_id) ? 'border-[#333] cursor-default' : 'border-transparent hover:border-purple-500/50'
+                    className={`bg-[var(--bg-deep)] rounded-lg p-4 cursor-pointer border-2 transition-colors ${
+                      votedPolls.has(poll.poll_id) ? 'border-[var(--border-hover)] cursor-default' : 'border-transparent hover:border-purple-500/50'
                     }`}
                     onClick={() => !votedPolls.has(poll.poll_id) && handleVote(poll.poll_id, 'a')}
                   >
@@ -380,27 +380,27 @@ const PollsPage = () => {
                       <div className="flex items-center gap-3 mb-3">
                         <img src={poll.channel_a.thumbnail_url} alt="" className="w-12 h-12 rounded-full" />
                         <div>
-                          <h3 className="font-semibold text-white">{poll.channel_a.title}</h3>
-                          <p className="text-gray-500 text-sm">{formatNumber(poll.channel_a.subscriber_count)} subs</p>
+                          <h3 className="font-semibold text-[var(--text-primary)]">{poll.channel_a.title}</h3>
+                          <p className="text-[var(--text-dim)] text-sm">{formatNumber(poll.channel_a.subscriber_count)} subs</p>
                         </div>
                       </div>
                     )}
-                    <div className="relative h-8 bg-[#222] rounded-full overflow-hidden">
+                    <div className="relative h-8 bg-[var(--border)] rounded-full overflow-hidden">
                       <div
                         className="absolute left-0 top-0 bottom-0 bg-purple-500 rounded-full transition-all"
                         style={{ width: `${poll.percent_a}%` }}
                       />
-                      <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">
+                      <span className="absolute inset-0 flex items-center justify-center text-[var(--text-primary)] font-bold text-sm">
                         {poll.percent_a}%
                       </span>
                     </div>
-                    <p className="text-center text-gray-500 text-sm mt-2">{poll.votes_a || 0} votes</p>
+                    <p className="text-center text-[var(--text-dim)] text-sm mt-2">{poll.votes_a || 0} votes</p>
                   </div>
 
                   {/* Option B */}
                   <div
-                    className={`bg-[#0d0d0d] rounded-lg p-4 cursor-pointer border-2 transition-colors ${
-                      votedPolls.has(poll.poll_id) ? 'border-[#333] cursor-default' : 'border-transparent hover:border-pink-500/50'
+                    className={`bg-[var(--bg-deep)] rounded-lg p-4 cursor-pointer border-2 transition-colors ${
+                      votedPolls.has(poll.poll_id) ? 'border-[var(--border-hover)] cursor-default' : 'border-transparent hover:border-pink-500/50'
                     }`}
                     onClick={() => !votedPolls.has(poll.poll_id) && handleVote(poll.poll_id, 'b')}
                   >
@@ -408,21 +408,21 @@ const PollsPage = () => {
                       <div className="flex items-center gap-3 mb-3">
                         <img src={poll.channel_b.thumbnail_url} alt="" className="w-12 h-12 rounded-full" />
                         <div>
-                          <h3 className="font-semibold text-white">{poll.channel_b.title}</h3>
-                          <p className="text-gray-500 text-sm">{formatNumber(poll.channel_b.subscriber_count)} subs</p>
+                          <h3 className="font-semibold text-[var(--text-primary)]">{poll.channel_b.title}</h3>
+                          <p className="text-[var(--text-dim)] text-sm">{formatNumber(poll.channel_b.subscriber_count)} subs</p>
                         </div>
                       </div>
                     )}
-                    <div className="relative h-8 bg-[#222] rounded-full overflow-hidden">
+                    <div className="relative h-8 bg-[var(--border)] rounded-full overflow-hidden">
                       <div
                         className="absolute left-0 top-0 bottom-0 bg-pink-500 rounded-full transition-all"
                         style={{ width: `${poll.percent_b}%` }}
                       />
-                      <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">
+                      <span className="absolute inset-0 flex items-center justify-center text-[var(--text-primary)] font-bold text-sm">
                         {poll.percent_b}%
                       </span>
                     </div>
-                    <p className="text-center text-gray-500 text-sm mt-2">{poll.votes_b || 0} votes</p>
+                    <p className="text-center text-[var(--text-dim)] text-sm mt-2">{poll.votes_b || 0} votes</p>
                   </div>
                 </div>
               </div>
@@ -431,9 +431,9 @@ const PollsPage = () => {
         )}
 
         {/* SEO Content */}
-        <div className="mt-12 bg-[#111] border border-[#222] rounded-lg p-6">
-          <h2 className="text-xl font-bold text-white mb-4">About Prediction Polls</h2>
-          <div className="text-gray-400 space-y-3 text-sm">
+        <div className="mt-12 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">About Prediction Polls</h2>
+          <div className="text-[var(--text-muted)] space-y-3 text-sm">
             <p>
               Test your YouTube knowledge with our prediction polls! Vote on which channels you think will 
               perform better - whether it's gaining more subscribers, reaching a milestone first, or growing faster.
@@ -560,7 +560,7 @@ const AlertsPage = () => {
       case 'rank_change':
         return { icon: <ArrowUp className="w-5 h-5 text-blue-500" />, label: t('alerts.rankChange'), color: 'blue' };
       default:
-        return { icon: <Bell className="w-5 h-5 text-gray-500" />, label: type, color: 'gray' };
+        return { icon: <Bell className="w-5 h-5 text-[var(--text-dim)]" />, label: type, color: 'gray' };
     }
   };
 
@@ -568,9 +568,9 @@ const AlertsPage = () => {
     return (
       <div className="py-12" data-testid="alerts-page">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <Bell className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-white mb-4">{t('alerts.title')}</h1>
-          <p className="text-gray-400 mb-8">{t('alerts.subtitle')}</p>
+          <Bell className="w-16 h-16 text-[var(--text-dim)] mx-auto mb-4" />
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-4">{t('alerts.title')}</h1>
+          <p className="text-[var(--text-muted)] mb-8">{t('alerts.subtitle')}</p>
           <button
             onClick={login}
             className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg inline-flex items-center gap-2"
@@ -597,11 +597,11 @@ const AlertsPage = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-[var(--text-primary)] flex items-center gap-3">
               <Bell className="w-8 h-8 text-yellow-500" />
               {t('alerts.title')}
             </h1>
-            <p className="text-gray-400 mt-1">{t('alerts.subtitle')}</p>
+            <p className="text-[var(--text-muted)] mt-1">{t('alerts.subtitle')}</p>
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
@@ -617,14 +617,14 @@ const AlertsPage = () => {
           <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-6">
             <div className="flex items-center gap-2 mb-3">
               <Zap className="w-5 h-5 text-green-500" />
-              <h2 className="font-bold text-white">{triggeredAlerts.length} Alert(s) Triggered!</h2>
+              <h2 className="font-bold text-[var(--text-primary)]">{triggeredAlerts.length} Alert(s) Triggered!</h2>
             </div>
             <div className="space-y-2">
               {triggeredAlerts.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 bg-[#111] rounded-lg p-3">
+                <div key={idx} className="flex items-center gap-3 bg-[var(--bg-card)] rounded-lg p-3">
                   <img src={item.channel?.thumbnail_url} alt="" className="w-10 h-10 rounded-full" />
                   <div className="flex-1">
-                    <p className="text-white font-medium">{item.channel?.title}</p>
+                    <p className="text-[var(--text-primary)] font-medium">{item.channel?.title}</p>
                     <p className="text-green-400 text-sm">{item.reason}</p>
                   </div>
                   <button
@@ -646,7 +646,7 @@ const AlertsPage = () => {
             { type: 'daily_gain', icon: <TrendingUp className="w-6 h-6" />, count: alerts.filter(a => a.alert_type === 'daily_gain').length },
             { type: 'rank_change', icon: <ArrowUp className="w-6 h-6" />, count: alerts.filter(a => a.alert_type === 'rank_change').length }
           ].map(item => (
-            <div key={item.type} className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
+            <div key={item.type} className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
               <div className={`w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center ${
                 item.type === 'milestone' ? 'bg-yellow-500/20 text-yellow-500' :
                 item.type === 'daily_gain' ? 'bg-green-500/20 text-green-500' :
@@ -654,22 +654,22 @@ const AlertsPage = () => {
               }`}>
                 {item.icon}
               </div>
-              <div className="text-2xl font-bold text-white">{item.count}</div>
-              <div className="text-gray-500 text-sm">{getAlertTypeInfo(item.type).label}</div>
+              <div className="text-2xl font-bold text-[var(--text-primary)]">{item.count}</div>
+              <div className="text-[var(--text-dim)] text-sm">{getAlertTypeInfo(item.type).label}</div>
             </div>
           ))}
         </div>
 
         {/* Alerts List */}
-        <div className="bg-[#111] border border-[#222] rounded-lg">
-          <div className="p-4 border-b border-[#222]">
-            <h2 className="font-bold text-white">{t('alerts.myAlerts')} ({alerts.length})</h2>
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg">
+          <div className="p-4 border-b border-[var(--border)]">
+            <h2 className="font-bold text-[var(--text-primary)]">{t('alerts.myAlerts')} ({alerts.length})</h2>
           </div>
           
           {alerts.length === 0 ? (
             <div className="p-8 text-center">
-              <Bell className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-400">{t('alerts.noAlerts')}</p>
+              <Bell className="w-12 h-12 text-[var(--text-dim)] mx-auto mb-4" />
+              <p className="text-[var(--text-muted)]">{t('alerts.noAlerts')}</p>
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="mt-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg inline-flex items-center gap-2"
@@ -679,7 +679,7 @@ const AlertsPage = () => {
               </button>
             </div>
           ) : (
-            <div className="divide-y divide-[#222]">
+            <div className="divide-y divide-[var(--divide)]">
               {alerts.map(alert => {
                 const typeInfo = getAlertTypeInfo(alert.alert_type);
                 return (
@@ -698,8 +698,8 @@ const AlertsPage = () => {
                     )}
                     
                     <div className="flex-1">
-                      <p className="text-white font-medium">{alert.channel?.title || alert.channel_id}</p>
-                      <p className="text-gray-500 text-sm">
+                      <p className="text-[var(--text-primary)] font-medium">{alert.channel?.title || alert.channel_id}</p>
+                      <p className="text-[var(--text-dim)] text-sm">
                         {typeInfo.label} • Threshold: {formatNumber(alert.threshold)}
                       </p>
                     </div>
@@ -710,7 +710,7 @@ const AlertsPage = () => {
                         className={`px-3 py-1 rounded text-sm ${
                           alert.enabled 
                             ? 'bg-green-500/20 text-green-400' 
-                            : 'bg-gray-500/20 text-gray-400'
+                            : 'bg-gray-500/20 text-[var(--text-muted)]'
                         }`}
                       >
                         {alert.enabled ? 'Enabled' : 'Disabled'}
@@ -732,11 +732,11 @@ const AlertsPage = () => {
 
         {/* Create Alert Modal */}
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-[#111] border border-[#333] rounded-xl w-full max-w-md">
-              <div className="p-4 border-b border-[#333] flex items-center justify-between">
-                <h3 className="text-lg font-bold text-white">{t('alerts.createAlert')}</h3>
-                <button onClick={() => setShowCreateModal(false)} className="text-gray-400 hover:text-white">
+          <div className="fixed inset-0 bg-[var(--bg-page)]/70 flex items-center justify-center z-50 p-4">
+            <div className="bg-[var(--bg-card)] border border-[var(--border-hover)] rounded-xl w-full max-w-md">
+              <div className="p-4 border-b border-[var(--border-hover)] flex items-center justify-between">
+                <h3 className="text-lg font-bold text-[var(--text-primary)]">{t('alerts.createAlert')}</h3>
+                <button onClick={() => setShowCreateModal(false)} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -744,15 +744,15 @@ const AlertsPage = () => {
               <div className="p-4 space-y-4">
                 {/* Channel Search */}
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">{t('common.channel')}</label>
+                  <label className="block text-[var(--text-muted)] text-sm mb-1">{t('common.channel')}</label>
                   {selectedChannel ? (
-                    <div className="flex items-center gap-3 bg-[#0d0d0d] rounded-lg p-3">
+                    <div className="flex items-center gap-3 bg-[var(--bg-deep)] rounded-lg p-3">
                       <img src={selectedChannel.thumbnail_url} alt="" className="w-10 h-10 rounded-full" />
                       <div className="flex-1">
-                        <p className="text-white font-medium">{selectedChannel.title}</p>
-                        <p className="text-gray-500 text-sm">{formatNumber(selectedChannel.subscriber_count)} {t('common.subs')}</p>
+                        <p className="text-[var(--text-primary)] font-medium">{selectedChannel.title}</p>
+                        <p className="text-[var(--text-dim)] text-sm">{formatNumber(selectedChannel.subscriber_count)} {t('common.subs')}</p>
                       </div>
-                      <button onClick={() => setSelectedChannel(null)} className="text-gray-400 hover:text-white">
+                      <button onClick={() => setSelectedChannel(null)} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
                         <X className="w-4 h-4" />
                       </button>
                     </div>
@@ -763,14 +763,14 @@ const AlertsPage = () => {
                         value={searchQuery}
                         onChange={(e) => handleSearch(e.target.value)}
                         placeholder={t('leaderboard.searchPlaceholder')}
-                        className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-4 py-2 bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                       />
                       {searchResults.length > 0 && (
-                        <div className="absolute top-full left-0 right-0 mt-1 bg-[#1a1a1a] border border-[#333] rounded-lg overflow-hidden z-10">
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-[var(--bg-hover)] border border-[var(--border-hover)] rounded-lg overflow-hidden z-10">
                           {searchResults.map(ch => (
                             <div
                               key={ch.channel_id}
-                              className="flex items-center gap-3 p-3 hover:bg-[#222] cursor-pointer"
+                              className="flex items-center gap-3 p-3 hover:bg-[var(--border)] cursor-pointer"
                               onClick={() => {
                                 setSelectedChannel(ch);
                                 setSearchResults([]);
@@ -779,8 +779,8 @@ const AlertsPage = () => {
                             >
                               <img src={ch.thumbnail_url} alt="" className="w-8 h-8 rounded-full" />
                               <div>
-                                <p className="text-white text-sm">{ch.title}</p>
-                                <p className="text-gray-500 text-xs">{formatNumber(ch.subscriber_count)} {t('common.subs')}</p>
+                                <p className="text-[var(--text-primary)] text-sm">{ch.title}</p>
+                                <p className="text-[var(--text-dim)] text-xs">{formatNumber(ch.subscriber_count)} {t('common.subs')}</p>
                               </div>
                             </div>
                           ))}
@@ -792,7 +792,7 @@ const AlertsPage = () => {
 
                 {/* Alert Type */}
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">{t('alerts.alertTypes')}</label>
+                  <label className="block text-[var(--text-muted)] text-sm mb-1">{t('alerts.alertTypes')}</label>
                   <div className="grid grid-cols-3 gap-2">
                     {['milestone', 'daily_gain', 'rank_change'].map(type => {
                       const info = getAlertTypeInfo(type);
@@ -803,11 +803,11 @@ const AlertsPage = () => {
                           className={`p-3 rounded-lg border text-center transition-colors ${
                             alertType === type 
                               ? 'border-red-500 bg-red-500/10' 
-                              : 'border-[#333] hover:border-[#444]'
+                              : 'border-[var(--border-hover)] hover:border-[#444]'
                           }`}
                         >
                           <div className="flex justify-center mb-1">{info.icon}</div>
-                          <div className="text-xs text-gray-400">{info.label}</div>
+                          <div className="text-xs text-[var(--text-muted)]">{info.label}</div>
                         </button>
                       );
                     })}
@@ -816,7 +816,7 @@ const AlertsPage = () => {
 
                 {/* Threshold */}
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">
+                  <label className="block text-[var(--text-muted)] text-sm mb-1">
                     Threshold {alertType === 'milestone' ? '(Target Subscribers)' : alertType === 'daily_gain' ? '(Min Daily Gain)' : '(Rank Change)'}
                   </label>
                   <input
@@ -824,23 +824,23 @@ const AlertsPage = () => {
                     value={threshold}
                     onChange={(e) => setThreshold(e.target.value)}
                     placeholder={alertType === 'milestone' ? '100000000' : alertType === 'daily_gain' ? '100000' : '1'}
-                    className="w-full px-4 py-2 bg-[#0d0d0d] border border-[#333] rounded-lg text-white focus:border-red-500 focus:outline-none"
+                    className="w-full px-4 py-2 bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                   />
-                  <p className="text-gray-500 text-xs mt-1">Leave empty for automatic default</p>
+                  <p className="text-[var(--text-dim)] text-xs mt-1">Leave empty for automatic default</p>
                 </div>
               </div>
               
-              <div className="p-4 border-t border-[#333] flex gap-3">
+              <div className="p-4 border-t border-[var(--border-hover)] flex gap-3">
                 <button
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 py-2 bg-[#222] hover:bg-[#333] text-white rounded-lg"
+                  className="flex-1 py-2 bg-[var(--border)] hover:bg-[var(--border-hover)] text-[var(--text-primary)] rounded-lg"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   onClick={handleCreateAlert}
                   disabled={!selectedChannel || creating}
-                  className="flex-1 py-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white rounded-lg flex items-center justify-center gap-2"
+                  className="flex-1 py-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-[var(--text-primary)] rounded-lg flex items-center justify-center gap-2"
                 >
                   {creating ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -908,18 +908,18 @@ const FavoritesPage = () => {
     <div className="py-8" data-testid="favorites-page">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2 flex items-center gap-3">
             <Heart className="w-8 h-8 text-red-500" />
             My Favorites
           </h1>
-          <p className="text-gray-500">Your saved channels for quick access</p>
+          <p className="text-[var(--text-dim)]">Your saved channels for quick access</p>
         </div>
 
         {channelDetails.length === 0 ? (
-          <div className="text-center py-16 bg-[#111] border border-[#222] rounded-lg">
-            <Bookmark className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">No favorites yet</h2>
-            <p className="text-gray-500 mb-6">Click the heart icon on any channel to save it here</p>
+          <div className="text-center py-16 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg">
+            <Bookmark className="w-16 h-16 text-[var(--text-dim)] mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">No favorites yet</h2>
+            <p className="text-[var(--text-dim)] mb-6">Click the heart icon on any channel to save it here</p>
             <Link to="/leaderboard" className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700">
               Browse Channels
             </Link>
@@ -929,7 +929,7 @@ const FavoritesPage = () => {
             {channelDetails.map((channel, idx) => (
               <div 
                 key={channel.channel_id}
-                className="bg-[#111] border border-[#222] rounded-lg p-4 hover:border-[#333] transition-colors cursor-pointer"
+                className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 hover:border-[var(--border-hover)] transition-colors cursor-pointer"
                 onClick={() => navigate(`/channel/${channel.channel_id}`)}
                 data-testid={`favorite-card-${idx}`}
               >
@@ -941,10 +941,10 @@ const FavoritesPage = () => {
                     loading="lazy"
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-white truncate">{channel.title}</h3>
-                    <p className="text-gray-500 text-sm">{channel.country_name}</p>
+                    <h3 className="font-semibold text-[var(--text-primary)] truncate">{channel.title}</h3>
+                    <p className="text-[var(--text-dim)] text-sm">{channel.country_name}</p>
                     <div className="flex items-center gap-4 mt-2">
-                      <span className="text-lg font-bold text-white">{formatNumber(channel.subscriber_count)}</span>
+                      <span className="text-lg font-bold text-[var(--text-primary)]">{formatNumber(channel.subscriber_count)}</span>
                       <span className="text-green-400 text-sm">+{formatNumber(channel.daily_subscriber_gain || 0)}</span>
                     </div>
                   </div>

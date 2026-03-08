@@ -29,19 +29,19 @@ export const EmbedWidget = ({ type, data }) => {
     <div className="mt-4">
       <button
         onClick={() => setShowCode(!showCode)}
-        className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+        className="flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
       >
         <Code className="w-4 h-4" />
         {showCode ? 'Hide' : 'Show'} Embed Code
       </button>
       
       {showCode && (
-        <div className="mt-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#222]">
+        <div className="mt-3 bg-[var(--bg-page)] rounded-lg p-4 border border-[var(--border)]">
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs text-gray-500">HTML Embed Code</span>
+            <span className="text-xs text-[var(--text-dim)]">HTML Embed Code</span>
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1 text-xs text-gray-400 hover:text-white"
+              className="flex items-center gap-1 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             >
               {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
               {copied ? 'Copied!' : 'Copy'}

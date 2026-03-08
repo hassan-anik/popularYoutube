@@ -67,7 +67,7 @@ export const LastUpdatedIndicator = ({ timestamp, className = '' }) => {
   if (!timeAgo) return null;
   
   return (
-    <span className={`text-xs text-gray-500 ${className}`}>
+    <span className={`text-xs text-[var(--text-dim)] ${className}`}>
       Updated {timeAgo}
     </span>
   );

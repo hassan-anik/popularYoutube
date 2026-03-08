@@ -32,7 +32,7 @@ export const NewsletterSignup = ({ compact = false }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
-          className="flex-1 px-4 py-2 bg-[#1a1a1a] border border-[#333] rounded-lg text-white text-sm focus:border-red-500 focus:outline-none"
+          className="flex-1 px-4 py-2 bg-[var(--bg-hover)] border border-[var(--border-hover)] rounded-lg text-[var(--text-primary)] text-sm focus:border-red-500 focus:outline-none"
           required
         />
         <button
@@ -53,8 +53,8 @@ export const NewsletterSignup = ({ compact = false }) => {
           <Mail className="w-6 h-6 text-red-400" />
         </div>
         <div>
-          <h3 className="font-bold text-white">Stay Updated</h3>
-          <p className="text-sm text-gray-400">Get weekly insights on YouTube trends</p>
+          <h3 className="font-bold text-[var(--text-primary)]">Stay Updated</h3>
+          <p className="text-sm text-[var(--text-muted)]">Get weekly insights on YouTube trends</p>
         </div>
       </div>
       
@@ -64,7 +64,7 @@ export const NewsletterSignup = ({ compact = false }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="your@email.com"
-          className="flex-1 px-4 py-3 bg-[#0a0a0a] border border-[#333] rounded-lg text-white focus:border-red-500 focus:outline-none"
+          className="flex-1 px-4 py-3 bg-[var(--bg-page)] border border-[var(--border-hover)] rounded-lg text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
           required
         />
         <button

@@ -17,7 +17,7 @@ export const FavoriteButton = ({ channel, isFavorite, onToggle, size = 'md' }) =
       className={`p-2 rounded-full transition-all duration-300 ${
         isFavorite 
           ? 'text-red-500 bg-red-500/10 hover:bg-red-500/20' 
-          : 'text-gray-400 hover:text-red-400 hover:bg-red-500/10'
+          : 'text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/10'
       }`}
       title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
       data-testid="favorite-button"

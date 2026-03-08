@@ -33,22 +33,22 @@ export const FAQSection = ({ faqs, title = "Frequently Asked Questions" }) => {
         {faqs.map((faq, index) => (
           <div 
             key={index} 
-            className="bg-[#0d0d0d] border border-[#222] rounded-lg overflow-hidden"
+            className="bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg overflow-hidden"
           >
             <button
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-[#1a1a1a] transition-colors"
+              className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-[var(--bg-hover)] transition-colors"
               aria-expanded={openIndex === index}
             >
-              <span className="font-medium text-white">{faq.question}</span>
+              <span className="font-medium text-[var(--text-primary)]">{faq.question}</span>
               <ChevronDown 
-                className={`w-5 h-5 text-gray-400 transition-transform ${
+                className={`w-5 h-5 text-[var(--text-muted)] transition-transform ${
                   openIndex === index ? 'rotate-180' : ''
                 }`} 
               />
             </button>
             {openIndex === index && (
-              <div className="px-4 pb-4 text-gray-400 text-sm">
+              <div className="px-4 pb-4 text-[var(--text-muted)] text-sm">
                 {faq.answer}
               </div>
             )}

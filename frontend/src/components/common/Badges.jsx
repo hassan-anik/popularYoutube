@@ -30,7 +30,7 @@ export const ViralBadge = ({ label }) => {
 export const EstimatedLabel = ({ children, tooltip = "Estimated by TopTube World Pro" }) => (
   <span className="group relative" title={tooltip}>
     {children}
-    <span className="ml-1 text-[10px] text-gray-500 align-super">*</span>
+    <span className="ml-1 text-[10px] text-[var(--text-dim)] align-super">*</span>
   </span>
 );
 
@@ -42,5 +42,5 @@ export const RankChange = ({ current, previous }) => {
   if (change < 0) {
     return <span className="text-red-400 flex items-center gap-1 text-sm"><ArrowDown className="w-3 h-3" /> {Math.abs(change)}</span>;
   }
-  return <span className="text-gray-500 text-sm">-</span>;
+  return <span className="text-[var(--text-dim)] text-sm">-</span>;
 };

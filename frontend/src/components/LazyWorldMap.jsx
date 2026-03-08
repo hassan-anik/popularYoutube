@@ -93,7 +93,7 @@ const LazyWorldMap = memo(({ mapData, onCountryClick }) => {
   };
 
   return (
-    <div className="bg-[#111] dark:bg-[#111] rounded-lg border border-[#222] overflow-hidden" data-testid="world-map">
+    <div className="bg-[var(--bg-card)] rounded-lg border border-[var(--border)] overflow-hidden" data-testid="world-map">
       <ComposableMap projectionConfig={{ scale: 140 }} style={{ width: "100%", height: "350px" }}>
         <ZoomableGroup center={[0, 20]} zoom={1}>
           <Geographies geography={geoUrl}>

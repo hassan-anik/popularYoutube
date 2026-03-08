@@ -4,6 +4,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== THEME SYSTEM ===== */
+:root {
+  --bg-page: #f8f9fa;
+  --bg-deep: #edf0f3;
+  --bg-card: #ffffff;
+  --bg-hover: #f0f1f3;
+  --bg-input: #f5f5f5;
+  --border: #dde1e6;
+  --border-hover: #c8cdd3;
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-dim: #9ca3af;
+  --divide: #e5e7eb;
+  --scrollbar-track: #f0f0f0;
+  --scrollbar-thumb: #c0c0c0;
+  --scrollbar-hover: #a0a0a0;
+}
+
+[data-theme="dark"] {
+  --bg-page: #0a0a0a;
+  --bg-deep: #0d0d0d;
+  --bg-card: #111111;
+  --bg-hover: #1a1a1a;
+  --bg-input: #1a1a1a;
+  --border: #222222;
+  --border-hover: #333333;
+  --text-primary: #ffffff;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --text-dim: #6b7280;
+  --divide: #222222;
+  --scrollbar-track: #111111;
+  --scrollbar-thumb: #333333;
+  --scrollbar-hover: #444444;
+}
+
 /* Hide Emergent platform widget in production */
 #emergent-widget,
 .emergent-widget,
@@ -24,8 +61,8 @@ div[class*="emergent-"] {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #0a0a0a;
-  color: #e5e5e5;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
 }
@@ -42,16 +79,16 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #111;
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: var(--scrollbar-hover);
 }
 
 /* Line clamp utilities */
@@ -94,7 +131,7 @@ table {
   animation: spin 1s linear infinite;
 }
 
-/* Smooth transitions */
+/* Smooth transitions for theme switching */
 * {
   transition-property: color, background-color, border-color, opacity;
   transition-duration: 150ms;

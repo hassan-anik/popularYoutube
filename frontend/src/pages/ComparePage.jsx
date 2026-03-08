@@ -167,45 +167,45 @@ const ComparePage = () => {
         ]} />
         
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Compare YouTube Channels</h1>
-          <p className="text-gray-500">Compare up to 4 YouTube channels side by side - subscribers, views, growth & more</p>
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Compare YouTube Channels</h1>
+          <p className="text-[var(--text-dim)]">Compare up to 4 YouTube channels side by side - subscribers, views, growth & more</p>
         </div>
 
         {/* Channel Search/Add */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-4 mb-6">
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 mb-6">
           <div className="flex flex-wrap gap-3 mb-4">
             {channels.map((ch, idx) => (
-              <div key={ch.channel_id} className="flex items-center gap-2 bg-[#0d0d0d] rounded-lg px-3 py-2" style={{ borderLeft: `3px solid ${colors[idx]}` }}>
+              <div key={ch.channel_id} className="flex items-center gap-2 bg-[var(--bg-deep)] rounded-lg px-3 py-2" style={{ borderLeft: `3px solid ${colors[idx]}` }}>
                 <img src={ch.thumbnail_url} alt="" loading="lazy" className="w-6 h-6 rounded-full" />
-                <span className="text-white text-sm">{ch.title}</span>
-                <button onClick={() => removeChannel(ch.channel_id)} className="text-gray-500 hover:text-red-500">
+                <span className="text-[var(--text-primary)] text-sm">{ch.title}</span>
+                <button onClick={() => removeChannel(ch.channel_id)} className="text-[var(--text-dim)] hover:text-red-500">
                   <X className="w-4 h-4" />
                 </button>
               </div>
             ))}
             {channelIds.length < 4 && (
               <div className="relative flex-1 min-w-[200px]">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-dim)]" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
                   placeholder="Add a channel to compare..."
-                  className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg pl-9 pr-4 py-2 text-white text-sm focus:border-red-500 focus:outline-none"
+                  className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg pl-9 pr-4 py-2 text-[var(--text-primary)] text-sm focus:border-red-500 focus:outline-none"
                   data-testid="compare-search"
                 />
                 {searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-[#111] border border-[#333] rounded-lg overflow-hidden z-10 max-h-64 overflow-y-auto">
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-[var(--bg-card)] border border-[var(--border-hover)] rounded-lg overflow-hidden z-10 max-h-64 overflow-y-auto">
                     {searchResults.map(ch => (
                       <button
                         key={ch.channel_id}
                         onClick={() => addChannel(ch.channel_id)}
-                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-[#1a1a1a] text-left"
+                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-[var(--bg-hover)] text-left"
                       >
                         <img src={ch.thumbnail_url} alt="" loading="lazy" className="w-8 h-8 rounded-full" />
                         <div>
-                          <div className="text-white text-sm">{ch.title}</div>
-                          <div className="text-gray-500 text-xs">{formatNumber(ch.subscriber_count)} subs</div>
+                          <div className="text-[var(--text-primary)] text-sm">{ch.title}</div>
+                          <div className="text-[var(--text-dim)] text-xs">{formatNumber(ch.subscriber_count)} subs</div>
                         </div>
                       </button>
                     ))}
@@ -216,11 +216,11 @@ const ComparePage = () => {
           </div>
           
           {channelIds.length > 0 && (
-            <div className="flex items-center gap-3 pt-3 border-t border-[#222]">
-              <span className="text-sm text-gray-500">Share comparison:</span>
+            <div className="flex items-center gap-3 pt-3 border-t border-[var(--border)]">
+              <span className="text-sm text-[var(--text-dim)]">Share comparison:</span>
               <button
                 onClick={() => navigator.clipboard.writeText(shareUrl)}
-                className="flex items-center gap-1 text-xs px-3 py-1 bg-[#222] rounded hover:bg-[#333]"
+                className="flex items-center gap-1 text-xs px-3 py-1 bg-[var(--border)] rounded hover:bg-[var(--border-hover)]"
               >
                 <Copy className="w-3 h-3" /> Copy Link
               </button>
@@ -231,18 +231,18 @@ const ComparePage = () => {
         {channels.length === 0 ? (
           <div className="space-y-8">
             {/* Empty State with Instructions */}
-            <div className="text-center py-12 bg-[#111] border border-[#222] rounded-lg">
-              <BarChart3 className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-white mb-2">Compare YouTube Channels Side by Side</h2>
-              <p className="text-gray-500 mb-6">Search and add up to 4 channels above to compare their statistics</p>
+            <div className="text-center py-12 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg">
+              <BarChart3 className="w-16 h-16 text-[var(--text-dim)] mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">Compare YouTube Channels Side by Side</h2>
+              <p className="text-[var(--text-dim)] mb-6">Search and add up to 4 channels above to compare their statistics</p>
               
               {/* Quick Start Suggestions */}
               <div className="max-w-2xl mx-auto">
-                <p className="text-sm text-gray-400 mb-3">Popular comparisons:</p>
+                <p className="text-sm text-[var(--text-muted)] mb-3">Popular comparisons:</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   <button 
                     onClick={() => setSearchParams({ ids: 'UCX6OQ3DkcsbYNE6H8uQQuVA,UCq-Fj5jknLsUf-MWSy4_brA' })}
-                    className="px-3 py-1 bg-[#222] hover:bg-[#333] rounded text-sm text-gray-300"
+                    className="px-3 py-1 bg-[var(--border)] hover:bg-[var(--border-hover)] rounded text-sm text-[var(--text-secondary)]"
                   >
                     MrBeast vs T-Series
                   </button>
@@ -251,46 +251,46 @@ const ComparePage = () => {
             </div>
 
             {/* Educational Content */}
-            <div className="bg-[#111] border border-[#222] rounded-lg p-6">
-              <h2 className="text-xl font-bold text-white mb-4">How to Use the Channel Comparison Tool</h2>
-              <div className="text-gray-300 text-sm space-y-4">
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">How to Use the Channel Comparison Tool</h2>
+              <div className="text-[var(--text-secondary)] text-sm space-y-4">
                 <p>
                   Our free YouTube channel comparison tool lets you analyze multiple channels side by side. Whether you're 
                   researching competitors, scouting influencers for partnerships, or simply curious about how your favorite 
                   creators stack up, this tool provides valuable insights.
                 </p>
                 
-                <h3 className="text-lg font-semibold text-white mt-4">What You Can Compare</h3>
-                <ul className="list-disc list-inside space-y-1 text-gray-400">
-                  <li><strong className="text-white">Subscriber Counts:</strong> See exact subscriber numbers side by side</li>
-                  <li><strong className="text-white">Total Views:</strong> Compare cumulative view counts across all videos</li>
-                  <li><strong className="text-white">Video Output:</strong> See how many videos each channel has published</li>
-                  <li><strong className="text-white">Growth Metrics:</strong> Compare daily subscriber gains and growth rates</li>
-                  <li><strong className="text-white">Viral Status:</strong> See which channels are experiencing momentum</li>
-                  <li><strong className="text-white">Growth Charts:</strong> Visualize subscriber trends over the past 30 days</li>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mt-4">What You Can Compare</h3>
+                <ul className="list-disc list-inside space-y-1 text-[var(--text-muted)]">
+                  <li><strong className="text-[var(--text-primary)]">Subscriber Counts:</strong> See exact subscriber numbers side by side</li>
+                  <li><strong className="text-[var(--text-primary)]">Total Views:</strong> Compare cumulative view counts across all videos</li>
+                  <li><strong className="text-[var(--text-primary)]">Video Output:</strong> See how many videos each channel has published</li>
+                  <li><strong className="text-[var(--text-primary)]">Growth Metrics:</strong> Compare daily subscriber gains and growth rates</li>
+                  <li><strong className="text-[var(--text-primary)]">Viral Status:</strong> See which channels are experiencing momentum</li>
+                  <li><strong className="text-[var(--text-primary)]">Growth Charts:</strong> Visualize subscriber trends over the past 30 days</li>
                 </ul>
 
-                <h3 className="text-lg font-semibold text-white mt-4">Use Cases</h3>
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mt-4">Use Cases</h3>
                 <div className="grid md:grid-cols-2 gap-4 mt-2">
-                  <div className="bg-[#0d0d0d] rounded p-3">
-                    <h4 className="font-medium text-white mb-1">For Content Creators</h4>
-                    <p className="text-xs text-gray-500">Benchmark against competitors in your niche. Understand what growth rates are realistic and identify successful strategies.</p>
+                  <div className="bg-[var(--bg-deep)] rounded p-3">
+                    <h4 className="font-medium text-[var(--text-primary)] mb-1">For Content Creators</h4>
+                    <p className="text-xs text-[var(--text-dim)]">Benchmark against competitors in your niche. Understand what growth rates are realistic and identify successful strategies.</p>
                   </div>
-                  <div className="bg-[#0d0d0d] rounded p-3">
-                    <h4 className="font-medium text-white mb-1">For Marketers</h4>
-                    <p className="text-xs text-gray-500">Evaluate potential influencer partners. Compare reach, engagement, and growth trends before making partnership decisions.</p>
+                  <div className="bg-[var(--bg-deep)] rounded p-3">
+                    <h4 className="font-medium text-[var(--text-primary)] mb-1">For Marketers</h4>
+                    <p className="text-xs text-[var(--text-dim)]">Evaluate potential influencer partners. Compare reach, engagement, and growth trends before making partnership decisions.</p>
                   </div>
-                  <div className="bg-[#0d0d0d] rounded p-3">
-                    <h4 className="font-medium text-white mb-1">For Researchers</h4>
-                    <p className="text-xs text-gray-500">Analyze platform dynamics and creator economics. Study how different content types and strategies perform.</p>
+                  <div className="bg-[var(--bg-deep)] rounded p-3">
+                    <h4 className="font-medium text-[var(--text-primary)] mb-1">For Researchers</h4>
+                    <p className="text-xs text-[var(--text-dim)]">Analyze platform dynamics and creator economics. Study how different content types and strategies perform.</p>
                   </div>
-                  <div className="bg-[#0d0d0d] rounded p-3">
-                    <h4 className="font-medium text-white mb-1">For Fans</h4>
-                    <p className="text-xs text-gray-500">Follow the subscriber races between your favorite creators. Share comparisons with friends and communities.</p>
+                  <div className="bg-[var(--bg-deep)] rounded p-3">
+                    <h4 className="font-medium text-[var(--text-primary)] mb-1">For Fans</h4>
+                    <p className="text-xs text-[var(--text-dim)]">Follow the subscriber races between your favorite creators. Share comparisons with friends and communities.</p>
                   </div>
                 </div>
 
-                <p className="text-xs text-gray-500 mt-4 pt-4 border-t border-[#222]">
+                <p className="text-xs text-[var(--text-dim)] mt-4 pt-4 border-t border-[var(--border)]">
                   <em>Data sourced from YouTube Data API. Growth metrics are calculated by TopTube World Pro based on historical tracking and are estimates.</em>
                 </p>
               </div>
@@ -299,61 +299,61 @@ const ComparePage = () => {
         ) : (
           <>
             {/* Stats Comparison Table */}
-            <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden mb-6">
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg overflow-hidden mb-6">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-[#222]">
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase w-1/5">Metric</th>
+                    <tr className="border-b border-[var(--border)]">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase w-1/5">Metric</th>
                       {channels.map((ch, idx) => (
                         <th key={ch.channel_id} className="px-4 py-3 text-center" style={{ borderBottom: `3px solid ${colors[idx]}` }}>
                           <img src={ch.thumbnail_url} alt="" loading="lazy" className="w-10 h-10 rounded-full mx-auto mb-1" />
-                          <div className="text-white text-sm font-medium">{ch.title}</div>
+                          <div className="text-[var(--text-primary)] text-sm font-medium">{ch.title}</div>
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#222]">
+                  <tbody className="divide-y divide-[var(--divide)]">
                     <tr>
-                      <td className="px-4 py-3 text-gray-400">Subscribers</td>
+                      <td className="px-4 py-3 text-[var(--text-muted)]">Subscribers</td>
                       {channels.map(ch => (
-                        <td key={ch.channel_id} className="px-4 py-3 text-center text-white font-bold">{formatNumber(ch.subscriber_count)}</td>
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-[var(--text-primary)] font-bold">{formatNumber(ch.subscriber_count)}</td>
                       ))}
                     </tr>
                     <tr>
-                      <td className="px-4 py-3 text-gray-400">Total Views</td>
+                      <td className="px-4 py-3 text-[var(--text-muted)]">Total Views</td>
                       {channels.map(ch => (
-                        <td key={ch.channel_id} className="px-4 py-3 text-center text-white">{formatNumber(ch.view_count)}</td>
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-[var(--text-primary)]">{formatNumber(ch.view_count)}</td>
                       ))}
                     </tr>
                     <tr>
-                      <td className="px-4 py-3 text-gray-400">Videos</td>
+                      <td className="px-4 py-3 text-[var(--text-muted)]">Videos</td>
                       {channels.map(ch => (
-                        <td key={ch.channel_id} className="px-4 py-3 text-center text-white">{ch.video_count}</td>
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-[var(--text-primary)]">{ch.video_count}</td>
                       ))}
                     </tr>
                     <tr>
-                      <td className="px-4 py-3 text-gray-400">24h Growth</td>
+                      <td className="px-4 py-3 text-[var(--text-muted)]">24h Growth</td>
                       {channels.map(ch => (
                         <td key={ch.channel_id} className="px-4 py-3 text-center text-green-400">+{formatNumber(ch.daily_subscriber_gain || 0)}</td>
                       ))}
                     </tr>
                     <tr>
-                      <td className="px-4 py-3 text-gray-400">Growth Rate</td>
+                      <td className="px-4 py-3 text-[var(--text-muted)]">Growth Rate</td>
                       {channels.map(ch => (
                         <td key={ch.channel_id} className="px-4 py-3 text-center text-green-400">{(ch.daily_growth_percent || 0).toFixed(3)}%</td>
                       ))}
                     </tr>
                     <tr>
-                      <td className="px-4 py-3 text-gray-400">Status</td>
+                      <td className="px-4 py-3 text-[var(--text-muted)]">Status</td>
                       {channels.map(ch => (
                         <td key={ch.channel_id} className="px-4 py-3 text-center"><ViralBadge label={ch.viral_label} /></td>
                       ))}
                     </tr>
                     <tr>
-                      <td className="px-4 py-3 text-gray-400">Country</td>
+                      <td className="px-4 py-3 text-[var(--text-muted)]">Country</td>
                       {channels.map(ch => (
-                        <td key={ch.channel_id} className="px-4 py-3 text-center text-white">{ch.country_name}</td>
+                        <td key={ch.channel_id} className="px-4 py-3 text-center text-[var(--text-primary)]">{ch.country_name}</td>
                       ))}
                     </tr>
                   </tbody>
@@ -363,8 +363,8 @@ const ComparePage = () => {
 
             {/* Growth Chart Overlay */}
             {chartData.length > 0 && (
-              <div className="bg-[#111] border border-[#222] rounded-lg p-6">
-                <h2 className="text-lg font-bold text-white mb-4">Subscriber Growth Comparison</h2>
+              <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+                <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">Subscriber Growth Comparison</h2>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartData}>

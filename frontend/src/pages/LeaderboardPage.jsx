@@ -95,18 +95,18 @@ const LeaderboardPage = () => {
       <div className="max-w-6xl mx-auto px-4">
         {/* SEO-Optimized Header */}
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-3">
             Top 100 Most Subscribed YouTube Channels (Live Leaderboard)
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[var(--text-muted)] text-lg">
             Real-time YouTube subscriber leaderboard tracking the world's most popular channels. Updated every 10 minutes.
           </p>
         </header>
 
         {/* SEO Introduction Section */}
-        <section className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">Most Subscribed YouTube Channels {year}</h2>
-          <div className="text-gray-300 text-sm leading-relaxed space-y-4">
+        <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Most Subscribed YouTube Channels {year}</h2>
+          <div className="text-[var(--text-secondary)] text-sm leading-relaxed space-y-4">
             <p>
               Welcome to the definitive <strong>YouTube subscriber leaderboard</strong> – your source for tracking the 
               <strong> most subscribed YouTube channels</strong> in real-time. This live ranking displays the <strong>top YouTube channels</strong> worldwide, 
@@ -123,33 +123,33 @@ const LeaderboardPage = () => {
         </section>
 
         {/* How Ranking Works Section */}
-        <section className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">How the Ranking System Works</h2>
+        <section className="bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">How the Ranking System Works</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">Data Collection</h3>
-              <p className="text-gray-400 text-sm">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Data Collection</h3>
+              <p className="text-[var(--text-muted)] text-sm">
                 Our system fetches subscriber counts directly from the official YouTube Data API v3. This ensures accuracy 
                 and reliability for all <strong>top YouTube channels</strong> displayed in our rankings.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">Ranking Methodology</h3>
-              <p className="text-gray-400 text-sm">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Ranking Methodology</h3>
+              <p className="text-[var(--text-muted)] text-sm">
                 Channels are ranked purely by total subscriber count. We track over {channels.length} channels across 197 
                 countries, making this one of the most comprehensive <strong>YouTube channel rankings</strong> available.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">Growth Metrics</h3>
-              <p className="text-gray-400 text-sm">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Growth Metrics</h3>
+              <p className="text-[var(--text-muted)] text-sm">
                 Daily subscriber gains and growth percentages are calculated by comparing current counts with our historical 
                 snapshots. These metrics help identify which <strong>most subscribed YouTube channels</strong> are trending.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">Viral Status</h3>
-              <p className="text-gray-400 text-sm">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Viral Status</h3>
+              <p className="text-[var(--text-muted)] text-sm">
                 Our proprietary algorithm assigns viral status labels (Exploding, Rising Fast, Stable, Slowing) based on 
                 recent growth patterns, helping you identify momentum in the <strong>YouTube subscriber leaderboard</strong>.
               </p>
@@ -159,15 +159,15 @@ const LeaderboardPage = () => {
 
         {/* Update Frequency Section */}
         <section className="bg-gradient-to-r from-red-500/10 to-transparent border border-red-500/20 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-3">How Often Subscriber Counts Update</h2>
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-3">How Often Subscriber Counts Update</h2>
           <div className="flex flex-wrap gap-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
                 <RefreshCw className="w-6 h-6 text-red-400" />
               </div>
               <div>
-                <div className="text-white font-semibold">Every 10 Minutes</div>
-                <div className="text-gray-500 text-sm">Ranking updates</div>
+                <div className="text-[var(--text-primary)] font-semibold">Every 10 Minutes</div>
+                <div className="text-[var(--text-dim)] text-sm">Ranking updates</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -175,8 +175,8 @@ const LeaderboardPage = () => {
                 <TrendingUp className="w-6 h-6 text-green-400" />
               </div>
               <div>
-                <div className="text-white font-semibold">Hourly</div>
-                <div className="text-gray-500 text-sm">Growth calculations</div>
+                <div className="text-[var(--text-primary)] font-semibold">Hourly</div>
+                <div className="text-[var(--text-dim)] text-sm">Growth calculations</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -184,25 +184,25 @@ const LeaderboardPage = () => {
                 <BarChart3 className="w-6 h-6 text-blue-400" />
               </div>
               <div>
-                <div className="text-white font-semibold">Every 6 Hours</div>
-                <div className="text-gray-500 text-sm">Full data refresh</div>
+                <div className="text-[var(--text-primary)] font-semibold">Every 6 Hours</div>
+                <div className="text-[var(--text-dim)] text-sm">Full data refresh</div>
               </div>
             </div>
           </div>
         </section>
         
         {/* Search and Filter Bar */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-4 mb-6">
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-dim)]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search channels..."
-                className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg pl-10 pr-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg pl-10 pr-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                 data-testid="search-input"
               />
             </div>
@@ -211,7 +211,7 @@ const LeaderboardPage = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+              className="bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
               data-testid="sort-select"
             >
               <option value="subscribers">Sort: Subscribers</option>
@@ -224,7 +224,7 @@ const LeaderboardPage = () => {
             <select
               value={filterCountry}
               onChange={(e) => setFilterCountry(e.target.value)}
-              className="bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+              className="bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
               data-testid="country-filter"
             >
               <option value="all">All Countries</option>
@@ -237,7 +237,7 @@ const LeaderboardPage = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+              className="bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
               data-testid="status-filter"
             >
               <option value="all">All Status</option>
@@ -248,45 +248,45 @@ const LeaderboardPage = () => {
             </select>
           </div>
           
-          <div className="mt-3 text-sm text-gray-500">
+          <div className="mt-3 text-sm text-[var(--text-dim)]">
             Showing {filteredChannels.length} of {channels.length} channels
           </div>
         </div>
 
         {/* Desktop Table */}
-        <div className="hidden md:block bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+        <div className="hidden md:block bg-[var(--bg-card)] border border-[var(--border)] rounded-lg overflow-hidden">
           <table className="w-full">
-            <thead className="bg-[#0d0d0d] border-b border-[#222]">
+            <thead className="bg-[var(--bg-deep)] border-b border-[var(--border)]">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Rank</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Channel</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Subscribers</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Change</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">24h Gain <span className="text-[10px]" title="Estimated">*</span></th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status <span className="text-[10px]" title="Estimated">*</span></th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Rank</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Channel</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Subscribers</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Change</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">24h Gain <span className="text-[10px]" title="Estimated">*</span></th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Status <span className="text-[10px]" title="Estimated">*</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#222]">
+            <tbody className="divide-y divide-[var(--divide)]">
               {filteredChannels.map((channel, idx) => (
                 <React.Fragment key={channel.channel_id}>
                   {/* In-feed ad every 10 rows */}
                   <InFeedAd index={idx} />
                   <tr 
-                    className="hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+                    className="hover:bg-[var(--bg-hover)] cursor-pointer transition-colors"
                     onClick={() => navigate(`/channel/${channel.channel_id}`)}
                     data-testid={`leaderboard-row-${idx}`}
                   >
-                    <td className="px-4 py-4 font-bold text-gray-400">#{idx + 1}</td>
+                    <td className="px-4 py-4 font-bold text-[var(--text-muted)]">#{idx + 1}</td>
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
                         <img src={channel.thumbnail_url || "https://via.placeholder.com/40"} alt="" loading="lazy" className="w-10 h-10 rounded-full" loading="lazy" />
                         <div>
-                          <div className="font-medium text-white">{channel.title}</div>
-                          <div className="text-xs text-gray-500">{channel.country_name}</div>
+                          <div className="font-medium text-[var(--text-primary)]">{channel.title}</div>
+                          <div className="text-xs text-[var(--text-dim)]">{channel.country_name}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-4 font-bold text-white">{formatNumber(channel.subscriber_count)}</td>
+                    <td className="px-4 py-4 font-bold text-[var(--text-primary)]">{formatNumber(channel.subscriber_count)}</td>
                     <td className="px-4 py-4"><RankChange current={channel.current_rank || idx + 1} previous={channel.previous_rank || idx + 1} /></td>
                     <td className="px-4 py-4 text-green-400">+{formatNumber(channel.daily_subscriber_gain || 0)}</td>
                     <td className="px-4 py-4"><ViralBadge label={channel.viral_label} /></td>
@@ -305,14 +305,14 @@ const LeaderboardPage = () => {
         </div>
         
         {/* Estimated Data Disclaimer */}
-        <div className="mt-4 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
+        <div className="mt-4 p-3 bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg text-xs text-[var(--text-dim)]">
           <span className="text-yellow-500">*</span> 24h Gains, Growth %, and Status are estimated by TopTube World Pro based on historical tracking. These metrics are not provided by YouTube.
         </div>
         
         {/* Most Popular YouTube Channels Section */}
-        <section className="mt-8 bg-[#111] border border-[#222] rounded-lg p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Most Popular YouTube Channels Worldwide</h2>
-          <div className="space-y-4 text-gray-300 text-sm leading-relaxed">
+        <section className="mt-8 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Most Popular YouTube Channels Worldwide</h2>
+          <div className="space-y-4 text-[var(--text-secondary)] text-sm leading-relaxed">
             <p>
               The <strong>most subscribed YouTube channels</strong> represent the pinnacle of digital content creation. These channels 
               have attracted hundreds of millions of subscribers through exceptional content, consistent uploads, and strong audience 
@@ -320,39 +320,39 @@ const LeaderboardPage = () => {
               content category imaginable.
             </p>
             
-            <h3 className="text-lg font-semibold text-white mt-6 mb-3">What Makes These Channels Popular?</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mt-6 mb-3">What Makes These Channels Popular?</h3>
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-[#0d0d0d] rounded-lg p-4">
-                <h4 className="font-medium text-white mb-2">Content Quality</h4>
-                <p className="text-xs text-gray-400">
+              <div className="bg-[var(--bg-deep)] rounded-lg p-4">
+                <h4 className="font-medium text-[var(--text-primary)] mb-2">Content Quality</h4>
+                <p className="text-xs text-[var(--text-muted)]">
                   The <strong>most subscribed YouTube channels</strong> consistently produce high-quality content that resonates with 
                   global audiences. Production values range from professional studio setups to authentic personal vlogs.
                 </p>
               </div>
-              <div className="bg-[#0d0d0d] rounded-lg p-4">
-                <h4 className="font-medium text-white mb-2">Upload Consistency</h4>
-                <p className="text-xs text-gray-400">
+              <div className="bg-[var(--bg-deep)] rounded-lg p-4">
+                <h4 className="font-medium text-[var(--text-primary)] mb-2">Upload Consistency</h4>
+                <p className="text-xs text-[var(--text-muted)]">
                   Regular upload schedules keep audiences engaged. Top creators on this <strong>YouTube channel ranking</strong> often 
                   post multiple times per week to maintain algorithmic visibility.
                 </p>
               </div>
-              <div className="bg-[#0d0d0d] rounded-lg p-4">
-                <h4 className="font-medium text-white mb-2">Audience Engagement</h4>
-                <p className="text-xs text-gray-400">
+              <div className="bg-[var(--bg-deep)] rounded-lg p-4">
+                <h4 className="font-medium text-[var(--text-primary)] mb-2">Audience Engagement</h4>
+                <p className="text-xs text-[var(--text-muted)]">
                   Building community through comments, live streams, and social media interaction helps 
                   <strong> top YouTube channels</strong> convert viewers into loyal subscribers.
                 </p>
               </div>
-              <div className="bg-[#0d0d0d] rounded-lg p-4">
-                <h4 className="font-medium text-white mb-2">Global Appeal</h4>
-                <p className="text-xs text-gray-400">
+              <div className="bg-[var(--bg-deep)] rounded-lg p-4">
+                <h4 className="font-medium text-[var(--text-primary)] mb-2">Global Appeal</h4>
+                <p className="text-xs text-[var(--text-muted)]">
                   Many channels on the <strong>YouTube subscriber leaderboard</strong> create content that transcends language barriers, 
                   including music, gaming, and visual entertainment.
                 </p>
               </div>
             </div>
 
-            <h3 className="text-lg font-semibold text-white mt-6 mb-3">Related Rankings</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mt-6 mb-3">Related Rankings</h3>
             <div className="flex flex-wrap gap-3">
               <Link to="/top-100" className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm transition-colors">
                 Top 100 YouTubers
@@ -368,7 +368,7 @@ const LeaderboardPage = () => {
               </Link>
             </div>
             
-            <p className="text-xs text-gray-500 mt-6 pt-4 border-t border-[#222]">
+            <p className="text-xs text-[var(--text-dim)] mt-6 pt-4 border-t border-[var(--border)]">
               <em>Data for this <strong>YouTube subscriber leaderboard</strong> is sourced from the YouTube Data API. Growth statistics 
               and viral predictions are calculated by TopTube World Pro. See our <Link to="/methodology" className="text-red-400 hover:text-red-300">Methodology</Link> page for details.</em>
             </p>

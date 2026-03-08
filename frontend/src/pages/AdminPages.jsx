@@ -136,8 +136,8 @@ const BlogAdminPage = () => {
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center" data-testid="blog-admin-login">
-        <div className="bg-[#111] border border-[#222] rounded-lg p-8 w-full max-w-md">
-          <h1 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-8 w-full max-w-md">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-6 flex items-center gap-3">
             <Settings className="w-6 h-6 text-red-500" />
             Blog Admin
           </h1>
@@ -149,13 +149,13 @@ const BlogAdminPage = () => {
           )}
           
           <form onSubmit={handleLogin}>
-            <label className="block text-gray-400 text-sm mb-2">Admin Key</label>
+            <label className="block text-[var(--text-muted)] text-sm mb-2">Admin Key</label>
             <input
               type="password"
               value={inputKey}
               onChange={(e) => setInputKey(e.target.value)}
               placeholder="Enter admin key..."
-              className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-3 text-white mb-4 focus:border-red-500 focus:outline-none"
+              className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-3 text-[var(--text-primary)] mb-4 focus:border-red-500 focus:outline-none"
               required
               data-testid="admin-key-input"
             />
@@ -176,7 +176,7 @@ const BlogAdminPage = () => {
     <div className="py-8" data-testid="blog-admin-page">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] flex items-center gap-3">
             <Settings className="w-8 h-8 text-red-500" />
             Blog Admin
           </h1>
@@ -196,48 +196,48 @@ const BlogAdminPage = () => {
 
         {/* Post Form Modal */}
         {showForm && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-            <div className="bg-[#111] border border-[#222] rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-[var(--bg-page)]/80 flex items-center justify-center z-50 p-4">
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-white">
+                  <h2 className="text-xl font-bold text-[var(--text-primary)]">
                     {editingPost ? 'Edit Post' : 'Create New Post'}
                   </h2>
-                  <button onClick={resetForm} className="text-gray-500 hover:text-white">
+                  <button onClick={resetForm} className="text-[var(--text-dim)] hover:text-[var(--text-primary)]">
                     <X className="w-6 h-6" />
                   </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-gray-400 text-sm mb-1">Title *</label>
+                    <label className="block text-[var(--text-muted)] text-sm mb-1">Title *</label>
                     <input
                       type="text"
                       value={formData.title}
                       onChange={handleTitleChange}
-                      className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-gray-400 text-sm mb-1">Slug *</label>
+                    <label className="block text-[var(--text-muted)] text-sm mb-1">Slug *</label>
                     <input
                       type="text"
                       value={formData.slug}
                       onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                      className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                       required
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-gray-400 text-sm mb-1">Category</label>
+                      <label className="block text-[var(--text-muted)] text-sm mb-1">Category</label>
                       <select
                         value={formData.category}
                         onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                        className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                        className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                       >
                         {BLOG_CATEGORIES.map(cat => (
                           <option key={cat} value={cat}>{cat}</option>
@@ -245,11 +245,11 @@ const BlogAdminPage = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-gray-400 text-sm mb-1">Status</label>
+                      <label className="block text-[var(--text-muted)] text-sm mb-1">Status</label>
                       <select
                         value={formData.status}
                         onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                        className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                        className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                       >
                         <option value="draft">Draft</option>
                         <option value="published">Published</option>
@@ -259,45 +259,45 @@ const BlogAdminPage = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-gray-400 text-sm mb-1">Read Time</label>
+                      <label className="block text-[var(--text-muted)] text-sm mb-1">Read Time</label>
                       <input
                         type="text"
                         value={formData.read_time}
                         onChange={(e) => setFormData(prev => ({ ...prev, read_time: e.target.value }))}
                         placeholder="5 min read"
-                        className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                        className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-gray-400 text-sm mb-1">Image URL</label>
+                      <label className="block text-[var(--text-muted)] text-sm mb-1">Image URL</label>
                       <input
                         type="url"
                         value={formData.image}
                         onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
                         placeholder="https://images.unsplash.com/..."
-                        className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                        className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-gray-400 text-sm mb-1">Excerpt *</label>
+                    <label className="block text-[var(--text-muted)] text-sm mb-1">Excerpt *</label>
                     <textarea
                       value={formData.excerpt}
                       onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
                       rows={2}
-                      className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none"
+                      className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-gray-400 text-sm mb-1">Content *</label>
+                    <label className="block text-[var(--text-muted)] text-sm mb-1">Content *</label>
                     <textarea
                       value={formData.content}
                       onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
                       rows={12}
-                      className="w-full bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-red-500 focus:outline-none font-mono text-sm"
+                      className="w-full bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:border-red-500 focus:outline-none font-mono text-sm"
                       placeholder="Write your blog post content here..."
                       required
                     />
@@ -314,7 +314,7 @@ const BlogAdminPage = () => {
                     <button
                       type="button"
                       onClick={resetForm}
-                      className="px-6 bg-[#222] text-white py-3 rounded-lg font-semibold hover:bg-[#333]"
+                      className="px-6 bg-[var(--border)] text-[var(--text-primary)] py-3 rounded-lg font-semibold hover:bg-[var(--border-hover)]"
                     >
                       Cancel
                     </button>
@@ -326,48 +326,48 @@ const BlogAdminPage = () => {
         )}
 
         {/* Posts List */}
-        <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg overflow-hidden">
           <table className="w-full">
-            <thead className="bg-[#0d0d0d]">
+            <thead className="bg-[var(--bg-deep)]">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Post</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Date</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Post</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Category</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Date</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-[var(--text-dim)] uppercase">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#222]">
+            <tbody className="divide-y divide-[var(--divide)]">
               {posts.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-4 py-12 text-center text-gray-500">
+                  <td colSpan="5" className="px-4 py-12 text-center text-[var(--text-dim)]">
                     <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
                     No blog posts yet. Create your first post!
                   </td>
                 </tr>
               ) : (
                 posts.map((post) => (
-                  <tr key={post.id} className="hover:bg-[#1a1a1a]">
+                  <tr key={post.id} className="hover:bg-[var(--bg-hover)]">
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
                         {post.image && (
                           <img src={post.image} alt="" loading="lazy" className="w-12 h-12 rounded object-cover" />
                         )}
                         <div>
-                          <div className="font-medium text-white">{post.title}</div>
-                          <div className="text-xs text-gray-500">/blog/{post.slug}</div>
+                          <div className="font-medium text-[var(--text-primary)]">{post.title}</div>
+                          <div className="text-xs text-[var(--text-dim)]">/blog/{post.slug}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-4 py-4">
-                      <span className="bg-[#222] text-gray-300 px-2 py-1 rounded text-xs">{post.category}</span>
+                      <span className="bg-[var(--border)] text-[var(--text-secondary)] px-2 py-1 rounded text-xs">{post.category}</span>
                     </td>
                     <td className="px-4 py-4">
                       <span className={`px-2 py-1 rounded text-xs ${post.status === 'published' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
                         {post.status}
                       </span>
                     </td>
-                    <td className="px-4 py-4 text-gray-500 text-sm">
+                    <td className="px-4 py-4 text-[var(--text-dim)] text-sm">
                       {formatDate(post.created_at)}
                     </td>
                     <td className="px-4 py-4 text-right">
@@ -376,21 +376,21 @@ const BlogAdminPage = () => {
                           href={`/blog/${post.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 text-gray-500 hover:text-white"
+                          className="p-2 text-[var(--text-dim)] hover:text-[var(--text-primary)]"
                           title="View"
                         >
                           <ExternalLink className="w-4 h-4" />
                         </a>
                         <button
                           onClick={() => handleEdit(post)}
-                          className="p-2 text-gray-500 hover:text-blue-400"
+                          className="p-2 text-[var(--text-dim)] hover:text-blue-400"
                           title="Edit"
                         >
                           <Settings className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDelete(post.id)}
-                          className="p-2 text-gray-500 hover:text-red-400"
+                          className="p-2 text-[var(--text-dim)] hover:text-red-400"
                           title="Delete"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -405,9 +405,9 @@ const BlogAdminPage = () => {
         </div>
 
         {/* Image Upload Help */}
-        <div className="mt-6 bg-[#111] border border-[#222] rounded-lg p-4">
-          <h3 className="text-white font-semibold mb-2">Image Upload Tips</h3>
-          <p className="text-gray-500 text-sm mb-2">
+        <div className="mt-6 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4">
+          <h3 className="text-[var(--text-primary)] font-semibold mb-2">Image Upload Tips</h3>
+          <p className="text-[var(--text-dim)] text-sm mb-2">
             For blog post images, upload to a free image hosting service and paste the URL:
           </p>
           <div className="flex gap-4 text-sm">
@@ -526,7 +526,7 @@ const AdminPage = () => {
   return (
     <div className="py-8" data-testid="admin-page">
       <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-white mb-8">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-8">Admin Dashboard</h1>
 
         {message && (
           <div className={`mb-6 p-4 rounded-lg flex items-center justify-between ${message.type === 'success' ? 'bg-green-900/30 border border-green-800 text-green-400' : 'bg-red-900/30 border border-red-800 text-red-400'}`}>
@@ -537,27 +537,27 @@ const AdminPage = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-white">{stats?.total_countries || 0}</div>
-            <div className="text-gray-500 text-sm">Countries</div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[var(--text-primary)]">{stats?.total_countries || 0}</div>
+            <div className="text-[var(--text-dim)] text-sm">Countries</div>
           </div>
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-white">{stats?.total_channels || 0}</div>
-            <div className="text-gray-500 text-sm">Channels</div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[var(--text-primary)]">{stats?.total_channels || 0}</div>
+            <div className="text-[var(--text-dim)] text-sm">Channels</div>
           </div>
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-white">{formatNumber(stats?.total_stats_records || 0)}</div>
-            <div className="text-gray-500 text-sm">Data Points</div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[var(--text-primary)]">{formatNumber(stats?.total_stats_records || 0)}</div>
+            <div className="text-[var(--text-dim)] text-sm">Data Points</div>
           </div>
-          <div className="bg-[#111] border border-[#222] rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-white">{stats?.last_update !== "Never" ? formatShortDate(stats?.last_update) : "Never"}</div>
-            <div className="text-gray-500 text-sm">Last Update</div>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-[var(--text-primary)]">{stats?.last_update !== "Never" ? formatShortDate(stats?.last_update) : "Never"}</div>
+            <div className="text-[var(--text-dim)] text-sm">Last Update</div>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-lg font-bold text-white mb-4">Quick Actions</h2>
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">Quick Actions</h2>
           <div className="flex flex-wrap gap-4">
             <button
               onClick={handleSeed}
@@ -571,7 +571,7 @@ const AdminPage = () => {
             <button
               onClick={handleRefresh}
               disabled={refreshing}
-              className="bg-[#222] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#333] disabled:opacity-50 flex items-center gap-2"
+              className="bg-[var(--border)] text-[var(--text-primary)] px-4 py-2 rounded-lg font-medium hover:bg-[var(--border-hover)] disabled:opacity-50 flex items-center gap-2"
               data-testid="refresh-btn"
             >
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
@@ -581,13 +581,13 @@ const AdminPage = () => {
         </div>
 
         {/* Add Channel */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-lg font-bold text-white mb-4">Add Channel</h2>
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-bold text-[var(--text-primary)] mb-4">Add Channel</h2>
           <div className="flex flex-col md:flex-row gap-4 mb-4">
             <select
               value={selectedCountry}
               onChange={(e) => setSelectedCountry(e.target.value)}
-              className="bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white"
+              className="bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)]"
               data-testid="country-select"
             >
               <option value="">Select Country</option>
@@ -601,7 +601,7 @@ const AdminPage = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search YouTube channels..."
-                className="flex-1 bg-[#0d0d0d] border border-[#333] rounded-lg px-4 py-2 text-white"
+                className="flex-1 bg-[var(--bg-deep)] border border-[var(--border-hover)] rounded-lg px-4 py-2 text-[var(--text-primary)]"
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 data-testid="search-input"
               />
@@ -617,17 +617,17 @@ const AdminPage = () => {
           </div>
 
           {searchResults.length > 0 && (
-            <div className="border border-[#222] rounded-lg divide-y divide-[#222]">
+            <div className="border border-[var(--border)] rounded-lg divide-y divide-[var(--divide)]">
               {searchResults.map(result => (
                 <div key={result.channel_id} className="p-4 flex items-center gap-4">
                   <img src={result.thumbnail_url} alt="" loading="lazy" className="w-10 h-10 rounded-full" />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-white truncate">{result.title}</div>
-                    <div className="text-xs text-gray-500 truncate">{result.description}</div>
+                    <div className="font-medium text-[var(--text-primary)] truncate">{result.title}</div>
+                    <div className="text-xs text-[var(--text-dim)] truncate">{result.description}</div>
                   </div>
                   <button
                     onClick={() => handleAddChannel(result.channel_id)}
-                    className="bg-[#222] text-white px-3 py-1 rounded text-sm hover:bg-[#333]"
+                    className="bg-[var(--border)] text-[var(--text-primary)] px-3 py-1 rounded text-sm hover:bg-[var(--border-hover)]"
                     data-testid={`add-${result.channel_id}`}
                   >
                     Add
@@ -639,25 +639,25 @@ const AdminPage = () => {
         </div>
 
         {/* Countries Table */}
-        <div className="bg-[#111] border border-[#222] rounded-lg overflow-hidden">
-          <div className="px-4 py-3 border-b border-[#222]">
-            <h2 className="font-bold text-white">Countries Overview</h2>
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg overflow-hidden">
+          <div className="px-4 py-3 border-b border-[var(--border)]">
+            <h2 className="font-bold text-[var(--text-primary)]">Countries Overview</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#0d0d0d]">
+              <thead className="bg-[var(--bg-deep)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Country</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Channels</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Top Channel</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Country</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Channels</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-dim)] uppercase">Top Channel</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#222]">
+              <tbody className="divide-y divide-[var(--divide)]">
                 {countries.map(country => (
                   <tr key={country.code} data-testid={`admin-country-${country.code}`}>
-                    <td className="px-4 py-3 text-white">{country.flag_emoji} {country.name}</td>
-                    <td className="px-4 py-3 text-gray-400">{country.channel_count}</td>
-                    <td className="px-4 py-3 text-gray-400">{country.top_channel?.title || "-"}</td>
+                    <td className="px-4 py-3 text-[var(--text-primary)]">{country.flag_emoji} {country.name}</td>
+                    <td className="px-4 py-3 text-[var(--text-muted)]">{country.channel_count}</td>
+                    <td className="px-4 py-3 text-[var(--text-muted)]">{country.top_channel?.title || "-"}</td>
                   </tr>
                 ))}
               </tbody>

@@ -87,9 +87,9 @@ const RacePage = () => {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Trophy className="w-10 h-10 text-yellow-500" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Race to Milestone</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">Race to Milestone</h1>
           </div>
-          <p className="text-gray-400 text-lg">Live tracking of YouTube channels racing to subscriber milestones</p>
+          <p className="text-[var(--text-muted)] text-lg">Live tracking of YouTube channels racing to subscriber milestones</p>
           <LiveIndicator />
         </div>
 
@@ -98,7 +98,7 @@ const RacePage = () => {
           <div className="bg-gradient-to-r from-yellow-500/10 to-red-500/10 border border-yellow-500/30 rounded-xl p-6 mb-8">
             <div className="flex items-center gap-2 mb-4">
               <Flame className="w-6 h-6 text-yellow-500" />
-              <h2 className="text-2xl font-bold text-white">{featuredRace.title}</h2>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)]">{featuredRace.title}</h2>
               <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">LIVE</span>
             </div>
             
@@ -106,45 +106,45 @@ const RacePage = () => {
               {featuredRace.channels.map((channel, idx) => (
                 <div 
                   key={channel.channel_id}
-                  className={`bg-[#111] border ${idx === 0 ? 'border-yellow-500/50' : 'border-[#333]'} rounded-lg p-4 cursor-pointer hover:border-yellow-500/30 transition-colors`}
+                  className={`bg-[var(--bg-card)] border ${idx === 0 ? 'border-yellow-500/50' : 'border-[var(--border-hover)]'} rounded-lg p-4 cursor-pointer hover:border-yellow-500/30 transition-colors`}
                   onClick={() => navigate(`/channel/${channel.channel_id}`)}
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <span className={`text-2xl font-bold ${idx === 0 ? 'text-yellow-500' : idx === 1 ? 'text-gray-400' : 'text-amber-700'}`}>
+                    <span className={`text-2xl font-bold ${idx === 0 ? 'text-yellow-500' : idx === 1 ? 'text-[var(--text-muted)]' : 'text-amber-700'}`}>
                       #{idx + 1}
                     </span>
                     <img src={channel.thumbnail_url} alt={channel.title} className="w-12 h-12 rounded-full" />
                     <div>
-                      <h3 className="font-semibold text-white text-sm">{channel.title}</h3>
-                      <p className="text-gray-500 text-xs">{channel.country_name}</p>
+                      <h3 className="font-semibold text-[var(--text-primary)] text-sm">{channel.title}</h3>
+                      <p className="text-[var(--text-dim)] text-xs">{channel.country_name}</p>
                     </div>
                   </div>
                   
                   {/* Progress Bar */}
                   <div className="mb-3">
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
+                    <div className="flex justify-between text-xs text-[var(--text-muted)] mb-1">
                       <span>{formatNumber(channel.subscriber_count)}</span>
                       <span>{formatNumber(featuredRace.milestone)}</span>
                     </div>
-                    <div className="h-3 bg-[#222] rounded-full overflow-hidden">
+                    <div className="h-3 bg-[var(--border)] rounded-full overflow-hidden">
                       <div 
                         className={`h-full rounded-full ${idx === 0 ? 'bg-yellow-500' : idx === 1 ? 'bg-gray-500' : 'bg-amber-700'}`}
                         style={{ width: `${channel.progress}%` }}
                       />
                     </div>
-                    <div className="text-center text-xs text-gray-500 mt-1">{channel.progress.toFixed(1)}%</div>
+                    <div className="text-center text-xs text-[var(--text-dim)] mt-1">{channel.progress.toFixed(1)}%</div>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2 text-center">
-                    <div className="bg-[#0d0d0d] rounded p-2">
+                    <div className="bg-[var(--bg-deep)] rounded p-2">
                       <div className="text-red-400 font-bold text-sm">{formatNumber(channel.remaining)}</div>
-                      <div className="text-gray-500 text-xs">Remaining</div>
+                      <div className="text-[var(--text-dim)] text-xs">Remaining</div>
                     </div>
-                    <div className="bg-[#0d0d0d] rounded p-2">
+                    <div className="bg-[var(--bg-deep)] rounded p-2">
                       <div className="text-green-400 font-bold text-sm">
                         {channel.daysToReach ? `~${channel.daysToReach} days` : 'N/A'}
                       </div>
-                      <div className="text-gray-500 text-xs">Est. Time *</div>
+                      <div className="text-[var(--text-dim)] text-xs">Est. Time *</div>
                     </div>
                   </div>
                 </div>
@@ -154,39 +154,39 @@ const RacePage = () => {
         )}
 
         {/* All Active Races */}
-        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
           <BarChart3 className="w-5 h-5 text-red-500" />
           All Active Races
         </h2>
         
         <div className="space-y-6">
           {races.filter(r => r !== featuredRace).map(race => (
-            <div key={race.milestone} className="bg-[#111] border border-[#222] rounded-lg p-5">
-              <h3 className="text-lg font-semibold text-white mb-4">{race.title}</h3>
+            <div key={race.milestone} className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">{race.title}</h3>
               <div className="space-y-3">
                 {race.channels.map((channel, idx) => (
                   <div 
                     key={channel.channel_id}
-                    className="flex items-center gap-4 p-3 bg-[#0d0d0d] rounded-lg cursor-pointer hover:bg-[#1a1a1a] transition-colors"
+                    className="flex items-center gap-4 p-3 bg-[var(--bg-deep)] rounded-lg cursor-pointer hover:bg-[var(--bg-hover)] transition-colors"
                     onClick={() => navigate(`/channel/${channel.channel_id}`)}
                   >
-                    <span className={`text-lg font-bold w-8 ${idx === 0 ? 'text-yellow-500' : 'text-gray-500'}`}>#{idx + 1}</span>
+                    <span className={`text-lg font-bold w-8 ${idx === 0 ? 'text-yellow-500' : 'text-[var(--text-dim)]'}`}>#{idx + 1}</span>
                     <img src={channel.thumbnail_url} alt={channel.title} className="w-10 h-10 rounded-full" />
                     <div className="flex-1">
-                      <div className="font-medium text-white">{channel.title}</div>
-                      <div className="text-sm text-gray-500">{formatNumber(channel.subscriber_count)} subs</div>
+                      <div className="font-medium text-[var(--text-primary)]">{channel.title}</div>
+                      <div className="text-sm text-[var(--text-dim)]">{formatNumber(channel.subscriber_count)} subs</div>
                     </div>
                     <div className="flex-1">
-                      <div className="h-2 bg-[#222] rounded-full overflow-hidden">
+                      <div className="h-2 bg-[var(--border)] rounded-full overflow-hidden">
                         <div className="h-full bg-red-500 rounded-full" style={{ width: `${channel.progress}%` }} />
                       </div>
-                      <div className="text-xs text-gray-500 mt-1">{channel.progress.toFixed(1)}% complete</div>
+                      <div className="text-xs text-[var(--text-dim)] mt-1">{channel.progress.toFixed(1)}% complete</div>
                     </div>
                     <div className="text-right">
                       <div className="text-green-400 text-sm font-medium">
                         {channel.daysToReach ? `~${channel.daysToReach} days` : 'N/A'}
                       </div>
-                      <div className="text-xs text-gray-500">Est. arrival *</div>
+                      <div className="text-xs text-[var(--text-dim)]">Est. arrival *</div>
                     </div>
                   </div>
                 ))}
@@ -196,14 +196,14 @@ const RacePage = () => {
         </div>
 
         {/* Disclaimer */}
-        <div className="mt-6 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
+        <div className="mt-6 p-3 bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg text-xs text-[var(--text-dim)]">
           <span className="text-yellow-500">*</span> Estimated arrival times are calculated based on current daily growth rates and may vary significantly. These are projections by TopTube World Pro, not YouTube data.
         </div>
 
         {/* SEO Content */}
-        <div className="mt-12 bg-[#111] border border-[#222] rounded-lg p-6">
-          <h2 className="text-xl font-bold text-white mb-4">About YouTube Subscriber Races</h2>
-          <div className="text-gray-400 space-y-3 text-sm">
+        <div className="mt-12 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">About YouTube Subscriber Races</h2>
+          <div className="text-[var(--text-muted)] space-y-3 text-sm">
             <p>
               The race to major subscriber milestones has become one of the most exciting narratives in YouTube history. 
               From the legendary PewDiePie vs T-Series battle to MrBeast's meteoric rise, these races captivate millions of viewers worldwide.
@@ -307,15 +307,15 @@ const MilestonePage = () => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Star className="w-10 h-10 text-yellow-500" />
-            <h1 className="text-3xl md:text-4xl font-bold text-white">YouTube Milestone Tracker</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">YouTube Milestone Tracker</h1>
           </div>
-          <p className="text-gray-400 text-lg">Track channels approaching and achieving major subscriber milestones</p>
+          <p className="text-[var(--text-muted)] text-lg">Track channels approaching and achieving major subscriber milestones</p>
         </div>
 
         {/* Editorial Introduction */}
-        <div className="bg-[#111] border border-[#222] rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-white mb-3">Understanding YouTube Milestones</h2>
-          <div className="text-gray-300 text-sm space-y-3">
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-3">Understanding YouTube Milestones</h2>
+          <div className="text-[var(--text-secondary)] text-sm space-y-3">
             <p>
               YouTube subscriber milestones have become cultural moments in the digital age. When MrBeast hit 100 million subscribers 
               or T-Series became the first channel to reach 200 million, these achievements made headlines worldwide. Our milestone 
@@ -326,7 +326,7 @@ const MilestonePage = () => {
               we estimate when channels might reach their next milestone – though these predictions can change dramatically based on 
               viral content or algorithm shifts.
             </p>
-            <p className="text-xs text-gray-500 pt-2 border-t border-[#222]">
+            <p className="text-xs text-[var(--text-dim)] pt-2 border-t border-[var(--border)]">
               <em>Estimated arrival times are calculated by TopTube World Pro based on current growth rates and are speculative projections.</em>
             </p>
           </div>
@@ -336,7 +336,7 @@ const MilestonePage = () => {
         <section className="mb-12">
           <div className="flex items-center gap-2 mb-6">
             <Clock className="w-6 h-6 text-green-500" />
-            <h2 className="text-2xl font-bold text-white">Upcoming Milestones</h2>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">Upcoming Milestones</h2>
             <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">LIVE</span>
           </div>
           
@@ -344,25 +344,25 @@ const MilestonePage = () => {
             {upcomingMilestones.map((item, idx) => (
               <div 
                 key={`${item.channel.channel_id}-${item.milestone}`}
-                className={`bg-[#111] border ${idx < 3 ? 'border-yellow-500/30' : 'border-[#222]'} rounded-lg p-4 cursor-pointer hover:border-yellow-500/50 transition-colors`}
+                className={`bg-[var(--bg-card)] border ${idx < 3 ? 'border-yellow-500/30' : 'border-[var(--border)]'} rounded-lg p-4 cursor-pointer hover:border-yellow-500/50 transition-colors`}
                 onClick={() => navigate(`/channel/${item.channel.channel_id}`)}
               >
                 <div className="flex items-center gap-3 mb-3">
                   {idx < 3 && <Flame className="w-5 h-5 text-yellow-500" />}
                   <img src={item.channel.thumbnail_url} alt={item.channel.title} className="w-10 h-10 rounded-full" />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-white">{item.channel.title}</h3>
-                    <p className="text-gray-500 text-sm">{item.channel.country_name}</p>
+                    <h3 className="font-semibold text-[var(--text-primary)]">{item.channel.title}</h3>
+                    <p className="text-[var(--text-dim)] text-sm">{item.channel.country_name}</p>
                   </div>
                   <div className="text-right">
                     <div className="text-yellow-500 font-bold">{formatNumber(item.milestone)}</div>
-                    <div className="text-gray-500 text-xs">Target</div>
+                    <div className="text-[var(--text-dim)] text-xs">Target</div>
                   </div>
                 </div>
                 
                 {/* Progress */}
                 <div className="mb-2">
-                  <div className="h-2 bg-[#222] rounded-full overflow-hidden">
+                  <div className="h-2 bg-[var(--border)] rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-yellow-500 to-red-500 rounded-full"
                       style={{ width: `${item.progress}%` }}
@@ -371,7 +371,7 @@ const MilestonePage = () => {
                 </div>
                 
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">{formatNumber(item.channel.subscriber_count)} current</span>
+                  <span className="text-[var(--text-muted)]">{formatNumber(item.channel.subscriber_count)} current</span>
                   <span className="text-green-400">~{item.daysToReach} days away *</span>
                 </div>
               </div>
@@ -383,24 +383,24 @@ const MilestonePage = () => {
         <section className="mb-12">
           <div className="flex items-center gap-2 mb-6">
             <BookOpen className="w-6 h-6 text-blue-500" />
-            <h2 className="text-2xl font-bold text-white">Milestone History</h2>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">Milestone History</h2>
           </div>
           
-          <div className="bg-[#111] border border-[#222] rounded-lg p-6">
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6">
             <div className="relative">
               {/* Timeline line */}
-              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-[#333]" />
+              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-[var(--border-hover)]" />
               
               <div className="space-y-6">
                 {historicalMilestones.map((item, idx) => (
                   <div key={idx} className="flex items-start gap-4 ml-2">
                     <div className={`w-5 h-5 rounded-full ${idx < 2 ? 'bg-yellow-500' : 'bg-blue-500'} flex-shrink-0 z-10`} />
-                    <div className="flex-1 bg-[#0d0d0d] rounded-lg p-4">
+                    <div className="flex-1 bg-[var(--bg-deep)] rounded-lg p-4">
                       <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-semibold text-white">{item.channel}</h3>
-                        <span className="text-gray-500 text-sm">{item.date}</span>
+                        <h3 className="font-semibold text-[var(--text-primary)]">{item.channel}</h3>
+                        <span className="text-[var(--text-dim)] text-sm">{item.date}</span>
                       </div>
-                      <p className="text-gray-400">
+                      <p className="text-[var(--text-muted)]">
                         Reached <span className="text-yellow-500 font-bold">{item.milestone}</span> subscribers
                       </p>
                     </div>
@@ -415,27 +415,27 @@ const MilestonePage = () => {
         <section>
           <div className="flex items-center gap-2 mb-6">
             <Trophy className="w-6 h-6 text-purple-500" />
-            <h2 className="text-2xl font-bold text-white">Milestone Levels</h2>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">Milestone Levels</h2>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { value: "500M", label: "Diamond", color: "text-cyan-400", bg: "bg-cyan-500/20", count: channels.filter(c => c.subscriber_count >= 500000000).length },
-              { value: "200M", label: "Platinum", color: "text-gray-300", bg: "bg-gray-500/20", count: channels.filter(c => c.subscriber_count >= 200000000).length },
+              { value: "200M", label: "Platinum", color: "text-[var(--text-secondary)]", bg: "bg-gray-500/20", count: channels.filter(c => c.subscriber_count >= 200000000).length },
               { value: "100M", label: "Gold", color: "text-yellow-500", bg: "bg-yellow-500/20", count: channels.filter(c => c.subscriber_count >= 100000000).length },
-              { value: "50M", label: "Silver", color: "text-gray-400", bg: "bg-gray-400/20", count: channels.filter(c => c.subscriber_count >= 50000000).length },
+              { value: "50M", label: "Silver", color: "text-[var(--text-muted)]", bg: "bg-gray-400/20", count: channels.filter(c => c.subscriber_count >= 50000000).length },
             ].map(level => (
-              <div key={level.value} className={`${level.bg} border border-[#333] rounded-lg p-4 text-center`}>
+              <div key={level.value} className={`${level.bg} border border-[var(--border-hover)] rounded-lg p-4 text-center`}>
                 <div className={`text-3xl font-bold ${level.color} mb-1`}>{level.value}</div>
-                <div className="text-gray-400 text-sm">{level.label} Level</div>
-                <div className="text-white font-semibold mt-2">{level.count} channels</div>
+                <div className="text-[var(--text-muted)] text-sm">{level.label} Level</div>
+                <div className="text-[var(--text-primary)] font-semibold mt-2">{level.count} channels</div>
               </div>
             ))}
           </div>
         </section>
 
         {/* Disclaimer */}
-        <div className="mt-6 p-3 bg-[#0d0d0d] border border-[#222] rounded-lg text-xs text-gray-500">
+        <div className="mt-6 p-3 bg-[var(--bg-deep)] border border-[var(--border)] rounded-lg text-xs text-[var(--text-dim)]">
           <span className="text-yellow-500">*</span> Estimated arrival times are calculated based on current daily growth rates by TopTube World Pro and may change.
         </div>
       </div>

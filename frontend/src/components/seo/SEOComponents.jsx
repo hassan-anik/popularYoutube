@@ -255,21 +255,21 @@ export const Breadcrumb = ({ items }) => {
     <>
       <JsonLd data={schemaData} />
       <nav aria-label="Breadcrumb" className="mb-4">
-        <ol className="flex items-center gap-2 text-sm text-gray-400">
+        <ol className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
           {items.map((item, idx) => (
             <li key={idx} className="flex items-center gap-2">
               {idx > 0 && <ChevronRight className="w-3 h-3" />}
               {item.href ? (
                 <Link 
                   to={item.href} 
-                  className="hover:text-white transition-colors"
+                  className="hover:text-[var(--text-primary)] transition-colors"
                   title={item.label}
                 >
                   {idx === 0 && <Home className="w-4 h-4 inline mr-1" />}
                   {item.label}
                 </Link>
               ) : (
-                <span className="text-gray-300">{item.label}</span>
+                <span className="text-[var(--text-secondary)]">{item.label}</span>
               )}
             </li>
           ))}
@@ -299,25 +299,25 @@ export const FAQSection = ({ faqs, title = "Frequently Asked Questions" }) => {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <section className="bg-[#111] border border-[#222] rounded-lg p-6" data-testid="faq-section">
+    <section className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-6" data-testid="faq-section">
       <FAQSchema faqs={faqs} />
-      <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
         <HelpCircle className="w-5 h-5 text-red-500" />
         {title}
       </h2>
       <div className="space-y-3">
         {faqs.map((faq, idx) => (
-          <div key={idx} className="border border-[#222] rounded-lg overflow-hidden">
+          <div key={idx} className="border border-[var(--border)] rounded-lg overflow-hidden">
             <button
               onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-              className="w-full flex items-center justify-between p-4 text-left hover:bg-[#1a1a1a] transition-colors"
+              className="w-full flex items-center justify-between p-4 text-left hover:bg-[var(--bg-hover)] transition-colors"
               aria-expanded={openIndex === idx}
             >
-              <span className="font-medium text-white pr-4">{faq.question}</span>
-              <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openIndex === idx ? 'rotate-180' : ''}`} />
+              <span className="font-medium text-[var(--text-primary)] pr-4">{faq.question}</span>
+              <ChevronDown className={`w-5 h-5 text-[var(--text-muted)] transition-transform ${openIndex === idx ? 'rotate-180' : ''}`} />
             </button>
             {openIndex === idx && (
-              <div className="px-4 pb-4 text-gray-400 text-sm leading-relaxed">
+              <div className="px-4 pb-4 text-[var(--text-muted)] text-sm leading-relaxed">
                 {faq.answer}
               </div>
             )}
