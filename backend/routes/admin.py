@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, HTTPException, BackgroundTasks, Query
 from typing import List, Dict, Any
@@ -955,6 +956,74 @@ async def remove_placeholder_channels():
     return {
         "message": "Placeholder channels removed",
         "deleted_count": result.deleted_count
+    }
+
+
+@router.post("/admin/import-blog-posts")
+async def import_blog_posts(posts: List[Dict[Any, Any]]):
+    """Import blog posts from JSON data (used for syncing between environments)"""
+    
+    added_count = 0
+    updated_count = 0
+    skipped_count = 0
+    
+    for post_data in posts:
+        slug = post_data.get("slug")
+        if not slug:
+            skipped_count += 1
+            continue
+            
+        # Remove _id if present
+        post_data.pop("_id", None)
+        
+        # Convert date strings to datetime objects
+        for date_field in ["published_at", "created_at", "updated_at"]:
+            if date_field in post_data and isinstance(post_data[date_field], str):
+                try:
+                    post_data[date_field] = datetime.fromisoformat(post_data[date_field].replace('Z', '+00:00'))
+                except:
+                    pass
+        
+        existing = await db.blog_posts.find_one({"slug": slug})
+        
+        if existing:
+            # Update only if content has changed
+            if existing.get("content") != post_data.get("content"):
+                await db.blog_posts.update_one(
+                    {"slug": slug},
+                    {"$set": post_data}
+                )
+                updated_count += 1
+            else:
+                skipped_count += 1
+        else:
+            await db.blog_posts.insert_one(post_data)
+            added_count += 1
+    
+    return {
+        "message": "Blog posts imported successfully",
+        "added": added_count,
+        "updated": updated_count,
+        "skipped": skipped_count,
+        "total_processed": len(posts)
+    }
+
+
+@router.get("/admin/export-blog-posts")
+async def export_blog_posts():
+    """Export all blog posts as JSON (used for syncing between environments)"""
+    
+    posts = await db.blog_posts.find({}, {"_id": 0}).to_list(length=None)
+    
+    # Convert datetime objects to strings
+    for post in posts:
+        for key, value in post.items():
+            if isinstance(value, datetime):
+                post[key] = value.isoformat()
+    
+    return {
+        "posts": posts,
+        "total": len(posts)
     }
 
 
