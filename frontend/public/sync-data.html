@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync Blog Posts to Production</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background: #1a1a1a; color: #fff; }
+        button { background: #e53935; color: white; padding: 15px 30px; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; margin: 10px 5px; }
+        button:hover { background: #c62828; }
+        button:disabled { background: #666; cursor: not-allowed; }
+        #log { background: #0d0d0d; padding: 20px; border-radius: 8px; margin-top: 20px; white-space: pre-wrap; font-family: monospace; max-height: 400px; overflow-y: auto; }
+        .success { color: #4caf50; }
+        .error { color: #f44336; }
+        h1 { color: #e53935; }
+    </style>
+</head>
+<body>
+    <h1>TopTube World Pro - Data Sync Tool</h1>
+    <p>This tool syncs blog posts from the preview database to production.</p>
+    
+    <div>
+        <button onclick="fetchPreviewData()">Step 1: Fetch Preview Data</button>
+        <button onclick="syncToProduction()" id="syncBtn" disabled>Step 2: Sync to Production</button>
+    </div>
+    
+    <div id="log">Ready. Click "Fetch Preview Data" to start.</div>
+    
+    <script>
+        let blogPosts = [];
+        const previewAPI = 'https://toptube-world.preview.emergentagent.com';
+        const productionAPI = 'https://mostpopularyoutubechannel.com';
+        
+        function log(msg, type = '') {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `\n[${time}] <span class="${type}">${msg}</span>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        async function fetchPreviewData() {
+            log('Fetching blog posts from preview...');
+            try {
+                const response = await fetch(`${previewAPI}/api/admin/export-blog-posts`);
+                const data = await response.json();
+                blogPosts = data.posts || [];
+                log(`✅ Fetched ${blogPosts.length} blog posts from preview`, 'success');
+                document.getElementById('syncBtn').disabled = false;
+                log('Now click "Sync to Production" to push data');
+            } catch (error) {
+                log(`❌ Error fetching from preview: ${error.message}`, 'error');
+            }
+        }
+        
+        async function syncToProduction() {
+            if (blogPosts.length === 0) {
+                log('❌ No posts to sync. Fetch preview data first.', 'error');
+                return;
+            }
+            
+            log(`Syncing ${blogPosts.length} posts to production...`);
+            
+            try {
+                const response = await fetch(`${productionAPI}/api/admin/import-blog-posts`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(blogPosts)
+                });
+                
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${text}`);
+                }
+                
+                const result = await response.json();
+                log(`✅ Sync complete!`, 'success');
+                log(`   Added: ${result.added}`, 'success');
+                log(`   Updated: ${result.updated}`, 'success');
+                log(`   Skipped: ${result.skipped}`, 'success');
+                log('\n🎉 Done! Refresh your production blog page to see the posts.');
+            } catch (error) {
+                log(`❌ Error syncing to production: ${error.message}`, 'error');
+                log('This usually means the production backend is not running.', 'error');
+                log('Make sure to deploy the application properly on Emergent.', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
